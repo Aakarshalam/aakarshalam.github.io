@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Aakarsh Alam — Hardware Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
   :root {
     --bg:        #080b0f;
@@ -21,7 +21,7 @@
     --white:     #f0f5fa;
     --serif:     'DM Serif Display', Georgia, serif;
     --mono:      'JetBrains Mono', 'Courier New', monospace;
-    --sans:      'DM Sans', sans-serif;
+    --sans:      'IBM Plex Sans', sans-serif;
     --radius:    4px;
   }
 
@@ -38,6 +38,7 @@
     overflow-x: hidden;
   }
 
+  /* ── Noise texture overlay ── */
   body::before {
     content: '';
     position: fixed;
@@ -48,6 +49,7 @@
     opacity: 0.4;
   }
 
+  /* ── Circuit grid background ── */
   body::after {
     content: '';
     position: fixed;
@@ -60,6 +62,7 @@
     z-index: 0;
   }
 
+  /* ── Navigation ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -99,6 +102,7 @@
   }
   .nav-links a:hover { color: var(--gold); }
 
+  /* ── Main layout ── */
   main {
     position: relative;
     z-index: 1;
@@ -107,6 +111,7 @@
     padding: 0 2rem;
   }
 
+  /* ── Hero ── */
   #hero {
     min-height: 70vh;
     display: flex;
@@ -200,6 +205,7 @@
     color: var(--gold);
   }
 
+  /* ── Section shared ── */
   section {
     padding: 6rem 0;
     border-top: 1px solid var(--border);
@@ -222,6 +228,7 @@
     margin-bottom: 3rem;
   }
 
+  /* ── Publication ── */
   .pub-card {
     background: var(--bg2);
     border: 1px solid var(--border);
@@ -242,17 +249,21 @@
   }
 
   .pub-title {
-    font-family: var(--serif);
-    font-size: 1.15rem;
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 600;
     color: var(--white);
     margin-bottom: 0.5rem;
-    line-height: 1.4;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
   }
 
   .pub-authors {
     font-size: 13px;
+    font-weight: 400;
     color: var(--text-dim);
     margin-bottom: 0.6rem;
+    letter-spacing: 0.01em;
   }
 
   .pub-authors strong {
@@ -269,6 +280,7 @@
   }
   .pub-doi:hover { color: var(--gold); }
 
+  /* ── Experience cards ── */
   .exp-list { display: flex; flex-direction: column; gap: 2px; }
 
   .exp-card {
@@ -302,16 +314,20 @@
   }
 
   .exp-title {
-    font-family: var(--serif);
-    font-size: 1.05rem;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--white);
     line-height: 1.3;
+    letter-spacing: 0.01em;
   }
 
   .exp-place {
     font-size: 12.5px;
+    font-weight: 400;
     color: var(--text-dim);
     margin-top: 0.25rem;
+    letter-spacing: 0.01em;
   }
 
   .exp-right {
@@ -357,11 +373,13 @@
   }
 
   .exp-bullets li {
-    font-size: 13.5px;
+    font-size: 13px;
+    font-weight: 400;
     color: var(--text-dim);
-    line-height: 1.6;
+    line-height: 1.7;
     padding-left: 1.1rem;
     position: relative;
+    letter-spacing: 0.01em;
   }
   .exp-bullets li::before {
     content: '▸';
@@ -377,6 +395,7 @@
     font-weight: 500;
   }
 
+  /* ── Skills ── */
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -442,20 +461,24 @@
   }
 
   .ach-text {
-    font-size: 13.5px;
+    font-size: 13px;
+    font-weight: 400;
     color: var(--text-dim);
-    line-height: 1.6;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
   }
 
   .ach-text strong {
     color: var(--white);
-    font-weight: 500;
+    font-weight: 600;
     display: block;
-    margin-bottom: 0.2rem;
-    font-family: var(--serif);
-    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
   }
 
+  /* ── Contact ── */
   #contact {
     text-align: center;
     padding-bottom: 5rem;
@@ -488,6 +511,7 @@
     color: var(--gold);
   }
 
+  /* ── Footer ── */
   footer {
     position: relative;
     z-index: 1;
@@ -500,6 +524,7 @@
     letter-spacing: 0.1em;
   }
 
+  /* ── Stat bar (hero) ── */
   .hero-stats {
     display: flex;
     gap: 2.5rem;
@@ -528,6 +553,7 @@
     text-transform: uppercase;
   }
 
+  /* ── Animations ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -547,11 +573,13 @@
     transform: translateY(0);
   }
 
+  /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
 
+  /* ── Responsive ── */
   @media (max-width: 640px) {
     nav { padding: 0 1.5rem; }
     .nav-links { display: none; }
@@ -562,6 +590,7 @@
 </head>
 <body>
 
+<!-- Navigation -->
 <nav>
   <a class="nav-logo" href="#">Aakarsh Alam_</a>
   <ul class="nav-links">
@@ -576,6 +605,7 @@
 
 <main>
 
+  <!-- Hero -->
   <section id="hero" style="border-top: none;">
     <p class="hero-tag">// IIT Kharagpur · E&ECE · Microelectronics & VLSI</p>
     <h1 class="hero-name">Aakarsh <em>Alam</em></h1>
@@ -585,12 +615,13 @@
       Research focus on <em>FPGA Accelerators.</em>
     </p>
     <div class="hero-links">
-      <a class="btn btn-primary" href="mailto:aakarshalam05@kgpian.iitkgp.ac.in">Get In Touch</a>
+      <a class="btn btn-primary" href="/cdn-cgi/l/email-protection#a2c3c3c9c3d0d1cac3cec3cf9297e2c9c5d2cbc3cc8ccbcbd6c9c5d28cc3c18ccbcc">Get In Touch</a>
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank">LinkedIn</a>
       <a class="btn btn-ghost" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank">ACM Publication</a>
     </div>
   </section>
 
+  <!-- Publication -->
   <section id="publication">
     <p class="sec-label reveal">// peer-reviewed</p>
     <h2 class="sec-title reveal">Publication</h2>
@@ -607,6 +638,7 @@
     </div>
   </section>
 
+  <!-- Projects -->
   <section id="projects">
     <p class="sec-label reveal">// hardware & research</p>
     <h2 class="sec-title reveal">Projects</h2>
@@ -731,6 +763,7 @@
     </div>
   </section>
 
+  <!-- Experience -->
   <section id="experience">
     <p class="sec-label reveal">// industry</p>
     <h2 class="sec-title reveal">Internship Experience</h2>
@@ -740,7 +773,7 @@
         <div class="exp-header" onclick="toggle(this)">
           <div class="exp-left">
             <p class="exp-tag">Embedded Systems · BMS</p>
-            <p class="exp-title">Embedded Intern - Midwest Energy Private Limited</p>
+            <p class="exp-title">Embedded Intern — Midwest Energy Private Limited</p>
             <p class="exp-place">Hyderabad, India</p>
           </div>
           <div class="exp-right">
@@ -792,8 +825,8 @@
       <div class="exp-card reveal">
         <div class="exp-header" onclick="toggle(this)">
           <div class="exp-left">
-            <p class="exp-tag"> Top-15 Finish · FPGA Prototyping</p>
-            <p class="exp-title">FPGA Hackathon 2025 - Nokia</p>
+            <p class="exp-tag">🏅 Top-15 Finish · FPGA Prototyping</p>
+            <p class="exp-title">FPGA Hackathon 2025 — Nokia</p>
             <p class="exp-place">Krakow, Poland</p>
           </div>
           <div class="exp-right">
@@ -876,6 +909,7 @@
     </div>
   </section>
 
+  <!-- Achievements -->
   <section id="achievements">
     <p class="sec-label reveal">// recognition</p>
     <h2 class="sec-title reveal">Awards &amp; Achievements</h2>
@@ -883,14 +917,14 @@
       <div class="ach-card reveal">
         <div class="ach-icon">🎯</div>
         <div class="ach-text">
-          <strong>AIR 1516 - JEE Advanced 2022</strong>
+          <strong>AIR 1516 — JEE Advanced 2022</strong>
           Out of 1.6 lakh students. AIR 1580 in JEE Mains out of 10 lakh students.
         </div>
       </div>
       <div class="ach-card reveal">
         <div class="ach-icon">🔬</div>
         <div class="ach-text">
-          <strong>KVPY Fellow 2021 - AIR 600</strong>
+          <strong>KVPY Fellow 2021 — AIR 600</strong>
           National fellowship by DST, Government of India.
         </div>
       </div>
@@ -919,8 +953,8 @@
       Open to research collaborations, internship opportunities, and conversations about hardware architecture.
     </p>
     <div class="contact-grid reveal">
-      <a class="contact-item" href="mailto:aakarshalam05@kgpian.iitkgp.ac.in">
-        ✉ aakarshalam05@kgpian.iitkgp.ac.in
+      <a class="contact-item" href="/cdn-cgi/l/email-protection#0b6a6a606a7978636a676a663b3e4b606c7b626a652562627f606c7b256a68256265">
+        ✉ <span class="__cf_email__" data-cfemail="4f2e2e242e3d3c272e232e227f7a0f24283f262e216126263b24283f612e2c612621">[email&#160;protected]</span>
       </a>
       <a class="contact-item" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank">
         ↗ linkedin.com/in/aakarsh-a
@@ -937,7 +971,7 @@
   Aakarsh Alam &nbsp;·&nbsp; IIT Kharagpur &nbsp;·&nbsp; E&ECE &nbsp;·&nbsp; 2027
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Accordion toggle - global scope
   function toggle(header) {
     const card = header.closest('.exp-card');
@@ -959,15 +993,4 @@
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
-        e.target.classList.remove('hidden');
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-
-  reveals.forEach(el => io.observe(el));
-
-  // Nav active state
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-lin
+        e.target
