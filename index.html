@@ -38,7 +38,6 @@
     overflow-x: hidden;
   }
 
-  /* ── Noise texture overlay ── */
   body::before {
     content: '';
     position: fixed;
@@ -49,7 +48,6 @@
     opacity: 0.4;
   }
 
-  /* ── Circuit grid background ── */
   body::after {
     content: '';
     position: fixed;
@@ -62,7 +60,6 @@
     z-index: 0;
   }
 
-  /* ── Navigation ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -102,7 +99,6 @@
   }
   .nav-links a:hover { color: var(--gold); }
 
-  /* ── Main layout ── */
   main {
     position: relative;
     z-index: 1;
@@ -111,9 +107,8 @@
     padding: 0 2rem;
   }
 
-  /* ── Hero ── */
   #hero {
-    min-height: 100vh;
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -205,7 +200,6 @@
     color: var(--gold);
   }
 
-  /* ── Section shared ── */
   section {
     padding: 6rem 0;
     border-top: 1px solid var(--border);
@@ -228,7 +222,6 @@
     margin-bottom: 3rem;
   }
 
-  /* ── Publication ── */
   .pub-card {
     background: var(--bg2);
     border: 1px solid var(--border);
@@ -276,7 +269,6 @@
   }
   .pub-doi:hover { color: var(--gold); }
 
-  /* ── Experience cards ── */
   .exp-list { display: flex; flex-direction: column; gap: 2px; }
 
   .exp-card {
@@ -303,7 +295,7 @@
   .exp-tag {
     font-family: var(--mono);
     font-size: 9.5px;
-    color: var(--text-faint);
+    color: var(--gold);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     margin-bottom: 0.3rem;
@@ -385,7 +377,6 @@
     font-weight: 500;
   }
 
-  /* ── Skills ── */
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -465,7 +456,6 @@
     font-size: 0.95rem;
   }
 
-  /* ── Contact ── */
   #contact {
     text-align: center;
     padding-bottom: 5rem;
@@ -498,7 +488,6 @@
     color: var(--gold);
   }
 
-  /* ── Footer ── */
   footer {
     position: relative;
     z-index: 1;
@@ -511,7 +500,6 @@
     letter-spacing: 0.1em;
   }
 
-  /* ── Stat bar (hero) ── */
   .hero-stats {
     display: flex;
     gap: 2.5rem;
@@ -540,7 +528,6 @@
     text-transform: uppercase;
   }
 
-  /* ── Animations ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -560,13 +547,11 @@
     transform: translateY(0);
   }
 
-  /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
 
-  /* ── Responsive ── */
   @media (max-width: 640px) {
     nav { padding: 0 1.5rem; }
     .nav-links { display: none; }
@@ -577,7 +562,6 @@
 </head>
 <body>
 
-<!-- Navigation -->
 <nav>
   <a class="nav-logo" href="#">Aakarsh Alam_</a>
   <ul class="nav-links">
@@ -592,23 +576,21 @@
 
 <main>
 
-  <!-- Hero -->
   <section id="hero" style="border-top: none;">
     <p class="hero-tag">// IIT Kharagpur · E&ECE · Microelectronics & VLSI</p>
-    <h1 class="hero-name">Aakarsh <em>Alam.</em></h1>
+    <h1 class="hero-name">Aakarsh <em>Alam</em></h1>
     <p class="hero-degree">B.Tech + M.Tech (Dual Degree) &nbsp;·&nbsp; Expected 2027 &nbsp;·&nbsp; CGPA 9.10 / 10</p>
     <p class="hero-bio">
-      Hardware engineer at heart with a focus on FPGA design, ML Hardware, and Computer Architecture.
-      Research focus on FPGA Accelerators.
+      Hardware engineer at heart with a focus on FPGA design, ML Hardware, and Computer Architecture.<br/>
+      Research focus on <em>FPGA Accelerators.</em>
     </p>
     <div class="hero-links">
-      <a class="btn btn-primary" href="/cdn-cgi/l/email-protection#036262686271706b626f626e3336436864736a626d2d6a6a776864732d62602d6a6d">Get In Touch</a>
-      <a class="btn btn-ghost" href="https://linkedin.com/in/Aakarsh" target="_blank">LinkedIn</a>
+      <a class="btn btn-primary" href="mailto:aakarshalam05@kgpian.iitkgp.ac.in">Get In Touch</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank">LinkedIn</a>
       <a class="btn btn-ghost" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank">ACM Publication</a>
     </div>
   </section>
 
-  <!-- Publication -->
   <section id="publication">
     <p class="sec-label reveal">// peer-reviewed</p>
     <h2 class="sec-title reveal">Publication</h2>
@@ -625,7 +607,6 @@
     </div>
   </section>
 
-  <!-- Projects -->
   <section id="projects">
     <p class="sec-label reveal">// hardware & research</p>
     <h2 class="sec-title reveal">Projects</h2>
@@ -750,7 +731,6 @@
     </div>
   </section>
 
-  <!-- Experience -->
   <section id="experience">
     <p class="sec-label reveal">// industry</p>
     <h2 class="sec-title reveal">Internship Experience</h2>
@@ -760,7 +740,7 @@
         <div class="exp-header" onclick="toggle(this)">
           <div class="exp-left">
             <p class="exp-tag">Embedded Systems · BMS</p>
-            <p class="exp-title">Embedded Intern — Midwest Energy Private Limited</p>
+            <p class="exp-title">Embedded Intern - Midwest Energy Private Limited</p>
             <p class="exp-place">Hyderabad, India</p>
           </div>
           <div class="exp-right">
@@ -812,8 +792,8 @@
       <div class="exp-card reveal">
         <div class="exp-header" onclick="toggle(this)">
           <div class="exp-left">
-            <p class="exp-tag">🏅 Top-15 Finish · FPGA Prototyping</p>
-            <p class="exp-title">FPGA Hackathon 2025 — Nokia</p>
+            <p class="exp-tag"> Top-15 Finish · FPGA Prototyping</p>
+            <p class="exp-title">FPGA Hackathon 2025 - Nokia</p>
             <p class="exp-place">Krakow, Poland</p>
           </div>
           <div class="exp-right">
@@ -896,7 +876,6 @@
     </div>
   </section>
 
-  <!-- Achievements -->
   <section id="achievements">
     <p class="sec-label reveal">// recognition</p>
     <h2 class="sec-title reveal">Awards &amp; Achievements</h2>
@@ -904,22 +883,22 @@
       <div class="ach-card reveal">
         <div class="ach-icon">🎯</div>
         <div class="ach-text">
-          <strong>AIR 1516 — JEE Advanced 2022</strong>
+          <strong>AIR 1516 - JEE Advanced 2022</strong>
           Out of 1.6 lakh students. AIR 1580 in JEE Mains out of 10 lakh students.
         </div>
       </div>
       <div class="ach-card reveal">
         <div class="ach-icon">🔬</div>
         <div class="ach-text">
-          <strong>KVPY Fellow 2021 — AIR 600</strong>
-          National fellowship by DST, Government of India — awarded to exceptionally motivated students for pursuing research careers in basic sciences, administered by IISc Bangalore. Among ~3,000 selected from over 1 lakh aspirants.
+          <strong>KVPY Fellow 2021 - AIR 600</strong>
+          National fellowship by DST, Government of India.
         </div>
       </div>
       <div class="ach-card reveal">
         <div class="ach-icon">📚</div>
         <div class="ach-text">
           <strong>NTSE Fellow 2020</strong>
-          National Talent Search Examination scholar — among the top 2,000 students in India, awarded by NCERT to identify and nurture academically talented students at the national level.
+          National Talent Search Examination scholar — among the top 2,000 students in India.
         </div>
       </div>
       <div class="ach-card reveal">
@@ -940,11 +919,11 @@
       Open to research collaborations, internship opportunities, and conversations about hardware architecture.
     </p>
     <div class="contact-grid reveal">
-      <a class="contact-item" href="/cdn-cgi/l/email-protection#3756565c5645445f565b565a0702775c50475e5659195e5e435c5047195654195e59">
-        ✉ <span class="__cf_email__" data-cfemail="3756565c5645445f565b565a0702775c50475e5659195e5e435c5047195654195e59">[email&#160;protected]</span>
+      <a class="contact-item" href="mailto:aakarshalam05@kgpian.iitkgp.ac.in">
+        ✉ aakarshalam05@kgpian.iitkgp.ac.in
       </a>
-      <a class="contact-item" href="https://linkedin.com/in/Aakarsh" target="_blank">
-        ↗ linkedin.com/in/Aakarsh
+      <a class="contact-item" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank">
+        ↗ linkedin.com/in/aakarsh-a
       </a>
       <a class="contact-item" href="tel:+919345100477">
         ✆ +91-9345100477
