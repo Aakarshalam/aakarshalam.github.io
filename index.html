@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aakarsh Alam — Hardware Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #080b0f;
+    --bg2:       #0e1318;
+    --bg3:       #141b22;
+    --border:    #1e2a35;
+    --gold:      #c8963e;
+    --gold-dim:  #8a6428;
+    --gold-glow: rgba(200,150,62,0.12);
+    --text:      #dde4ec;
+    --text-dim:  #7a8fa3;
+    --text-faint:#3d5068;
+    --white:     #f0f5fa;
+    --serif:     'DM Serif Display', Georgia, serif;
+    --mono:      'JetBrains Mono', 'Courier New', monospace;
+    --sans:      'DM Sans', sans-serif;
+    --radius:    4px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── Circuit grid background ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,150,62,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,150,62,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    height: 60px;
+    background: rgba(8,11,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── Main layout ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── Hero ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 60px;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.2s both;
+  }
+
+  h1.hero-name {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 0.3rem;
+    animation: fadeUp 0.7s 0.35s both;
+  }
+
+  h1.hero-name em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-degree {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.7s 0.5s both;
+  }
+
+  .hero-bio {
+    max-width: 560px;
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.65s both;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.8s both;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 500;
+    border: 1px solid var(--gold);
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--gold);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  /* ── Section shared ── */
+  section {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .sec-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h2.sec-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Publication ── */
+  .pub-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    transition: background 0.2s;
+  }
+  .pub-card:hover { background: var(--bg3); }
+
+  .pub-venue {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .pub-title {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .pub-authors {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 0.6rem;
+  }
+
+  .pub-authors strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .pub-doi {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .pub-doi:hover { color: var(--gold); }
+
+  /* ── Experience cards ── */
+  .exp-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .exp-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .exp-card:hover { border-color: var(--gold-dim); }
+
+  .exp-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .exp-left { flex: 1; }
+
+  .exp-tag {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--text-faint);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .exp-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: var(--white);
+    line-height: 1.3;
+  }
+
+  .exp-place {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  .exp-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .exp-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  .exp-chevron {
+    font-size: 10px;
+    color: var(--text-faint);
+    transition: transform 0.25s;
+  }
+  .exp-card.open .exp-chevron { transform: rotate(180deg); }
+
+  .exp-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .exp-card.open .exp-body { max-height: 600px; }
+
+  .exp-inner {
+    padding: 0 1.5rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .exp-bullets {
+    list-style: none;
+    margin-top: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .exp-bullets li {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    padding-left: 1.1rem;
+    position: relative;
+  }
+  .exp-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+    top: 4px;
+  }
+
+  .exp-bullets li strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── Skills ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .skill-group {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .skill-group-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.2rem 0.55rem;
+    transition: all 0.15s;
+  }
+  .tag:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* ── Achievements ── */
+  .ach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .ach-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .ach-card:hover {
+    background: var(--bg3);
+    border-color: var(--gold-dim);
+  }
+
+  .ach-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .ach-text {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .ach-text strong {
+    color: var(--white);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.2rem;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+  }
+
+  /* ── Contact ── */
+  #contact {
+    text-align: center;
+    padding-bottom: 5rem;
+  }
+
+  .contact-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.7rem 1.2rem;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .contact-item:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  /* ── Footer ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Stat bar (hero) ── */
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.7s 1s forwards;
+    flex-wrap: wrap;
+  }
+
+  .stat { display: flex; flex-direction: column; gap: 0.2rem; }
+
+  .stat-val {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-faint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .reveal.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .reveal.hidden.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+    main { padding: 0 1.25rem; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <a class="nav-logo" href="#">Aakarsh Alam_</a>
+  <ul class="nav-links">
+    <li><a href="#publication">Publication</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- Hero -->
+  <section id="hero" style="border-top: none;">
+    <p class="hero-tag">// IIT Kharagpur · E&ECE · Microelectronics & VLSI</p>
+    <h1 class="hero-name">Aakarsh <em>Alam.</em></h1>
+    <p class="hero-degree">B.Tech + M.Tech (Dual Degree) &nbsp;·&nbsp; Expected 2027 &nbsp;·&nbsp; CGPA 9.10 / 10</p>
+    <p class="hero-bio">
+      Hardware engineer at heart with a focus on FPGA design, ML Hardware, and Computer Architecture.
+      Research focus on FPGA Accelerators.
+    </p>
+    <div class="hero-links">
+      <a class="btn btn-primary" href="/cdn-cgi/l/email-protection#036262686271706b626f626e3336436864736a626d2d6a6a776864732d62602d6a6d">Get In Touch</a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/Aakarsh" target="_blank">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank">ACM Publication</a>
+    </div>
+  </section>
+
+  <!-- Publication -->
+  <section id="publication">
+    <p class="sec-label reveal">// peer-reviewed</p>
+    <h2 class="sec-title reveal">Publication</h2>
+    <div class="pub-card reveal">
+      <p class="pub-venue">ISFPGA 2026 · ACM/SIGDA · Poster</p>
+      <p class="pub-title">FARE: A Fine-grained Pipelined Reconfigurable FlashAttention Kernel</p>
+      <p class="pub-authors">Kaushikkumar S Rathva, <strong>Aakarsh Alam</strong>, Srini Srinivasan, Sumit K Mandal</p>
+      <p style="font-size:13px; color:var(--text-dim); margin-bottom:0.6rem;">
+        Proceedings of the 2026 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays, pp. 179–179
+      </p>
+      <a class="pub-doi" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank">
+        ↗ doi.org/10.1145/3748173.3779572
+      </a>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <p class="sec-label reveal">// hardware & research</p>
+    <h2 class="sec-title reveal">Projects</h2>
+    <div class="exp-list">
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">FPGA Architecture · Published</p>
+            <p class="exp-title">FlashAttention Design on FPGA</p>
+            <p class="exp-place">IISc Bangalore · Prof. Sumit K Mandal</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">May 2025 – Present</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Devised a <strong>3-stage FlashAttention architecture</strong> for Zedboard to accelerate Transformer self-attention for throughput and latency.</li>
+              <li>Implemented online softmax with negative exponential engine, achieving error &lt;0.05% for 32-bit, optimised for parallel operations.</li>
+              <li>Verified the PS-PL flow for Stage 2 by running a host application on ARM (Zynq PS), achieving latency &lt;50 ns per tile on average.</li>
+              <li>Integrated all 3 stages for tile sizes 4, 8, &amp; 16; achieved a <strong>2.9× decrement in latency</strong> over SOTA for tile size 64.</li>
+              <li>Work published as a poster at <strong>ISFPGA 2026</strong> (ACM/SIGDA), pp. 179–179.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">Signal Processing · B.Tech Project</p>
+            <p class="exp-title">Approximate Recovery of Signals with Non-linear Distortions using Robust-PCA</p>
+            <p class="exp-place">IIT Kharagpur · Prof. Amitalok J. Budkuley</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">Aug 2025 – Present</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Built a Hankel-lifted, first-difference Robust PCA pipeline to separate structured multitone signal components from sparse non-linear folding distortions.</li>
+              <li>Implemented PCP using an Inexact ALM solver in MATLAB and proposed an integer-aware RPCA heuristic to improve stability in strongly non-linear folding regimes.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">SoC Architecture · VLSI</p>
+            <p class="exp-title">MLP Accelerator Design on Zynq-7000 SoC</p>
+            <p class="exp-place">IIT Kharagpur · Prof. Indrajit Chakraborty</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">Mar 2025 – Aug 2025</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Architected an MLP with configurable layer sizes, fixed-point datapath, pipelined MAC array, and a CORDIC-based tanh engine achieving &lt;0.2% error for 16-bit.</li>
+              <li>Synthesised and implemented on Zedboard PL, achieving a <strong>maximum operating frequency of 200 MHz</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">EV Powertrain · Team Lead</p>
+            <p class="exp-title">Formula SAE Electric Car — TeamKART Electric</p>
+            <p class="exp-place">IIT Kharagpur</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">Jan 2024 – Oct 2025</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Designed Control Panel architecture using a V-F converter and Arduino Nano's ADC for accurate, rapid contactor and relay actuation.</li>
+              <li>Engineered STM32 charger architecture for a 90 V battery pack with CC-CV algorithm for fast-charging in under 1 hour.</li>
+              <li>Conducted FMEA for 100+ failure modes; developed TSAL circuitry for safety checks and VCU Isolator for galvanic isolation.</li>
+              <li>Characterised NMC &amp; LFP cells for Kari drive cycle under variable temperature conditions; max. current reaching 7C for 10 s.</li>
+              <li>Led a <strong>40+ member electrical team</strong> as Head of Electrical Systems, overseeing full EV powertrain validation on a custom motor test bench.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">DFT · Term Project</p>
+            <p class="exp-title">Concurrent Fault Simulator for Design-for-Test</p>
+            <p class="exp-place">IIT Kharagpur · Prof. Indranil Sengupta</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">Sep 2025 – Nov 2025</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Built an event-driven, bit-parallel concurrent fault simulator for structural Verilog netlists with automated test vector generation.</li>
+              <li>Implemented two-level fault collapsing (equivalence &amp; dominance) to eliminate redundant faults and reduce total simulation time.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <p class="sec-label reveal">// industry</p>
+    <h2 class="sec-title reveal">Internship Experience</h2>
+    <div class="exp-list">
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">Embedded Systems · BMS</p>
+            <p class="exp-title">Embedded Intern — Midwest Energy Private Limited</p>
+            <p class="exp-place">Hyderabad, India</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">Jun 2024 – Jul 2024</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Integrated CAN bus on STM32-based BMS for 24 voltage &amp; 16 temperature sensing lines on a 160 V pack; programmed a LUT-based Extended Kalman Filter for SoC estimation, <strong>reducing error by 4.5%</strong> over Coulomb counting.</li>
+              <li>Built a custom TouchGFX graphical UI on STM32F7 to visualise cell voltages, temperatures, and SoC in real time.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Competitions -->
+  <section id="competitions">
+    <p class="sec-label reveal">// inter-collegiate</p>
+    <h2 class="sec-title reveal">Competitions &amp; Hackathons</h2>
+    <div class="exp-list">
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">🥈 Silver Medal · ASIC Design · ISRO</p>
+            <p class="exp-title">Inter IIT Tech Meet 14.0 — Delta-Sigma ASIC Development</p>
+            <p class="exp-place">IIT Patna · Contingent Gold</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">2025</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Served as <strong>Team Captain</strong>; secured Silver among 23 IITs with a <strong>20-bit Delta-Sigma ADC</strong> design — 2nd-order CIFF Modulator with CIC + FIR filter achieving ENOB of 19.44 at 2 KSPS.</li>
+              <li>Generated full GDSII for the Reconfigurable CIC using Cadence Genus, Innovus, and Calibre toolchain.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header" onclick="toggle(this)">
+          <div class="exp-left">
+            <p class="exp-tag">🏅 Top-15 Finish · FPGA Prototyping</p>
+            <p class="exp-title">FPGA Hackathon 2025 — Nokia</p>
+            <p class="exp-place">Krakow, Poland</p>
+          </div>
+          <div class="exp-right">
+            <span class="exp-date">2025</span>
+            <span class="exp-chevron">▼</span>
+          </div>
+        </div>
+        <div class="exp-body">
+          <div class="exp-inner">
+            <ul class="exp-bullets">
+              <li>Selected as one of the <strong>top 70 teams from 1,000+ applicants</strong>; achieved a top-15 finish implementing 5 FPGA designs including a dot-product processor and 7-bit Hamming decoder.</li>
+              <li>Configured a Jenkins pipeline invoking Vivado in batch mode for synthesis, implementation, and bitstream export on Kria KV260.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <p class="sec-label reveal">// toolbox</p>
+    <h2 class="sec-title reveal">Technical Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <p class="skill-group-label">Hardware Description</p>
+        <div class="skill-tags">
+          <span class="tag">Verilog</span>
+          <span class="tag">SystemVerilog</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <p class="skill-group-label">Programming</p>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">C</span>
+          <span class="tag">MATLAB</span>
+          <span class="tag">LaTeX</span>
+          <span class="tag">Git</span>
+          <span class="tag">Linux</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <p class="skill-group-label">FPGA / EDA Tools</p>
+        <div class="skill-tags">
+          <span class="tag">Vivado</span>
+          <span class="tag">Vitis IDE</span>
+          <span class="tag">Icarus Verilog</span>
+          <span class="tag">Yosys</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <p class="skill-group-label">Cadence Suite</p>
+        <div class="skill-tags">
+          <span class="tag">Virtuoso</span>
+          <span class="tag">Genus</span>
+          <span class="tag">Innovus</span>
+          <span class="tag">Calibre</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <p class="skill-group-label">PCB & Hardware</p>
+        <div class="skill-tags">
+          <span class="tag">Altium</span>
+          <span class="tag">EasyEDA</span>
+          <span class="tag">LTSpice</span>
+          <span class="tag">Keil µVision</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <p class="skill-group-label">Core Competencies</p>
+        <div class="skill-tags">
+          <span class="tag">FPGA Design</span>
+          <span class="tag">RTL → GDSII</span>
+          <span class="tag">PCB Design</span>
+          <span class="tag">HW Prototyping</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements -->
+  <section id="achievements">
+    <p class="sec-label reveal">// recognition</p>
+    <h2 class="sec-title reveal">Awards &amp; Achievements</h2>
+    <div class="ach-grid">
+      <div class="ach-card reveal">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-text">
+          <strong>AIR 1516 — JEE Advanced 2022</strong>
+          Out of 1.6 lakh students. AIR 1580 in JEE Mains out of 10 lakh students.
+        </div>
+      </div>
+      <div class="ach-card reveal">
+        <div class="ach-icon">🔬</div>
+        <div class="ach-text">
+          <strong>KVPY Fellow 2021 — AIR 600</strong>
+          National fellowship by DST, Government of India — awarded to exceptionally motivated students for pursuing research careers in basic sciences, administered by IISc Bangalore. Among ~3,000 selected from over 1 lakh aspirants.
+        </div>
+      </div>
+      <div class="ach-card reveal">
+        <div class="ach-icon">📚</div>
+        <div class="ach-text">
+          <strong>NTSE Fellow 2020</strong>
+          National Talent Search Examination scholar — among the top 2,000 students in India, awarded by NCERT to identify and nurture academically talented students at the national level.
+        </div>
+      </div>
+      <div class="ach-card reveal">
+        <div class="ach-icon">🌟</div>
+        <div class="ach-text">
+          <strong>Two-time VVM State Camp Winner</strong>
+          Annual camp by Tamil Nadu promoting research and innovation among young students.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" style="border-top: 1px solid var(--border);">
+    <p class="sec-label reveal" style="text-align:center">// reach out</p>
+    <h2 class="sec-title reveal" style="text-align:center; margin-bottom:0.75rem;">Let's Connect</h2>
+    <p class="reveal" style="color:var(--text-dim); text-align:center; max-width:420px; margin:0 auto 0; font-size:14px;">
+      Open to research collaborations, internship opportunities, and conversations about hardware architecture.
+    </p>
+    <div class="contact-grid reveal">
+      <a class="contact-item" href="/cdn-cgi/l/email-protection#3756565c5645445f565b565a0702775c50475e5659195e5e435c5047195654195e59">
+        ✉ <span class="__cf_email__" data-cfemail="3756565c5645445f565b565a0702775c50475e5659195e5e435c5047195654195e59">[email&#160;protected]</span>
+      </a>
+      <a class="contact-item" href="https://linkedin.com/in/Aakarsh" target="_blank">
+        ↗ linkedin.com/in/Aakarsh
+      </a>
+      <a class="contact-item" href="tel:+919345100477">
+        ✆ +91-9345100477
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Aakarsh Alam &nbsp;·&nbsp; IIT Kharagpur &nbsp;·&nbsp; E&ECE &nbsp;·&nbsp; 2027
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Accordion toggle - global scope
+  function toggle(header) {
+    const card = header.closest('.exp-card');
+    card.classList.toggle('open');
+  }
+</script>
+<script>
+  // Attach accordion listeners after DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.exp-header').forEach(function(header) {
+      header.addEventListener('click', function() {
+        header.closest('.exp-card').classList.toggle('open');
+      });
+    });
+  });
+
+  // Scroll reveal - content visible by default, animate on scroll as enhancement
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.remove('hidden');
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  reveals.forEach(el => io.observe(el));
+
+  // Nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-lin
