@@ -3,958 +3,1361 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Aakarsh Alam</title>
+<title>Aakarsh Alam — FPGA &amp; ML Hardware</title>
+<meta name="description" content="Aakarsh Alam — Dual Degree (Microelectronics &amp; VLSI) at IIT Kharagpur. FPGA design, ML hardware accelerators and computer architecture. Co-author of FARE (ISFPGA 2026)."/>
+<meta name="author" content="Aakarsh Alam"/>
+<meta name="theme-color" content="#0a0c0f"/>
+<link rel="canonical" href="https://aakarshalam.github.io/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://aakarshalam.github.io/"/>
+<meta property="og:title" content="Aakarsh Alam — FPGA &amp; ML Hardware"/>
+<meta property="og:description" content="FPGA accelerators for ML, computer architecture and RTL-to-GDSII. IIT Kharagpur · ISFPGA 2026."/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='%23e3a04f'%3E%3Crect x='3' y='9' width='3' height='2'/%3E%3Crect x='3' y='15' width='3' height='2'/%3E%3Crect x='3' y='21' width='3' height='2'/%3E%3Crect x='26' y='9' width='3' height='2'/%3E%3Crect x='26' y='15' width='3' height='2'/%3E%3Crect x='26' y='21' width='3' height='2'/%3E%3Crect x='9' y='3' width='2' height='3'/%3E%3Crect x='15' y='3' width='2' height='3'/%3E%3Crect x='21' y='3' width='2' height='3'/%3E%3Crect x='9' y='26' width='2' height='3'/%3E%3Crect x='15' y='26' width='2' height='3'/%3E%3Crect x='21' y='26' width='2' height='3'/%3E%3C/g%3E%3Crect x='6' y='6' width='20' height='20' rx='2' fill='%230a0c0f' stroke='%23e3a04f' stroke-width='2'/%3E%3Ccircle cx='10.5' cy='10.5' r='1.6' fill='%23e3a04f'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<script>
+  (function () {
+    var t;
+    try { t = localStorage.getItem('theme'); } catch (e) {}
+    if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.classList.add('js');
+  })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Aakarsh Alam",
+  "url": "https://aakarshalam.github.io/",
+  "email": "mailto:aakarshalam05@kgpian.iitkgp.ac.in",
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology Kharagpur" },
+  "knowsAbout": ["FPGA design", "ML hardware", "Computer architecture", "VLSI", "RTL design"],
+  "sameAs": ["https://www.linkedin.com/in/aakarsh-a-b96830258/", "https://github.com/Aakarshalam"]
+}
+</script>
 <style>
+  /* ---------- tokens ---------- */
+  :root, [data-theme="dark"] {
+    --bg:          #0a0c0f;
+    --bg-2:        #0e1216;
+    --surface:     #11161b;
+    --surface-2:   #171d24;
+    --glass:       rgba(10,12,15,0.78);
+    --line:        #1f262e;
+    --line-2:      #2c3540;
+    --ink:         #e9ecf0;
+    --ink-2:       #a2acb8;
+    --ink-3:       #6a7583;
+    --accent:      #e3a04f;
+    --accent-ink:  #1a1206;
+    --accent-soft: rgba(227,160,79,0.13);
+    --signal:      #5fe08f;
+    --signal-soft: rgba(95,224,143,0.12);
+    --dot:         rgba(255,255,255,0.07);
+    color-scheme: dark;
+  }
+  [data-theme="light"] {
+    --bg:          #f4f2ec;
+    --bg-2:        #ece9e1;
+    --surface:     #fbfaf7;
+    --surface-2:   #f0ede6;
+    --glass:       rgba(244,242,236,0.82);
+    --line:        #dfd9cd;
+    --line-2:      #c8c0b0;
+    --ink:         #15181c;
+    --ink-2:       #4a525c;
+    --ink-3:       #7b838d;
+    --accent:      #a55712;
+    --accent-ink:  #ffffff;
+    --accent-soft: rgba(165,87,18,0.10);
+    --signal:      #16803c;
+    --signal-soft: rgba(22,128,60,0.10);
+    --dot:         rgba(0,0,0,0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      --bg: #f4f2ec; --bg-2: #ece9e1; --surface: #fbfaf7; --surface-2: #f0ede6; --glass: rgba(244,242,236,0.82);
+      --line: #dfd9cd; --line-2: #c8c0b0; --ink: #15181c; --ink-2: #4a525c; --ink-3: #7b838d;
+      --accent: #a55712; --accent-ink: #ffffff; --accent-soft: rgba(165,87,18,0.10);
+      --signal: #16803c; --signal-soft: rgba(22,128,60,0.10); --dot: rgba(0,0,0,0.08);
+      color-scheme: light;
+    }
+  }
   :root {
-    --bg:        #080b0f;
-    --bg2:       #0e1318;
-    --bg3:       #141b22;
-    --border:    #1e2a35;
-    --gold:      #c8963e;
-    --gold-dim:  #8a6428;
-    --gold-glow: rgba(200,150,62,0.12);
-    --text:      #dde4ec;
-    --text-dim:  #7a8fa3;
-    --text-faint:#3d5068;
-    --white:     #f0f5fa;
-    --serif:     'DM Serif Display', Georgia, serif;
-    --mono:      'JetBrains Mono', 'Courier New', monospace;
-    --sans:      'IBM Plex Sans', sans-serif;
-    --radius:    4px;
+    --sans:  'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --r:     14px;
   }
 
+  /* ---------- base ---------- */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
   body {
     background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 15px;
-    line-height: 1.65;
+    color: var(--ink);
+    font: 400 16px/1.65 var(--sans);
+    -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    transition: background-color .25s, color .25s;
   }
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    z-index: -1;
     pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
+    background-image: radial-gradient(var(--dot) 1px, transparent 1.2px);
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 70% 0%, #000 0%, transparent 80%);
+            mask-image: radial-gradient(ellipse 80% 60% at 70% 0%, #000 0%, transparent 80%);
   }
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(200,150,62,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,150,62,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--mono); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skip { position: absolute; left: 16px; top: -48px; z-index: 200; background: var(--accent); color: var(--accent-ink); padding: 8px 14px; border-radius: 8px; font: 500 14px var(--sans); text-decoration: none; }
+  .skip:focus { top: 12px; }
+
+  /* ---------- top bar ---------- */
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s;
   }
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
+  .top.scrolled { border-bottom-color: var(--line); }
+  .top .wrap { display: flex; align-items: center; gap: 16px; height: 64px; }
+  .brand {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 3rem;
-    height: 60px;
-    background: rgba(8,11,15,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--gold);
-    letter-spacing: 0.08em;
+    gap: 10px;
+    font: 500 13px var(--mono);
+    letter-spacing: .03em;
     text-decoration: none;
+    color: var(--ink);
   }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
+  .brand svg { width: 22px; height: 22px; color: var(--accent); }
+  .brand span { color: var(--ink-3); }
+  .nav { margin-left: auto; display: flex; gap: 2px; }
+  .nav a {
+    font: 500 12.5px var(--mono);
+    color: var(--ink-2);
     text-decoration: none;
-    letter-spacing: 0.12em;
+    padding: 8px 11px;
+    border-radius: 8px;
+    letter-spacing: .02em;
+    transition: color .15s, background-color .15s;
+  }
+  .nav a:hover { color: var(--ink); background: var(--surface-2); }
+  .nav a.active { color: var(--accent); }
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .icon-btn:hover { color: var(--ink); border-color: var(--line-2); }
+  .icon-btn svg { width: 17px; height: 17px; }
+  [data-theme="dark"] .i-sun, [data-theme="light"] .i-moon { display: none; }
+  .menu-btn { display: none; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+    gap: 56px;
+    align-items: center;
+    padding: 88px 0 96px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 13px 6px 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    font: 500 11.5px var(--mono);
+    color: var(--ink-2);
+    letter-spacing: .06em;
     text-transform: uppercase;
-    transition: color 0.2s;
   }
-  .nav-links a:hover { color: var(--gold); }
-  main {
-    position: relative;
-    z-index: 1;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  .live { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); }
+  .live::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid var(--signal);
+    animation: ping 2.4s ease-out infinite;
   }
-  #hero {
-    min-height: 70vh;
+  @keyframes ping { 0% { transform: scale(.4); opacity: .9; } 80%, 100% { transform: scale(1.5); opacity: 0; } }
+  .name {
+    font: 400 clamp(3.6rem, 8.4vw, 6.6rem)/.92 var(--serif);
+    letter-spacing: -.015em;
+    margin: 26px 0 22px;
+  }
+  .name em { color: var(--accent); }
+  .lede { font-size: clamp(1.06rem, 1.5vw, 1.22rem); color: var(--ink-2); max-width: 33em; }
+  .lede strong { color: var(--ink); font-weight: 500; }
+  .facts {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 60px;
-  }
-
-  .hero-tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.7s 0.2s both;
-  }
-
-  h1.hero-name {
-    font-family: var(--serif);
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    color: var(--white);
-    line-height: 1.05;
-    margin-bottom: 0.3rem;
-    animation: fadeUp 0.7s 0.35s both;
-  }
-
-  h1.hero-name em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .hero-degree {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-dim);
-    letter-spacing: 0.06em;
-    margin-bottom: 2rem;
-    animation: fadeUp 0.7s 0.5s both;
-  }
-
-  .hero-bio {
-    max-width: 560px;
-    color: var(--text-dim);
-    font-size: 15px;
-    line-height: 1.75;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.7s 0.65s both;
-  }
-
-  .hero-links {
-    display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
-    animation: fadeUp 0.7s 0.8s both;
+    gap: 6px 22px;
+    margin: 26px 0 34px;
+    font: 400 13px var(--mono);
+    color: var(--ink-3);
   }
-
+  .facts b { color: var(--ink); font-weight: 500; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; }
   .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1.2rem;
-    border-radius: var(--radius);
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font: 500 14.5px var(--sans);
     text-decoration: none;
-    text-transform: uppercase;
-    transition: all 0.2s;
     cursor: pointer;
+    transition: transform .15s, border-color .15s, background-color .15s, filter .15s;
+  }
+  .btn:hover { border-color: var(--ink-3); transform: translateY(-1px); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { border-color: var(--accent); filter: brightness(1.08); }
+  .btn-sm { height: 36px; padding: 0 14px; font-size: 13.5px; border-radius: 9px; }
+
+  /* chip pinout */
+  .chip-wrap { position: relative; }
+  .chip { display: block; width: 100%; height: auto; overflow: visible; }
+  .chip .pkg  { fill: var(--surface); stroke: var(--line-2); stroke-width: 1.2; }
+  .chip .pin  { fill: var(--line-2); transition: fill .15s; }
+  .chip .lbl  { font: 500 12px var(--mono); fill: var(--ink-3); letter-spacing: .04em; transition: fill .15s; }
+  .chip .num  { font: 400 8px var(--mono); fill: var(--ink-3); opacity: .7; }
+  .chip .wire { fill: none; stroke: var(--line-2); stroke-width: .8; transition: stroke .15s; }
+  .chip .pulse {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 6 160;
+    stroke-dashoffset: 166;
+    animation: flow 2.6s linear infinite;
+  }
+  @keyframes flow { to { stroke-dashoffset: 0; } }
+  .chip .link .pin { fill: var(--accent); }
+  .chip .link .lbl { fill: var(--ink); }
+  .chip .link:hover .lbl, .chip .link:focus-visible .lbl { fill: var(--accent); }
+  .chip .link:hover .wire, .chip .link:focus-visible .wire { stroke: var(--accent); stroke-width: 1.2; }
+  .chip .link:focus-visible { outline: none; }
+  .chip .p1   { fill: var(--ink-3); }
+  .chip .die  { fill: var(--bg-2); stroke: var(--line-2); stroke-width: .8; }
+  .chip .blk  { fill: var(--accent-soft); stroke: var(--accent); stroke-opacity: .45; stroke-width: .6; }
+  .chip .blk-lbl { font: 500 5.4px var(--mono); fill: var(--ink-2); letter-spacing: .06em; }
+  .chip .sram { stroke: var(--accent); stroke-opacity: .35; stroke-width: .6; }
+  .chip .pe   { fill: var(--accent); opacity: .14; animation: pe 2.4s ease-in-out infinite; }
+  @keyframes pe { 0%, 100% { opacity: .14; } 18% { opacity: .9; } 40% { opacity: .14; } }
+  .chip-cap {
+    margin-top: 10px;
+    text-align: center;
+    font: 400 12px var(--mono);
+    color: var(--ink-3);
   }
 
-  .btn-primary {
-    background: var(--gold);
-    color: var(--bg);
-    font-weight: 500;
-    border: 1px solid var(--gold);
+  /* ---------- sections ---------- */
+  .section { padding: 104px 0; border-top: 1px solid var(--line); }
+  .sec-head {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 24px;
+    align-items: baseline;
+    margin-bottom: 44px;
   }
-  .btn-primary:hover {
-    background: transparent;
-    color: var(--gold);
-  }
+  .sec-num { font: 500 12px var(--mono); color: var(--accent); letter-spacing: .1em; text-transform: uppercase; }
+  .sec-head h2 { font: 600 clamp(1.85rem, 3.4vw, 2.6rem)/1.08 var(--sans); letter-spacing: -.028em; }
+  .sec-head p { color: var(--ink-2); margin-top: 12px; max-width: 40em; }
+  .panel { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
 
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-dim);
-    border: 1px solid var(--border);
-  }
-  .btn-ghost:hover {
-    border-color: var(--gold-dim);
-    color: var(--gold);
-  }
-
-  section {
-    padding: 6rem 0;
-    border-top: 1px solid var(--border);
-  }
-
-  .sec-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--gold);
-    letter-spacing: 0.22em;
+  /* characteristics table */
+  .table-wrap { overflow: hidden; }
+  .spec { width: 100%; border-collapse: collapse; }
+  .spec th {
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--line-2);
+    background: var(--surface-2);
+    text-align: left;
+    font: 500 11px var(--mono);
+    color: var(--ink-3);
+    letter-spacing: .1em;
     text-transform: uppercase;
-    margin-bottom: 0.75rem;
   }
-
-  h2.sec-title {
-    font-family: var(--serif);
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    color: var(--white);
-    line-height: 1.15;
-    margin-bottom: 3rem;
-  }
-  .pub-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--gold);
-    border-radius: var(--radius);
-    padding: 1.5rem 1.75rem;
-    transition: background 0.2s;
-  }
-  .pub-card:hover { background: var(--bg3); }
-
-  .pub-venue {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--gold);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .pub-title {
-    font-family: var(--sans);
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 0.5rem;
-    line-height: 1.45;
-    letter-spacing: 0.01em;
-  }
-
-  .pub-authors {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-dim);
-    margin-bottom: 0.6rem;
-    letter-spacing: 0.01em;
-  }
-
-  .pub-authors strong {
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  .pub-doi {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gold-dim);
+  .spec th.r, .spec td.r { text-align: right; }
+  .spec td { padding: 15px 20px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .spec tr:last-child td { border-bottom: 0; }
+  .spec tbody tr { transition: background-color .15s; }
+  .spec tbody tr:hover { background: var(--surface-2); }
+  .spec .p { font-weight: 500; }
+  .spec .p small { display: block; font-weight: 400; font-size: 13px; color: var(--ink-3); margin-top: 1px; }
+  .spec .sym { font: italic 400 19px var(--serif); color: var(--ink-2); white-space: nowrap; }
+  .spec .sym sub { font-size: .62em; font-style: normal; font-family: var(--mono); }
+  .spec .val { font: 500 19px var(--mono); white-space: nowrap; letter-spacing: -.02em; }
+  .spec .unit { font: 400 13px var(--mono); color: var(--ink-3); white-space: nowrap; }
+  .spec .ref a {
+    font: 500 12px var(--mono);
+    color: var(--accent);
     text-decoration: none;
-    transition: color 0.2s;
-  }
-  .pub-doi:hover { color: var(--gold); }
-
-  .exp-list { display: flex; flex-direction: column; gap: 2px; }
-
-  .exp-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--gold);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .exp-card:hover { border-color: var(--gold); }
-
-  .exp-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .exp-left { flex: 1; }
-
-  .exp-tag {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    color: var(--gold);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
-  }
-
-  .exp-title {
-    font-family: var(--sans);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--white);
-    line-height: 1.3;
-    letter-spacing: 0.01em;
-  }
-
-  .exp-place {
-    font-size: 12.5px;
-    font-weight: 400;
-    color: var(--text-dim);
-    margin-top: 0.25rem;
-    letter-spacing: 0.01em;
-  }
-
-  .exp-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.3rem;
-    flex-shrink: 0;
-  }
-
-  .exp-date {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-faint);
     white-space: nowrap;
   }
+  .spec .ref a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-  .exp-chevron {
-    font-size: 10px;
-    color: var(--text-faint);
-    transition: transform 0.25s;
+  /* publication */
+  .pub { position: relative; padding: 36px 40px; overflow: hidden; }
+  .pub::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
   }
-  .exp-card.open .exp-chevron { transform: rotate(180deg); }
-
-  .exp-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease;
+  .pub::after {
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(var(--accent-soft), transparent 70%);
+    pointer-events: none;
   }
-  .exp-card.open .exp-body { max-height: 600px; }
-
-  .exp-inner {
-    padding: 0 1.5rem 1.25rem;
-    border-top: 1px solid var(--border);
+  .pub-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font: 400 12.5px var(--mono); color: var(--ink-3); }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font: 500 11.5px var(--mono);
+    letter-spacing: .06em;
+    text-transform: uppercase;
   }
+  .pub h3 { font: 400 clamp(1.6rem, 3vw, 2.25rem)/1.15 var(--serif); margin: 18px 0 14px; max-width: 26em; }
+  .pub h3 a { text-decoration: none; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size .3s; }
+  .pub h3 a:hover { background-size: 100% 1px; }
+  .authors { color: var(--ink-2); font-size: 15px; }
+  .authors b { color: var(--ink); font-weight: 600; }
+  .venue { color: var(--ink-3); font-size: 14px; margin-top: 4px; }
+  .pub-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 
-  .exp-bullets {
-    list-style: none;
-    margin-top: 0.9rem;
+  /* projects */
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+    padding: 36px;
+    margin-bottom: 20px;
+  }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .card { display: flex; flex-direction: column; gap: 14px; padding: 28px; transition: border-color .2s; }
+  .card:hover, .feature:hover { border-color: var(--line-2); }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font: 500 11.5px var(--mono);
+    color: var(--ink-3);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .card-top .tag { color: var(--accent); }
+  .card-top time { white-space: nowrap; }
+  .card h3 { font: 600 1.22rem/1.3 var(--sans); letter-spacing: -.012em; }
+  .feature h3 { font: 400 clamp(1.8rem, 3vw, 2.4rem)/1.1 var(--serif); letter-spacing: 0; }
+  .where { margin-top: -6px; color: var(--ink-2); font-size: 14.5px; }
+  .metrics { display: flex; flex-wrap: wrap; gap: 10px 32px; padding: 14px 0; border-top: 1px dashed var(--line-2); border-bottom: 1px dashed var(--line-2); }
+  .metric { display: flex; flex-direction: column; }
+  .metric b { font: 400 2.1rem/1 var(--serif); color: var(--accent); }
+  .metric span { margin-top: 4px; font: 400 12px var(--mono); color: var(--ink-3); }
+  .bul { list-style: none; display: grid; gap: 9px; }
+  .bul li { position: relative; padding-left: 20px; color: var(--ink-2); font-size: 15px; }
+  .bul li::before { content: ''; position: absolute; left: 2px; top: .78em; width: 8px; height: 1.5px; background: var(--accent); }
+  .bul strong { color: var(--ink); font-weight: 500; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }
+  .chips span {
+    padding: 3px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg-2);
+    font: 400 12px var(--mono);
+    color: var(--ink-2);
+  }
+  .flash { animation: flash 1.8s ease-out; }
+  @keyframes flash { 0%, 35% { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); } 100% { box-shadow: 0 0 0 4px transparent; } }
+
+  /* FARE block diagram */
+  .arch {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .exp-bullets li {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-dim);
-    line-height: 1.7;
-    padding-left: 1.1rem;
-    position: relative;
-    letter-spacing: 0.01em;
-  }
-  .exp-bullets li::before {
-    content: '▸';
-    position: absolute;
-    left: 0;
-    color: var(--gold);
-    font-size: 10px;
-    top: 4px;
-  }
-
-  .exp-bullets li strong {
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-  }
-
-  .skill-group {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-  }
-
-  .skill-group-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--gold);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  .skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 0.2rem 0.55rem;
-    transition: all 0.15s;
-  }
-  .tag:hover { border-color: var(--gold-dim); color: var(--gold); }
-
-  .ach-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-  }
-
-  .ach-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .ach-card:hover {
-    background: var(--bg3);
-    border-color: var(--gold-dim);
-  }
-
-  .ach-icon {
-    font-size: 1.2rem;
-    margin-bottom: 0.6rem;
-  }
-
-  .ach-text {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-dim);
-    line-height: 1.65;
-    letter-spacing: 0.01em;
-  }
-
-  .ach-text strong {
-    color: var(--white);
-    font-weight: 600;
-    display: block;
-    margin-bottom: 0.25rem;
-    font-family: var(--sans);
-    font-size: 0.9rem;
-    letter-spacing: 0.01em;
-  }
-
-  #contact {
-    text-align: center;
-    padding-bottom: 5rem;
-  }
-
-  .contact-grid {
-    display: flex;
     justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 2rem;
+    gap: 14px;
+    padding: 28px 24px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 20px 20px,
+      var(--bg-2);
+    background-blend-mode: normal;
   }
-
-  .contact-item {
+  .arch::before { content: ''; position: absolute; inset: 0; border-radius: 12px; background: var(--bg-2); opacity: .55; }
+  .arch > * { position: relative; }
+  .arch-k { font: 500 10.5px var(--mono); letter-spacing: .12em; color: var(--ink-3); text-transform: uppercase; }
+  .arch-box { padding: 14px 16px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface); }
+  .arch-box p { font: 500 14px var(--sans); margin-top: 2px; }
+  .arch-box small { display: block; font: 400 12px var(--mono); color: var(--ink-3); }
+  .arch-bus {
+    align-self: center;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.7rem 1.2rem;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: var(--text-dim);
-    text-decoration: none;
-    transition: all 0.2s;
+    gap: 10px;
+    font: 500 11px var(--mono);
+    color: var(--ink-3);
+    letter-spacing: .08em;
   }
-  .contact-item:hover {
-    border-color: var(--gold-dim);
-    color: var(--gold);
-  }
-
-  footer {
+  .arch-bus::before, .arch-bus::after { content: ''; width: 1px; height: 18px; background: var(--line-2); }
+  .arch-pl { border-color: var(--accent); }
+  .stages { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 6px; margin: 12px 0 10px; }
+  .stage-b {
     position: relative;
-    z-index: 1;
-    border-top: 1px solid var(--border);
-    padding: 1.5rem 2rem;
+    overflow: hidden;
+    padding: 12px 6px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: var(--accent-soft);
     text-align: center;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-faint);
-    letter-spacing: 0.1em;
+    font: 500 12.5px var(--mono);
   }
+  .stage-b::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -40%;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+    animation: sweep 2.4s linear infinite;
+  }
+  .stage-b:nth-of-type(2)::after { animation-delay: .8s; }
+  .stage-b:nth-of-type(3)::after { animation-delay: 1.6s; }
+  @keyframes sweep { to { left: 100%; } }
+  .stage-arrow { color: var(--accent); font: 400 14px var(--mono); }
+  .arch-io { display: flex; justify-content: space-between; font: 400 12px var(--mono); color: var(--ink-3); }
 
-  .hero-stats {
+  /* timeline */
+  .wave-box { position: relative; padding: 18px 20px 14px; }
+  .wave-head {
     display: flex;
-    gap: 2.5rem;
-    margin-top: 3.5rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-    opacity: 0;
-    animation: fadeUp 0.7s 1s forwards;
     flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 16px;
+    margin-bottom: 10px;
+    font: 400 12px var(--mono);
+    color: var(--ink-3);
   }
-
-  .stat { display: flex; flex-direction: column; gap: 0.2rem; }
-
-  .stat-val {
-    font-family: var(--serif);
-    font-size: 1.6rem;
-    color: var(--gold);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-faint);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.6s, transform 0.6s;
-  }
-  .reveal.hidden {
+  .wave-head b { color: var(--ink-2); font-weight: 500; }
+  .wave-scroll { overflow-x: auto; scrollbar-width: thin; }
+  #wave { min-width: 640px; }
+  #wave svg { display: block; }
+  .w-grid { stroke: var(--line); stroke-width: 1; }
+  .w-grid.yr { stroke: var(--line-2); }
+  .w-yr  { font: 500 11px var(--mono); fill: var(--ink-2); }
+  .w-mo  { font: 400 10px var(--mono); fill: var(--ink-3); }
+  .w-lbl { font: 500 11px var(--mono); fill: var(--ink-2); letter-spacing: .03em; }
+  .w-clk { fill: none; stroke: var(--ink-3); stroke-width: 1; opacity: .7; }
+  .w-sig { fill: none; stroke: var(--signal); stroke-width: 1.5; stroke-linejoin: round; transition: stroke-width .15s; }
+  .w-sig.dash { stroke-dasharray: 3 4; }
+  .w-fill { fill: var(--signal-soft); transition: fill .15s; }
+  .w-in  { font: 500 10.5px var(--mono); fill: var(--ink); pointer-events: none; }
+  .w-now { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; }
+  .w-now-t { font: 500 10px var(--mono); fill: var(--accent); letter-spacing: .08em; }
+  .w-hit { fill: transparent; }
+  .w-row { cursor: pointer; outline: none; }
+  .w-row:hover .w-sig, .w-row:focus-visible .w-sig { stroke-width: 2.4; }
+  .w-row:hover .w-fill, .w-row:focus-visible .w-fill { fill: var(--signal); fill-opacity: .24; }
+  .w-row:hover .w-lbl, .w-row:focus-visible .w-lbl { fill: var(--signal); }
+  .w-row:focus-visible .w-hit { stroke: var(--accent); stroke-width: 1; }
+  .tip {
+    position: absolute;
+    z-index: 5;
+    padding: 8px 11px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: var(--bg);
+    font: 400 12px/1.45 var(--mono);
+    white-space: nowrap;
+    pointer-events: none;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate(-50%, calc(-100% - 12px));
+    transition: opacity .12s;
   }
-  .reveal.hidden.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .tip b { font-weight: 500; }
+  .tip.on { opacity: 1; }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 20px; margin-top: 20px; }
+  .split-col { display: flex; flex-direction: column; gap: 20px; }
+  .col-h { font: 500 11.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 12px 0 -6px; }
+  .comp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+
+  /* toolchain */
+  .flow { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); overflow: hidden; list-style: none; }
+  .step { position: relative; padding: 22px 18px 24px; border-right: 1px solid var(--line); }
+  .step:last-child { border-right: 0; }
+  .step::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: 26px;
+    right: -6px;
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid var(--line-2);
+    border-right: 1px solid var(--line-2);
+    background: var(--surface);
+    transform: rotate(45deg);
   }
+  .step:last-child::after { display: none; }
+  .step-n { font: 500 11px var(--mono); color: var(--accent); letter-spacing: .06em; }
+  .step h3 { font: 600 15px/1.3 var(--sans); margin: 6px 0 14px; }
+  .step ul { list-style: none; display: grid; gap: 6px; font: 400 13px var(--mono); color: var(--ink-2); }
+  .also { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px 24px; margin-top: 28px; align-items: baseline; }
+  .also dt { font: 500 11.5px var(--mono); color: var(--ink-3); letter-spacing: .1em; text-transform: uppercase; }
+  .also dd { display: flex; flex-wrap: wrap; gap: 6px; }
+  .also dd span { padding: 4px 11px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font: 400 13px var(--mono); color: var(--ink-2); }
 
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+  /* awards */
+  .awards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  .award { padding: 26px 24px; }
+  .award b { display: block; margin-bottom: 18px; font: 400 2.6rem/1 var(--serif); color: var(--accent); }
+  .award h3 { font: 600 15.5px/1.35 var(--sans); }
+  .award p { margin-top: 6px; font-size: 14px; color: var(--ink-2); }
 
+  /* contact */
+  .contact { padding: 120px 0 104px; border-top: 1px solid var(--line); }
+  .contact h2 { font: 400 clamp(2.8rem, 7vw, 5.4rem)/.98 var(--serif); letter-spacing: -.01em; max-width: 11em; margin: 18px 0 22px; }
+  .contact h2 em { color: var(--accent); }
+  .contact > .wrap > p { color: var(--ink-2); max-width: 32em; font-size: 1.08rem; }
+  .mail-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 36px 0 24px; }
+  .mail {
+    font: 500 clamp(1rem, 2.6vw, 1.6rem) var(--mono);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background: linear-gradient(var(--accent), var(--accent)) 0 100% / 100% 1px no-repeat;
+    padding-bottom: 4px;
+    transition: color .15s;
+  }
+  .mail:hover { color: var(--accent); }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  footer { border-top: 1px solid var(--line); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 22px; padding-bottom: 26px; font: 400 12px var(--mono); color: var(--ink-3); }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: var(--bg);
+    font: 500 13px var(--mono);
+    opacity: 0;
+    transform: translate(-50%, 12px);
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+  }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  /* reveal (only when JS is running) */
+  .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .hero > * { animation: rise .8s both; }
+  .hero > :nth-child(2) { animation-delay: .15s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1000px) {
+    .flow { grid-template-columns: 1fr; }
+    .step { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 4px 20px; padding: 16px 22px; border-right: 0; border-bottom: 1px solid var(--line); }
+    .step:last-child { border-bottom: 0; }
+    .step::after { display: none; }
+    .step-n { grid-column: 1; }
+    .step h3 { grid-column: 1; margin: 0; }
+    .step ul { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-wrap: wrap; gap: 4px 16px; align-self: center; }
+    .awards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .split { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 880px) {
+    .menu-btn { display: grid; margin-left: auto; }
+    .nav {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px 16px 16px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav.open { display: flex; }
+    .nav a { padding: 12px; font-size: 14px; }
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 56px 0 72px; }
+    .chip-wrap { width: 100%; max-width: 460px; margin: 0 auto; }
+    .feature { grid-template-columns: 1fr; gap: 28px; padding: 28px; }
+    .cards, .comp { grid-template-columns: 1fr; }
+    .sec-head { grid-template-columns: 1fr; gap: 10px; }
+  }
   @media (max-width: 640px) {
-    nav { padding: 0 1.5rem; }
-    .nav-links { display: none; }
-    main { padding: 0 1.25rem; }
-    .hero-stats { gap: 1.5rem; }
+    .wrap { padding: 0 16px; }
+    .section { padding: 72px 0; }
+    .brand span { display: none; }
+    .pub { padding: 28px 22px 26px 26px; }
+    .card { padding: 22px; }
+    .feature { padding: 22px; }
+    .spec .sym, .spec .sym-h { display: none; }
+    .spec th, .spec td { padding-left: 14px; padding-right: 14px; }
+    .spec .ref { display: none; }
+    .step { grid-template-columns: 1fr; }
+    .step ul { grid-column: 1; grid-row: auto; margin-top: 8px; }
+    .also { grid-template-columns: 1fr; gap: 8px; }
+    .awards { grid-template-columns: 1fr; }
+    .contact { padding: 88px 0 80px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js .reveal { opacity: 1; transform: none; }
+  }
+  @media print {
+    .top, .chip-wrap, .wave-box, .toast, .skip, .pub-actions, .cta, footer { display: none !important; }
+    body { background: #fff; color: #000; }
+    body::before { display: none; }
+    .section, .contact { padding: 28px 0; }
+    .js .reveal { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="#">Aakarsh Alam_</a>
-  <ul class="nav-links">
-    <li><a href="#publication">Publication</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#achievements">Achievements</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+<a class="skip" href="#main">Skip to content</a>
 
-<main>
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#main" aria-label="Aakarsh Alam — home">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <g fill="currentColor"><rect x="3" y="9" width="3" height="2"/><rect x="3" y="15" width="3" height="2"/><rect x="3" y="21" width="3" height="2"/><rect x="26" y="9" width="3" height="2"/><rect x="26" y="15" width="3" height="2"/><rect x="26" y="21" width="3" height="2"/><rect x="9" y="3" width="2" height="3"/><rect x="15" y="3" width="2" height="3"/><rect x="21" y="3" width="2" height="3"/><rect x="9" y="26" width="2" height="3"/><rect x="15" y="26" width="2" height="3"/><rect x="21" y="26" width="2" height="3"/></g>
+        <rect x="6.5" y="6.5" width="19" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="10.5" cy="10.5" r="1.5" fill="currentColor"/>
+      </svg>
+      Aakarsh Alam <span>/ hw</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <a href="#publication">Publication</a>
+      <a href="#work">Work</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#toolchain">Toolchain</a>
+      <a href="#awards">Awards</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Toggle colour theme">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+    </button>
+    <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
 
-  <section id="hero" style="border-top: none;">
-    <p class="hero-tag">// IIT Kharagpur · E&ECE · Microelectronics & VLSI</p>
-    <h1 class="hero-name">Aakarsh <em>Alam</em></h1>
-    <p class="hero-degree">B.Tech + M.Tech (Dual Degree) &nbsp;·&nbsp; Expected 2027 &nbsp;·&nbsp; CGPA 9.1 / 10</p>
-    <p class="hero-bio">
-      Hardware engineer at heart with focus on <em> FPGA design, ML Hardware, and Computer Architecture</em>.<br/>
-    </p>
-    <div class="hero-links">
-      <a class="btn btn-primary" href="#contact">Get In Touch</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank">LinkedIn</a>
+<main id="main">
+
+  <!-- ===== hero ===== -->
+  <div class="wrap">
+    <section class="hero" aria-label="Introduction">
+      <div>
+        <p class="eyebrow"><span class="live" aria-hidden="true"></span>IIT Kharagpur · Microelectronics &amp; VLSI</p>
+        <h1 class="name">Aakarsh <em>Alam</em></h1>
+        <p class="lede">
+          Hardware engineer at heart, focused on <strong>FPGA design</strong>, <strong>ML hardware</strong>
+          and <strong>computer architecture</strong>, currently building attention accelerators on FPGAs.
+        </p>
+        <p class="facts">
+          <span><b>B.Tech + M.Tech</b> Dual Degree, E&amp;ECE</span>
+          <span>Expected <b>2027</b></span>
+          <span>CGPA <b>9.1</b>/10</span>
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#contact">Get in touch</a>
+          <a class="btn" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank" rel="noopener">Read the paper
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          <a class="btn" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://github.com/Aakarshalam" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <figure class="chip-wrap">
+        <svg class="chip" id="chip" viewBox="0 0 480 400" role="group" aria-label="Chip pinout — labelled pins link to sections of this page"></svg>
+        <figcaption class="chip-cap">fig. 1 — AA-27 pinout · labelled pins are links</figcaption>
+      </figure>
+    </section>
+  </div>
+
+  <!-- ===== characteristics ===== -->
+  <section class="section" id="specs" aria-labelledby="specs-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">§ 01</span>
+        <div>
+          <h2 id="specs-h">Key characteristics</h2>
+          <p>Headline numbers from the work below, in datasheet form.</p>
+        </div>
+      </div>
+      <div class="panel table-wrap">
+        <table class="spec">
+          <thead>
+            <tr><th>Parameter</th><th class="sym-h">Symbol</th><th class="r">Value</th><th>Unit</th><th class="ref">Ref</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="p">Attention latency reduction<small>vs. SOTA, tile size 64, Zedboard</small></td><td class="sym">Δt<sub>lat</sub></td><td class="val r">2.9</td><td class="unit">×</td><td class="ref"><a href="#p-fare">FARE ↓</a></td></tr>
+            <tr><td class="p">Online-softmax exp error<small>32-bit, negative-exponential engine</small></td><td class="sym">ε<sub>exp</sub></td><td class="val r">&lt;0.05</td><td class="unit">%</td><td class="ref"><a href="#p-fare">FARE ↓</a></td></tr>
+            <tr><td class="p">Max operating frequency<small>MLP accelerator, Zedboard PL</small></td><td class="sym">f<sub>max</sub></td><td class="val r">200</td><td class="unit">MHz</td><td class="ref"><a href="#p-mlp">MLP ↓</a></td></tr>
+            <tr><td class="p">CORDIC tanh error<small>16-bit fixed point</small></td><td class="sym">ε<sub>tanh</sub></td><td class="val r">&lt;0.2</td><td class="unit">%</td><td class="ref"><a href="#p-mlp">MLP ↓</a></td></tr>
+            <tr><td class="p">Delta-Sigma ADC resolution<small>2nd-order CIFF, CIC + FIR, 2 KSPS</small></td><td class="sym">ENOB</td><td class="val r">19.44</td><td class="unit">bits</td><td class="ref"><a href="#c-interiit">Inter IIT ↓</a></td></tr>
+            <tr><td class="p">SoC estimation error reduction<small>LUT-based EKF vs. Coulomb counting</small></td><td class="sym">ΔSoC</td><td class="val r">4.5</td><td class="unit">%</td><td class="ref"><a href="#x-midwest">Midwest ↓</a></td></tr>
+            <tr><td class="p">Cumulative grade point average<small>Dual Degree, IIT Kharagpur</small></td><td class="sym">CGPA</td><td class="val r">9.1</td><td class="unit">/ 10</td><td class="ref"></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
-  <section id="publication">
-    <p class="sec-label reveal">// peer-reviewed</p>
-    <h2 class="sec-title reveal">Publication</h2>
-    <div class="pub-card reveal">
-      <p class="pub-venue">ISFPGA 2026 · ACM/SIGDA · Poster</p>
-      <p class="pub-title">FARE: A Fine-grained Pipelined Reconfigurable FlashAttention Kernel</p>
-      <p class="pub-authors">Kaushikkumar S Rathva, <strong>Aakarsh Alam</strong>, Srini Srinivasan, Sumit K Mandal</p>
-      <p style="font-size:13px; color:var(--text-dim); margin-bottom:0.6rem;">
-        Proceedings of the 2026 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays, pp. 179–179
-      </p>
-      <a class="pub-doi" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank">
-        ↗ doi.org/10.1145/3748173.3779572
-      </a>
+  <!-- ===== publication ===== -->
+  <section class="section" id="publication" aria-labelledby="pub-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">§ 02</span>
+        <div><h2 id="pub-h">Publication</h2></div>
+      </div>
+      <article class="panel pub">
+        <p class="pub-meta"><span class="badge">ISFPGA 2026</span> ACM/SIGDA · Poster · pp. 179</p>
+        <h3><a href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank" rel="noopener">FARE: A Fine-grained Pipelined Reconfigurable FlashAttention Kernel</a></h3>
+        <p class="authors">Kaushikkumar S Rathva, <b>Aakarsh Alam</b>, Srini Srinivasan, Sumit K Mandal</p>
+        <p class="venue">Proceedings of the 2026 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays</p>
+        <div class="pub-actions">
+          <a class="btn btn-sm" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank" rel="noopener">doi.org/10.1145/3748173.3779572
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          <button class="btn btn-sm" type="button" data-copy="#bibtex" data-msg="BibTeX copied">Copy BibTeX</button>
+          <a class="btn btn-sm" href="#p-fare">Project details ↓</a>
+        </div>
+<pre id="bibtex" hidden>@inproceedings{rathva2026fare,
+  title     = {FARE: A Fine-grained Pipelined Reconfigurable FlashAttention Kernel},
+  author    = {Rathva, Kaushikkumar S and Alam, Aakarsh and Srinivasan, Srini and Mandal, Sumit K},
+  booktitle = {Proceedings of the 2026 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays},
+  pages     = {179},
+  year      = {2026},
+  publisher = {ACM},
+  doi       = {10.1145/3748173.3779572}
+}</pre>
+      </article>
     </div>
   </section>
 
-  <section id="projects">
-    <p class="sec-label reveal">// hardware & research</p>
-    <h2 class="sec-title reveal">Projects</h2>
-    <div class="exp-list">
-
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">FPGA Architecture · Published</p>
-            <p class="exp-title">FlashAttention Design on FPGA</p>
-            <p class="exp-place">IISc Bangalore · Prof. Sumit K Mandal</p>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">May 2025 – Present</span>
-            <span class="exp-chevron">▼</span>
-          </div>
-        </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Devised a <strong>3-stage FlashAttention architecture</strong> for Zedboard to accelerate Transformer self-attention for throughput and latency.</li>
-              <li>Implemented online softmax with negative exponential engine, achieving error &lt;0.05% for 32-bit, optimised for parallel operations.</li>
-              <li>Verified the PS-PL flow for Stage 2 by running a host application on ARM (Zynq PS), achieving latency &lt;50 ns per tile on average.</li>
-              <li>Integrated all 3 stages for tile sizes 4, 8, &amp; 16; achieved a <strong>2.9× decrement in latency</strong> over SOTA for tile size 64.</li>
-              <li>Work published as a poster at <strong>ISFPGA 2026</strong> (ACM/SIGDA), pp. 179–179.</li>
-            </ul>
-          </div>
+  <!-- ===== work ===== -->
+  <section class="section" id="work" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">§ 03</span>
+        <div>
+          <h2 id="work-h">Selected work</h2>
+          <p>Hardware and research projects, from attention kernels on FPGAs to a Formula Student EV powertrain.</p>
         </div>
       </div>
 
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">Signal Processing · B.Tech Project</p>
-            <p class="exp-title">Approximate Recovery of Signals with Non-linear Distortions using Robust-PCA</p>
-            <p class="exp-place">IIT Kharagpur · Prof. Amitalok J. Budkuley</p>
+      <article class="panel feature" id="p-fare">
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="card-top"><span class="tag">FPGA architecture · Published</span><time>May 2025 – Present</time></div>
+          <h3>FlashAttention Design on FPGA</h3>
+          <p class="where">IISc Bangalore · Prof. Sumit K Mandal</p>
+          <div class="metrics">
+            <div class="metric"><b>2.9×</b><span>lower latency vs. SOTA</span></div>
+            <div class="metric"><b>&lt;50 ns</b><span>avg. latency / tile, stage 2</span></div>
+            <div class="metric"><b>&lt;0.05%</b><span>exp error, 32-bit</span></div>
           </div>
-          <div class="exp-right">
-            <span class="exp-date">Aug 2025 - Present</span>
-            <span class="exp-chevron">▼</span>
+          <ul class="bul">
+            <li>Devised a <strong>3-stage FlashAttention architecture</strong> for Zedboard to accelerate Transformer self-attention for throughput and latency.</li>
+            <li>Implemented online softmax with a negative exponential engine, achieving error &lt;0.05% for 32-bit, optimised for parallel operations.</li>
+            <li>Verified the PS-PL flow for Stage 2 by running a host application on ARM (Zynq PS), achieving latency &lt;50 ns per tile on average.</li>
+            <li>Integrated all 3 stages for tile sizes 4, 8 &amp; 16; achieved a <strong>2.9× decrement in latency</strong> over SOTA for tile size 64.</li>
+            <li>Published as a poster at <strong>ISFPGA 2026</strong> (ACM/SIGDA).</li>
+          </ul>
+        </div>
+        <div class="arch" aria-label="Block diagram: ARM host on the Zynq PS drives a three-stage FlashAttention pipeline in the PL">
+          <div class="arch-box">
+            <span class="arch-k">PS · Zynq-7000</span>
+            <p>ARM host application</p>
+            <small>tile scheduling · verification</small>
+          </div>
+          <div class="arch-bus">PS ⇄ PL</div>
+          <div class="arch-box arch-pl">
+            <span class="arch-k">PL · FlashAttention pipeline</span>
+            <div class="arch-io"><span>Q, K, V tiles</span><span>O</span></div>
+            <div class="stages">
+              <div class="stage-b">Stage 1</div><span class="stage-arrow">→</span>
+              <div class="stage-b">Stage 2</div><span class="stage-arrow">→</span>
+              <div class="stage-b">Stage 3</div>
+            </div>
+            <small>online softmax · neg-exp engine · tiles 4 / 8 / 16</small>
           </div>
         </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Built a Hankel-lifted, first-difference Robust PCA pipeline to separate structured multitone signal components from sparse non-linear folding distortions.</li>
-              <li>Implemented PCP using an Inexact ALM solver in MATLAB and proposed an integer-aware RPCA heuristic to improve stability in strongly non-linear folding regimes.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      </article>
 
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">SoC Architecture · VLSI</p>
-            <p class="exp-title">MLP Accelerator Design on Zynq-7000 SoC</p>
-            <p class="exp-place">IIT Kharagpur · Prof. Indrajit Chakraborty</p>
+      <div class="cards">
+        <article class="panel card" id="p-mlp">
+          <div class="card-top"><span class="tag">SoC architecture · VLSI</span><time>Mar – Aug 2025</time></div>
+          <h3>MLP Accelerator on Zynq-7000 SoC</h3>
+          <p class="where">IIT Kharagpur · Prof. Indrajit Chakraborty</p>
+          <div class="metrics">
+            <div class="metric"><b>200 MHz</b><span>f<sub>max</sub> on Zedboard PL</span></div>
+            <div class="metric"><b>&lt;0.2%</b><span>tanh error, 16-bit</span></div>
           </div>
-          <div class="exp-right">
-            <span class="exp-date">Mar 2025 – Aug 2025</span>
-            <span class="exp-chevron">▼</span>
-          </div>
-        </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Architected an MLP with configurable layer sizes, fixed-point datapath, pipelined MAC array, and a CORDIC-based tanh engine achieving &lt;0.2% error for 16-bit.</li>
-              <li>Synthesised and implemented on Zedboard PL, achieving a <strong>maximum operating frequency of 200 MHz</strong>.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+          <ul class="bul">
+            <li>Architected an MLP with configurable layer sizes, fixed-point datapath, pipelined MAC array, and a CORDIC-based tanh engine.</li>
+            <li>Synthesised and implemented on Zedboard PL, achieving a <strong>maximum operating frequency of 200 MHz</strong>.</li>
+          </ul>
+          <div class="chips"><span>Zynq-7000</span><span>Fixed-point</span><span>Pipelined MAC</span><span>CORDIC</span></div>
+        </article>
 
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">EV Powertrain · Team Lead</p>
-            <p class="exp-title">Formula SAE Electric Car - TeamKART Electric</p>
-            <p class="exp-place">IIT Kharagpur</p>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">Jan 2024 - Oct 2025</span>
-            <span class="exp-chevron">▼</span>
-          </div>
-        </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Designed Control Panel architecture using a V-F converter and Arduino Nano's ADC for accurate, rapid contactor and relay actuation.</li>
-              <li>Engineered STM32 charger architecture for a 90 V battery pack with CC-CV algorithm for fast-charging in under 1 hour.</li>
-              <li>Conducted FMEA for 100+ failure modes; developed TSAL circuitry for safety checks and VCU Isolator for galvanic isolation.</li>
-              <li>Characterised NMC &amp; LFP cells for Kari drive cycle under variable temperature conditions; max. current reaching 7C for 10 s.</li>
-              <li>Led a <strong>40+ member electrical team</strong> as Head of Electrical Systems, overseeing full EV powertrain validation on a custom motor test bench.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <article class="panel card" id="p-rpca">
+          <div class="card-top"><span class="tag">Signal processing · B.Tech project</span><time>Aug 2025 – Present</time></div>
+          <h3>Approximate Recovery of Signals with Non-linear Distortions using Robust-PCA</h3>
+          <p class="where">IIT Kharagpur · Prof. Amitalok J. Budkuley</p>
+          <ul class="bul">
+            <li>Built a Hankel-lifted, first-difference Robust PCA pipeline to separate structured multitone signal components from sparse non-linear folding distortions.</li>
+            <li>Implemented PCP using an Inexact ALM solver in MATLAB and proposed an <strong>integer-aware RPCA heuristic</strong> to improve stability in strongly non-linear folding regimes.</li>
+          </ul>
+          <div class="chips"><span>MATLAB</span><span>Robust PCA</span><span>Inexact ALM</span><span>Hankel lifting</span></div>
+        </article>
 
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">DFT · Term Project</p>
-            <p class="exp-title">Concurrent Fault Simulator for Design-for-Test</p>
-            <p class="exp-place">IIT Kharagpur · Prof. Indranil Sengupta</p>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">Sep 2025 - Nov 2025</span>
-            <span class="exp-chevron">▼</span>
-          </div>
-        </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Built an event-driven, bit-parallel concurrent fault simulator for structural Verilog netlists with automated test vector generation.</li>
-              <li>Implemented two-level fault collapsing (equivalence &amp; dominance) to eliminate redundant faults and reduce total simulation time.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+        <article class="panel card" id="p-dft">
+          <div class="card-top"><span class="tag">DFT · Term project</span><time>Sep – Nov 2025</time></div>
+          <h3>Concurrent Fault Simulator for Design-for-Test</h3>
+          <p class="where">IIT Kharagpur · Prof. Indranil Sengupta</p>
+          <ul class="bul">
+            <li>Built an <strong>event-driven, bit-parallel</strong> concurrent fault simulator for structural Verilog netlists with automated test vector generation.</li>
+            <li>Implemented two-level fault collapsing (equivalence &amp; dominance) to eliminate redundant faults and reduce total simulation time.</li>
+          </ul>
+          <div class="chips"><span>Structural Verilog</span><span>Bit-parallel sim</span><span>Fault collapsing</span></div>
+        </article>
 
+        <article class="panel card" id="p-kart">
+          <div class="card-top"><span class="tag">EV powertrain · Team lead</span><time>Jan 2024 – Oct 2025</time></div>
+          <h3>Formula SAE Electric Car — TeamKART Electric</h3>
+          <p class="where">IIT Kharagpur · Head of Electrical Systems</p>
+          <div class="metrics">
+            <div class="metric"><b>40+</b><span>engineers led</span></div>
+            <div class="metric"><b>&lt;1 h</b><span>CC-CV charge, 90 V pack</span></div>
+            <div class="metric"><b>100+</b><span>failure modes (FMEA)</span></div>
+          </div>
+          <ul class="bul">
+            <li>Designed control panel architecture using a V-F converter and Arduino Nano's ADC for accurate, rapid contactor and relay actuation.</li>
+            <li>Engineered an STM32 charger for a 90 V battery pack with a CC-CV algorithm for fast-charging in under 1 hour.</li>
+            <li>Conducted FMEA for 100+ failure modes; developed TSAL circuitry for safety checks and a VCU isolator for galvanic isolation.</li>
+            <li>Characterised NMC &amp; LFP cells for the Kari drive cycle under variable temperature; max. current reaching 7C for 10 s.</li>
+            <li>Led a <strong>40+ member electrical team</strong>, overseeing full EV powertrain validation on a custom motor test bench.</li>
+          </ul>
+          <div class="chips"><span>STM32</span><span>Arduino Nano</span><span>CC-CV</span><span>FMEA</span><span>TSAL</span></div>
+        </article>
+      </div>
     </div>
   </section>
-  <section id="experience">
-    <p class="sec-label reveal">// industry</p>
-    <h2 class="sec-title reveal">Internship Experience</h2>
-    <div class="exp-list">
 
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">Embedded Systems · BMS</p>
-            <p class="exp-title">Embedded Intern - Midwest Energy Private Limited</p>
-            <p class="exp-place">Hyderabad, India</p>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">Jun 2024 - Jul 2024</span>
-            <span class="exp-chevron">▼</span>
-          </div>
+  <!-- ===== timeline ===== -->
+  <section class="section" id="timeline" aria-labelledby="time-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">§ 04</span>
+        <div>
+          <h2 id="time-h">Timing diagram</h2>
+          <p>Every project and internship as a signal, asserted while active. Hover a trace for details, or click it to jump to the write-up.</p>
         </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Integrated CAN bus on STM32-based BMS for 24 voltage &amp; 16 temperature sensing lines on a 160 V pack; programmed a LUT-based Extended Kalman Filter for SoC estimation, <strong>reducing error by 4.5%</strong> over Coulomb counting.</li>
+      </div>
+
+      <div class="panel wave-box">
+        <div class="wave-head"><span><b>waveform</b> · 1 clk = 1 month</span><span>— high = active · ┄ = ongoing</span></div>
+        <div class="wave-scroll"><div id="wave"></div></div>
+        <div class="tip" id="tip" role="status"></div>
+      </div>
+
+      <div class="split">
+        <div class="split-col">
+          <p class="col-h">Industry</p>
+          <article class="panel card" id="x-midwest">
+            <div class="card-top"><span class="tag">Embedded · BMS</span><time>Jun – Jul 2024</time></div>
+            <h3>Embedded Intern — Midwest Energy Pvt. Ltd.</h3>
+            <p class="where">Hyderabad, India</p>
+            <div class="metrics"><div class="metric"><b>4.5%</b><span>lower SoC error vs. Coulomb counting</span></div></div>
+            <ul class="bul">
+              <li>Integrated CAN bus on an STM32-based BMS for 24 voltage &amp; 16 temperature sensing lines on a 160 V pack; programmed a LUT-based Extended Kalman Filter for SoC estimation.</li>
               <li>Built a custom TouchGFX graphical UI on STM32F7 to visualise cell voltages, temperatures, and SoC in real time.</li>
             </ul>
+            <div class="chips"><span>STM32F7</span><span>CAN</span><span>EKF</span><span>TouchGFX</span></div>
+          </article>
+        </div>
+        <div class="split-col">
+          <p class="col-h">Competitions &amp; hackathons</p>
+          <div class="comp">
+            <article class="panel card" id="c-interiit">
+              <div class="card-top"><span class="tag">🥈 Silver · ASIC · ISRO</span><time>2025</time></div>
+              <h3>Inter IIT Tech Meet 14.0 — Delta-Sigma ASIC</h3>
+              <p class="where">IIT Patna · Team Captain · Contingent Gold</p>
+              <div class="metrics"><div class="metric"><b>19.44</b><span>ENOB @ 2 KSPS</span></div><div class="metric"><b>2nd</b><span>of 23 IITs</span></div></div>
+              <ul class="bul">
+                <li>Secured Silver with a <strong>20-bit Delta-Sigma ADC</strong>: 2nd-order CIFF modulator with CIC + FIR decimation.</li>
+                <li>Generated full GDSII for the reconfigurable CIC using Cadence Genus, Innovus, and Calibre.</li>
+              </ul>
+              <div class="chips"><span>Genus</span><span>Innovus</span><span>Calibre</span></div>
+            </article>
+            <article class="panel card" id="c-nokia">
+              <div class="card-top"><span class="tag">🏅 Top 15 · FPGA</span><time>2025</time></div>
+              <h3>Nokia FPGA Hackathon 2025</h3>
+              <p class="where">Kraków, Poland</p>
+              <div class="metrics"><div class="metric"><b>Top 15</b><span>of 70 finalist teams</span></div><div class="metric"><b>1,000+</b><span>applicants</span></div></div>
+              <ul class="bul">
+                <li>Implemented 5 FPGA designs including a dot-product processor and a 7-bit Hamming decoder.</li>
+                <li>Configured a Jenkins pipeline invoking Vivado in batch mode for synthesis, implementation, and bitstream export on Kria KV260.</li>
+              </ul>
+              <div class="chips"><span>Kria KV260</span><span>Vivado batch</span><span>Jenkins</span></div>
+            </article>
           </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="competitions">
-    <p class="sec-label reveal">// inter-collegiate</p>
-    <h2 class="sec-title reveal">Competitions &amp; Hackathons</h2>
-    <div class="exp-list">
-
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">🥈 Silver Medal · ASIC Design · ISRO</p>
-            <p class="exp-title">Inter IIT Tech Meet 14.0 - Delta-Sigma ASIC Development</p>
-            <p class="exp-place">IIT Patna · Contingent Gold</p>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">2025</span>
-            <span class="exp-chevron">▼</span>
-          </div>
-        </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Served as <strong>Team Captain</strong>; secured Silver among 23 IITs with a <strong>20-bit Delta-Sigma ADC</strong> design — 2nd-order CIFF Modulator with CIC + FIR filter achieving ENOB of 19.44 at 2 KSPS.</li>
-              <li>Generated full GDSII for the Reconfigurable CIC using Cadence Genus, Innovus, and Calibre toolchain.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="exp-card reveal">
-        <div class="exp-header" onclick="toggle(this)">
-          <div class="exp-left">
-            <p class="exp-tag">🏅 Top-15 Finish · FPGA Prototyping</p>
-            <p class="exp-title">FPGA Hackathon 2025 - Nokia</p>
-            <p class="exp-place">Krakow, Poland</p>
-          </div>
-          <div class="exp-right">
-            <span class="exp-date">2025</span>
-            <span class="exp-chevron">▼</span>
-          </div>
-        </div>
-        <div class="exp-body">
-          <div class="exp-inner">
-            <ul class="exp-bullets">
-              <li>Selected as one of the <strong>top 70 teams from 1,000+ applicants</strong>; achieved a top-15 finish implementing 5 FPGA designs including a dot-product processor and 7-bit Hamming decoder.</li>
-              <li>Configured a Jenkins pipeline invoking Vivado in batch mode for synthesis, implementation, and bitstream export on Kria KV260.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="skills">
-    <p class="sec-label reveal">// toolbox</p>
-    <h2 class="sec-title reveal">Technical Skills</h2>
-    <div class="skills-grid">
-      <div class="skill-group reveal">
-        <p class="skill-group-label">Hardware Description</p>
-        <div class="skill-tags">
-          <span class="tag">Verilog</span>
-          <span class="tag">SystemVerilog</span>
-        </div>
-      </div>
-      <div class="skill-group reveal">
-        <p class="skill-group-label">Programming</p>
-        <div class="skill-tags">
-          <span class="tag">Python</span>
-          <span class="tag">C</span>
-          <span class="tag">MATLAB</span>
-          <span class="tag">LaTeX</span>
-          <span class="tag">Git</span>
-          <span class="tag">Linux</span>
-        </div>
-      </div>
-      <div class="skill-group reveal">
-        <p class="skill-group-label">FPGA / EDA Tools</p>
-        <div class="skill-tags">
-          <span class="tag">Vivado</span>
-          <span class="tag">Vitis IDE</span>
-          <span class="tag">Icarus Verilog</span>
-          <span class="tag">Yosys</span>
-        </div>
-      </div>
-      <div class="skill-group reveal">
-        <p class="skill-group-label">Cadence Suite</p>
-        <div class="skill-tags">
-          <span class="tag">Virtuoso</span>
-          <span class="tag">Genus</span>
-          <span class="tag">Innovus</span>
-          <span class="tag">Calibre</span>
-        </div>
-      </div>
-      <div class="skill-group reveal">
-        <p class="skill-group-label">PCB & Hardware</p>
-        <div class="skill-tags">
-          <span class="tag">Altium</span>
-          <span class="tag">EasyEDA</span>
-          <span class="tag">LTSpice</span>
-          <span class="tag">Keil µVision</span>
-        </div>
-      </div>
-      <div class="skill-group reveal">
-        <p class="skill-group-label">Core Competencies</p>
-        <div class="skill-tags">
-          <span class="tag">FPGA Design</span>
-          <span class="tag">RTL → GDSII</span>
-          <span class="tag">PCB Design</span>
-          <span class="tag">HW Prototyping</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="achievements">
-    <p class="sec-label reveal">// recognition</p>
-    <h2 class="sec-title reveal">Awards &amp; Achievements</h2>
-    <div class="ach-grid">
-      <div class="ach-card reveal">
-        <div class="ach-icon">🎯</div>
-        <div class="ach-text">
-          <strong>AIR 1516 — JEE Advanced 2022</strong>
-          Out of 1.6 lakh students. AIR 1580 in JEE Mains out of 10 lakh students.
+  <!-- ===== toolchain ===== -->
+  <section class="section" id="toolchain" aria-labelledby="tool-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">§ 05</span>
+        <div>
+          <h2 id="tool-h">Toolchain</h2>
+          <p>The tools I use, arranged along the flow from model to board.</p>
         </div>
       </div>
-      <div class="ach-card reveal">
-        <div class="ach-icon">🔬</div>
-        <div class="ach-text">
-          <strong>KVPY Fellow 2021 - AIR 600</strong>
-          National fellowship by DST, Government of India.
-        </div>
+      <ol class="panel flow" aria-label="Design flow">
+        <li class="step"><span class="step-n">01</span><h3>Model</h3><ul><li>Python</li><li>MATLAB</li></ul></li>
+        <li class="step"><span class="step-n">02</span><h3>RTL</h3><ul><li>Verilog</li><li>SystemVerilog</li></ul></li>
+        <li class="step"><span class="step-n">03</span><h3>Simulate</h3><ul><li>Icarus Verilog</li><li>Vivado</li></ul></li>
+        <li class="step"><span class="step-n">04</span><h3>Synthesize</h3><ul><li>Yosys</li><li>Genus</li><li>Vivado</li></ul></li>
+        <li class="step"><span class="step-n">05</span><h3>Place &amp; route</h3><ul><li>Innovus</li><li>Vivado</li></ul></li>
+        <li class="step"><span class="step-n">06</span><h3>Layout &amp; sign-off</h3><ul><li>Virtuoso</li><li>Calibre</li></ul></li>
+        <li class="step"><span class="step-n">07</span><h3>Board &amp; firmware</h3><ul><li>Vitis IDE</li><li>Keil µVision</li><li>C</li><li>Altium</li><li>EasyEDA</li><li>LTSpice</li></ul></li>
+      </ol>
+      <dl class="also">
+        <dt>Core</dt>
+        <dd><span>FPGA design</span><span>RTL → GDSII</span><span>PCB design</span><span>HW prototyping</span></dd>
+        <dt>Everyday</dt>
+        <dd><span>Git</span><span>Linux</span><span>LaTeX</span></dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== awards ===== -->
+  <section class="section" id="awards" aria-labelledby="awards-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">§ 06</span>
+        <div><h2 id="awards-h">Awards &amp; achievements</h2></div>
       </div>
-      <div class="ach-card reveal">
-        <div class="ach-icon">📚</div>
-        <div class="ach-text">
-          <strong>NTSE Fellow 2020</strong>
-          National Talent Search Examination scholar - among the top 2,000 students in India.
-        </div>
-      </div>
-      <div class="ach-card reveal">
-        <div class="ach-icon">🌟</div>
-        <div class="ach-text">
-          <strong>Two-time VVM State Camp Winner</strong>
-          Annual camp by Tamil Nadu promoting research and innovation among young students.
-        </div>
+      <div class="awards">
+        <article class="panel award">
+          <b>AIR 1516</b>
+          <h3>JEE Advanced 2022</h3>
+          <p>Out of 1.6 lakh candidates. AIR 1580 in JEE Main out of 10 lakh.</p>
+        </article>
+        <article class="panel award">
+          <b>AIR 600</b>
+          <h3>KVPY Fellow 2021</h3>
+          <p>National fellowship by DST, Government of India.</p>
+        </article>
+        <article class="panel award">
+          <b>Top 2k</b>
+          <h3>NTSE Scholar 2020</h3>
+          <p>National Talent Search Examination: among the top 2,000 students in India.</p>
+        </article>
+        <article class="panel award">
+          <b>2×</b>
+          <h3>VVM State Camp Winner</h3>
+          <p>Annual Tamil Nadu camp promoting research and innovation among young students.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <section id="contact" style="border-top: 1px solid var(--border);">
-    <p class="sec-label reveal" style="text-align:center">// reach out</p>
-    <h2 class="sec-title reveal" style="text-align:center; margin-bottom:0.75rem;">Let's Connect</h2>
-    <p class="reveal" style="color:var(--text-dim); text-align:center; max-width:420px; margin:0 auto 0; font-size:14px;">
-      Open to research collaborations, internship opportunities, and conversations about hardware architecture.
-    </p>
-    <div class="contact-grid reveal">
-      <a class="contact-item" href="/cdn-cgi/l/email-protection#0b6a6a606a7978636a676a663b3e4b606c7b626a652562627f606c7b256a68256265">
-        ✉ <span class="__cf_email__" data-cfemail="4f2e2e242e3d3c272e232e227f7a0f24283f262e216126263b24283f612e2c612621">[email&#160;protected]</span>
-      </a>
-      <a class="contact-item" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank">
-        ↗ linkedin.com/in/aakarsh-a
-      </a>
-      <a class="contact-item" href="tel:+919345100477">
-        ✆ +91-9345100477
-      </a>
+  <!-- ===== contact ===== -->
+  <section class="contact" id="contact" aria-labelledby="contact-h">
+    <div class="wrap">
+      <span class="sec-num">§ 07 · Contact</span>
+      <h2 id="contact-h">Let’s build something <em>fast.</em></h2>
+      <p>Open to research collaborations, internship opportunities, and conversations about hardware architecture.</p>
+      <div class="mail-row">
+        <a class="mail" href="mailto:aakarshalam05@kgpian.iitkgp.ac.in" id="mail">aakarshalam05@kgpian.iitkgp.ac.in</a>
+        <button class="icon-btn" type="button" data-copy="#mail" data-msg="Email copied" aria-label="Copy email address">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+        </button>
+      </div>
+      <div class="links">
+        <a class="btn" href="https://www.linkedin.com/in/aakarsh-a-b96830258/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn" href="https://github.com/Aakarshalam" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn" href="tel:+919345100477">+91 93451 00477</a>
+      </div>
     </div>
   </section>
 
 </main>
 
 <footer>
-  Aakarsh Alam &nbsp;·&nbsp; IIT KGP
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Aakarsh Alam · IIT Kharagpur</span>
+    <span>Hand-built · no frameworks</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  function toggle(header) {
-    const card = header.closest('.exp-card');
-    card.classList.toggle('open');
-  }
-</script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.exp-header').forEach(function(header) {
-      header.addEventListener('click', function() {
-        header.closest('.exp-card').classList.toggle('open');
-      });
-    });
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  var root = document.documentElement;
+  var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function svgEl(tag, attrs, parent) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  /* ---------- theme ---------- */
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
-  // Scroll reveal - content visible by default, animate on scroll as enhancement
-  const reveals = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target
+  /* ---------- mobile menu ---------- */
+  var nav = document.getElementById('nav');
+  var menuBtn = document.getElementById('menuBtn');
+  menuBtn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open);
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  });
+
+  /* ---------- top bar border + active section ---------- */
+  var topbar = document.getElementById('top');
+  function onScroll() { topbar.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var navLinks = {};
+  nav.querySelectorAll('a').forEach(function (a) { navLinks[a.getAttribute('href').slice(1)] = a; });
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      for (var id in navLinks) navLinks[id].classList.toggle('active', id === e.target.id);
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main section[id]').forEach(function (s) { spy.observe(s); });
+
+  /* ---------- reveal on scroll ---------- */
+  var revealables = document.querySelectorAll('.sec-head, .panel, .also, .contact h2, .mail-row');
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var rev = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); rev.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    revealables.forEach(function (el) {
+      if (el.closest('.hero')) return;
+      el.classList.add('reveal');
+      rev.observe(el);
+    });
+  }
+
+  /* ---------- copy to clipboard ---------- */
+  var toast = document.getElementById('toast'), toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('on'); }, 1800);
+  }
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = document.querySelector(btn.getAttribute('data-copy')).textContent.trim();
+      var done = function () { showToast(btn.getAttribute('data-msg') || 'Copied'); };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+      } else { fallbackCopy(text); done(); }
+    });
+  });
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+  }
+
+  /* ---------- jump + flash a card ---------- */
+  function jumpTo(hash) {
+    var target = document.querySelector(hash);
+    if (!target) return;
+    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    target.classList.remove('flash');
+    void target.offsetWidth;
+    target.classList.add('flash');
+    history.replaceState(null, '', hash);
+  }
+  document.querySelectorAll('.spec .ref a, a[href="#p-fare"]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); jumpTo(a.getAttribute('href')); });
+  });
+
+  /* ---------- chip pinout ---------- */
+  (function buildChip() {
+    var svg = document.getElementById('chip');
+    var P = { x: 140, y: 100, s: 200 };   // package
+    var D = { x: 190, y: 150, s: 100 };   // die
+    var N = 6, step = P.s / (N + 1), dstep = D.s / (N + 1);
+    var left  = [['VDD'], ['PUB', '#publication'], ['WORK', '#work'], ['CLK'], ['TIME', '#timeline'], ['GND']];
+    var right = [['GND'], ['TOOLS', '#toolchain'], ['AWARDS', '#awards'], ['CONTACT', '#contact'], ['RST_N'], ['VDD']];
+
+    svgEl('rect', { class: 'pkg', x: P.x, y: P.y, width: P.s, height: P.s, rx: 6 }, svg);
+    var wires = svgEl('g', {}, svg);
+    var pins = svgEl('g', {}, svg);
+    var pinNo = 1;
+
+    function addPin(side, i, def) {
+      var p = P.x + step * (i + 1), d = D.x + dstep * (i + 1);       // horizontal sides
+      var py = P.y + step * (i + 1), dy = D.y + dstep * (i + 1);     // vertical sides
+      var pin, wire, label = null, no = pinNo++;
+      if (side === 'L') {
+        pin = { x: P.x - 16, y: py - 3, width: 16, height: 6 };
+        wire = 'M' + (P.x + 6) + ' ' + py + ' L' + D.x + ' ' + dy;
+        if (def) label = { x: P.x - 24, y: py + 4, 'text-anchor': 'end' };
+      } else if (side === 'B') {
+        pin = { x: p - 3, y: P.y + P.s, width: 6, height: 16 };
+        wire = 'M' + p + ' ' + (P.y + P.s - 6) + ' L' + d + ' ' + (D.y + D.s);
+      } else if (side === 'R') {
+        pin = { x: P.x + P.s, y: py - 3, width: 16, height: 6 };
+        wire = 'M' + (P.x + P.s - 6) + ' ' + py + ' L' + (D.x + D.s) + ' ' + dy;
+        if (def) label = { x: P.x + P.s + 24, y: py + 4, 'text-anchor': 'start' };
+      } else {
+        pin = { x: p - 3, y: P.y - 16, width: 6, height: 16 };
+        wire = 'M' + p + ' ' + (P.y + 6) + ' L' + d + ' ' + D.y;
+      }
+      var group = def && def[1] ? svgEl('a', { href: def[1], class: 'link' }, pins) : svgEl('g', {}, pins);
+      svgEl('path', { class: 'wire', d: wire }, group);
+      var pulse = svgEl('path', { class: 'pulse', d: wire }, wires);
+      pulse.style.animationDelay = (-Math.random() * 2.6).toFixed(2) + 's';
+      svgEl('rect', Object.assign({ class: 'pin' }, pin), group);
+      if (label) {
+        var t = svgEl('text', Object.assign({ class: 'lbl' }, label), group);
+        t.textContent = def[0];
+        var n = svgEl('text', { class: 'num', x: side === 'L' ? P.x - 8 : P.x + P.s + 8, y: py - 6, 'text-anchor': 'middle' }, group);
+        n.textContent = no;
+      }
+      if (def && def[1]) group.setAttribute('aria-label', 'Go to ' + def[1].slice(1));
+    }
+    // pin 1 at top-left, numbering counter-clockwise as on a real QFP
+    left.forEach(function (d, i) { addPin('L', i, d); });
+    for (var i = 0; i < N; i++) addPin('B', i);
+    right.slice().reverse().forEach(function (d, i) { addPin('R', N - 1 - i, d); });
+    for (i = N - 1; i >= 0; i--) addPin('T', i);
+
+    svgEl('circle', { class: 'p1', cx: P.x + 14, cy: P.y + 14, r: 3.5 }, svg);
+
+    // die with an accelerator-ish floorplan; PE cells pulse as a systolic wavefront
+    var die = svgEl('g', {}, svg);
+    svgEl('rect', { class: 'die', x: D.x, y: D.y, width: D.s, height: D.s, rx: 2 }, die);
+    svgEl('rect', { class: 'blk', x: 196, y: 156, width: 56, height: 60, rx: 1.5 }, die);
+    svgEl('text', { class: 'blk-lbl', x: 200, y: 163 }, die).textContent = 'PE ARRAY';
+    for (var r = 0; r < 4; r++) for (var c = 0; c < 4; c++) {
+      var cell = svgEl('rect', { class: 'pe', x: 200.25 + c * 12.5, y: 167 + r * 12, width: 10, height: 9.5, rx: 1 }, die);
+      cell.style.animationDelay = ((r + c) * 0.16).toFixed(2) + 's';
+    }
+    svgEl('rect', { class: 'blk', x: 256, y: 156, width: 28, height: 60, rx: 1.5 }, die);
+    svgEl('text', { class: 'blk-lbl', x: 259, y: 163 }, die).textContent = 'SRAM';
+    for (var s = 0; s < 11; s++) svgEl('line', { class: 'sram', x1: 259, x2: 281, y1: 168 + s * 4.3, y2: 168 + s * 4.3 }, die);
+    svgEl('rect', { class: 'blk', x: 196, y: 220, width: 42, height: 24, rx: 1.5 }, die);
+    svgEl('text', { class: 'blk-lbl', x: 200, y: 234 }, die).textContent = 'SOFTMAX';
+    svgEl('rect', { class: 'blk', x: 242, y: 220, width: 42, height: 24, rx: 1.5 }, die);
+    svgEl('text', { class: 'blk-lbl', x: 246, y: 234 }, die).textContent = 'CTRL';
+
+    svg.querySelectorAll('a.link').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var id = a.getAttribute('href');
+        document.querySelector(id).scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+        history.replaceState(null, '', id);
+      });
+    });
+  })();
+
+  /* ---------- timing diagram ---------- */
+  var TL = [
+    { sig: 'TEAMKART',  name: 'Formula SAE Electric — Head of Electrical', href: '#p-kart',    s: [2024, 1], e: [2025, 10] },
+    { sig: 'MIDWEST',   name: 'Embedded Intern, Midwest Energy',           href: '#x-midwest', s: [2024, 6], e: [2024, 7] },
+    { sig: 'MLP_ACC',   name: 'MLP Accelerator on Zynq-7000',              href: '#p-mlp',     s: [2025, 3], e: [2025, 8] },
+    { sig: 'FARE',      name: 'FlashAttention on FPGA (FARE)',             href: '#p-fare',    s: [2025, 5], e: null },
+    { sig: 'BTP_RPCA',  name: 'Robust-PCA signal recovery (B.Tech project)', href: '#p-rpca',  s: [2025, 8], e: null },
+    { sig: 'FAULT_SIM', name: 'Concurrent fault simulator (DFT)',          href: '#p-dft',     s: [2025, 9], e: [2025, 11] }
+  ];
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var host = document.getElementById('wave');
+  var box = document.querySelector('.wave-box');
+  var tip = document.getElementById('tip');
+  var lastW = 0;
+
+  function fmt(ym) { return MON[ym[1] - 1] + ' ' + ym[0]; }
+
+  function showTip(item, x, y) {
+    tip.innerHTML = '<b></b><br/>';
+    tip.firstChild.textContent = item.name;
+    tip.appendChild(document.createTextNode(fmt(item.s) + ' – ' + (item.e ? fmt(item.e) : 'present')));
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+    tip.classList.add('on');
+  }
+  function hideTip() { tip.classList.remove('on'); }
+
+  function renderWave() {
+    var W = Math.max(host.clientWidth, 640);
+    if (W === lastW) return;
+    lastW = W;
+    host.innerHTML = '';
+
+    var L = 98, R = 14, TOP = 30, RH = 32;
+    var now = new Date();
+    var t0 = 2024 * 12;
+    var tNow = now.getFullYear() * 12 + now.getMonth() + (now.getDate() - 1) / 31;
+    var t1 = Math.floor(tNow) + 2;
+    var X = function (t) { return L + (t - t0) / (t1 - t0) * (W - L - R); };
+    var H = TOP + (TL.length + 1) * RH + 4;
+
+    var svg = svgEl('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H }, host);
+    svgEl('title', {}, svg).textContent = 'Timing diagram of projects and internships since January 2024';
+
+    for (var t = t0; t <= t1; t++) {
+      var yr = t % 12 === 0;
+      svgEl('line', { class: 'w-grid' + (yr ? ' yr' : ''), x1: X(t), x2: X(t), y1: TOP - 8, y2: H }, svg);
+      if (yr) svgEl('text', { class: 'w-yr', x: X(t) + 5, y: 14 }, svg).textContent = Math.floor(t / 12);
+      else if (t % 3 === 0 && t < t1 && Math.abs(X(t) - X(tNow)) > 34) svgEl('text', { class: 'w-mo', x: X(t) + 4, y: 14 }, svg).textContent = MON[t % 12];
+    }
+
+    // clock: one period per month
+    var lo = TOP + RH - 9, hi = TOP + 9;
+    var clk = 'M' + L + ' ' + lo;
+    for (t = t0; t < t1; t++) {
+      clk += ' L' + X(t) + ' ' + lo + ' L' + X(t) + ' ' + hi + ' L' + X(t + 0.5) + ' ' + hi + ' L' + X(t + 0.5) + ' ' + lo;
+    }
+    clk += ' L' + X(t1) + ' ' + lo;
+    svgEl('text', { class: 'w-lbl', x: 0, y: (lo + hi) / 2 + 4 }, svg).textContent = 'CLK';
+    svgEl('path', { class: 'w-clk', d: clk }, svg);
+
+    TL.forEach(function (item, i) {
+      var top = TOP + (i + 1) * RH, lo = top + RH - 8, hi = top + 8;
+      var ts = item.s[0] * 12 + item.s[1] - 1;
+      var te = item.e ? item.e[0] * 12 + item.e[1] : tNow;
+      var xs = X(ts), xe = X(te), xr = X(t1);
+      var g = svgEl('g', { class: 'w-row', tabindex: 0, role: 'link', 'aria-label': item.name + ', ' + fmt(item.s) + ' to ' + (item.e ? fmt(item.e) : 'present') }, svg);
+      svgEl('rect', { class: 'w-hit', x: 0, y: top + 2, width: W, height: RH - 4, rx: 4 }, g);
+      svgEl('text', { class: 'w-lbl', x: 0, y: (lo + hi) / 2 + 4 }, g).textContent = item.sig;
+      svgEl('path', { class: 'w-fill', d: 'M' + xs + ' ' + lo + ' L' + (xs + 3) + ' ' + hi + ' L' + (item.e ? xe - 3 : xe) + ' ' + hi + ' L' + xe + ' ' + lo + ' Z' }, g);
+      if (item.e) {
+        svgEl('path', { class: 'w-sig', d: 'M' + L + ' ' + lo + ' H' + xs + ' L' + (xs + 3) + ' ' + hi + ' H' + (xe - 3) + ' L' + xe + ' ' + lo + ' H' + xr }, g);
+      } else {
+        svgEl('path', { class: 'w-sig', d: 'M' + L + ' ' + lo + ' H' + xs + ' L' + (xs + 3) + ' ' + hi + ' H' + xe }, g);
+        svgEl('path', { class: 'w-sig dash', d: 'M' + xe + ' ' + hi + ' H' + xr }, g);
+      }
+      var range = fmt(item.s).replace(/ 20/, " '") + ' – ' + (item.e ? fmt(item.e).replace(/ 20/, " '") : 'now');
+      if (xe - xs > range.length * 6.4 + 14) {
+        svgEl('text', { class: 'w-in', x: xs + 9, y: (lo + hi) / 2 + 4 }, g).textContent = range;
+      }
+
+      var mid = (xs + xe) / 2;
+      g.addEventListener('mousemove', function (e) {
+        var b = box.getBoundingClientRect();
+        showTip(item, e.clientX - b.left, e.clientY - b.top);
+      });
+      g.addEventListener('mouseleave', hideTip);
+      g.addEventListener('focus', function () {
+        var b = box.getBoundingClientRect(), sb = svg.getBoundingClientRect();
+        showTip(item, sb.left - b.left + mid, sb.top - b.top + hi);
+      });
+      g.addEventListener('blur', hideTip);
+      g.addEventListener('click', function () { hideTip(); jumpTo(item.href); });
+      g.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hideTip(); jumpTo(item.href); }
+      });
+    });
+
+    var xn = X(tNow);
+    svgEl('line', { class: 'w-now', x1: xn, x2: xn, y1: TOP - 8, y2: H }, svg);
+    svgEl('text', { class: 'w-now-t', x: xn, y: 14, 'text-anchor': 'middle' }, svg).textContent = 'NOW';
+  }
+
+  renderWave();
+  if ('ResizeObserver' in window) new ResizeObserver(renderWave).observe(host);
+  else window.addEventListener('resize', renderWave);
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
