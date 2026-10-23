@@ -280,9 +280,9 @@
   .ink {
     position: absolute;
     left: 3.5%;
-    top: 55%;
-    width: 25.5%;
-    height: 26%;
+    top: 54%;
+    width: 26%;
+    height: 29%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -295,7 +295,8 @@
   }
   .ink .l { white-space: nowrap; animation: write 1.1s steps(20, end) both; }
   .ink .l + .l { margin-left: .9em; }
-  .ink .big { font-size: 6.4cqw; letter-spacing: .02em; }
+  .ink .big { font-size: 5.6cqw; letter-spacing: .02em; }
+  .ink .f1 { display: block; width: 13cqw; height: auto; margin-bottom: .25em; fill: currentColor; }
   @keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
   .sq { display: grid; margin-bottom: 40px; border-top: 1px solid var(--line); }
   .sq div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line); }
@@ -572,13 +573,13 @@
                  data-l="0,0,4,3" data-p="0,0,3,3" data-dates="2026-05,2026-07">
           <h3>Google</h3>
           <p class="k">Silicon Engineering Intern · May–Jul 2026</p>
-          <p class="d">Block-level STA and ECO in PrimeTime, from baseline to signoff. Built VIPER, a Python tool that triages 100K+ failing endpoints in seconds.</p>
+          <p class="d">Worked on static timing analysis and timing closure.</p>
         </article>
         <article class="w" id="aramas" data-label="ARAMAS" data-hue="#b48cff" data-tex="mixed" data-pal="purple" data-icon="aramas"
                  data-l="4,0,3,3" data-p="3,0,3,3" data-dates="2026-01,2026-04">
           <h3>Aramas.ai</h3>
           <p class="k">FPGA Research Intern · Jan–Apr 2026</p>
-          <p class="d">Vector-retrieval IP on an Agilex-7 over PCIe, with a custom Linux driver. 7× lower latency than the CPU, 40 µs per query.</p>
+          <p class="d">Worked on FPGA-based hardware acceleration.</p>
         </article>
         <article class="w" id="fare" data-label="FARE" data-hue="#e8b057" data-tex="accel" data-pal="gold" data-icon="bolt"
                  data-l="7,0,5,4" data-p="0,3,4,3" data-dates="2025-05,2026-01">
@@ -747,7 +748,7 @@
       </div>
 
       <div class="df">
-        <canvas id="forest" aria-label="Animation: a dark starfield around a three-star system. Stars that reveal their position get struck."></canvas>
+        <canvas id="forest" aria-label="Animation: the chaotic three-sun Trisolaris system in a dark starfield. Stars that reveal their position are struck by photoids, droplets or dual-vector foils."></canvas>
         <div class="df-copy">
           <p class="kicker">Favourite · The Three-Body Problem</p>
           <h3>The universe is a dark forest.</h3>
@@ -755,7 +756,7 @@
             <li>Survival is the primary need of a civilization.</li>
             <li>Civilizations keep growing, but the matter in the universe stays constant.</li>
           </ol>
-          <p class="df-hint">Click a star to give away its position.</p>
+          <p class="df-hint">Click a star to give away its position. Photoids, droplets and dual-vector foils answer.</p>
         </div>
         <div class="df-hud" aria-live="polite">revealed <span id="dfN">0</span> · <b id="dfMsg">do not answer.</b></div>
       </div>
@@ -1206,15 +1207,22 @@
   function at(f, u, v) { return [f.x + u * f.k, f.y + v * f.k]; }
   var ICON = {
     google: function (S, r, p) {
-      var f = plate(S, r, p, 24, 24), c = at(f, 12, 12), R0 = 8 * f.k, lw = 3.6 * f.k, d = Math.PI / 180;
-      [['#EA4335', 207, 322], ['#FBBC05', 150, 207], ['#34A853', 40, 150], ['#4285F4', -6, 40]].forEach(function (a) {
-        S.path(a[0], lw, false, f.bb).arc(c[0], c[1], R0, a[1] * d, a[2] * d);
-      });
-      S.rects('#4285F4', f.bb).push(c[0], c[1] - lw / 2, R0 + lw / 2, lw);
+      var f = plate(S, r, p, 24, 24), c = at(f, 12, 12), R0 = 8 * f.k, lw = 3.6 * f.k, d = Math.PI / 180, col = rgba(p[2], .95);
+      S.path(col, lw, false, f.bb).arc(c[0], c[1], R0, -6 * d, 322 * d);
+      S.rects(col, f.bb).push(c[0], c[1] - lw / 2, R0 + lw / 2, lw);
     },
+    // two triangle "mountains" sharing a bottom facet, drawn as etched facets of one colour
     aramas: function (S, r, p) {
-      var f = plate(S, r, p, 40, 12);
-      S.text(rgba(p[2], .95), '700 ' + (8.6 * f.k) + 'px monospace', f.x + 20 * f.k, f.y + 9 * f.k, 'aramas', f.bb, 'center');
+      var f = plate(S, r, p, 24, 14), sd = 8, h = sd * .866;
+      var tris = [
+        [[sd, 0], [sd / 2, h], [1.5 * sd, h], .95], [[0, 2 * h], [sd, 2 * h], [sd / 2, h], .7], [[sd / 2, h], [1.5 * sd, h], [sd, 2 * h], .5],
+        [[2 * sd, 0], [1.5 * sd, h], [2.5 * sd, h], .95], [[1.5 * sd, h], [2.5 * sd, h], [2 * sd, 2 * h], .5], [[2 * sd, 2 * h], [3 * sd, 2 * h], [2.5 * sd, h], .7],
+        [[sd, 2 * h], [2 * sd, 2 * h], [1.5 * sd, h], .22]
+      ];
+      tris.forEach(function (t) {
+        var cx = (t[0][0] + t[1][0] + t[2][0]) / 3, cy = (t[0][1] + t[1][1] + t[2][1]) / 3, ins = t[3] < .3 ? .78 : .9;
+        poly(S.path(rgba(p[2], t[3]), 0, true, f.bb), f, [0, 1, 2].map(function (i) { return [cx + (t[i][0] - cx) * ins, cy + (t[i][1] - cy) * ins]; }));
+      });
     },
     nokia: function (S, r, p) {
       var f = plate(S, r, p, 40, 12);
@@ -1489,8 +1497,16 @@
   loupe.style.left = '0px';
   loupe.style.top = '0px';
 
+  var pendingMove = null;
   cv.addEventListener('pointermove', function (e) {
     if (!scene) return;
+    var first = !pendingMove;
+    pendingMove = e;
+    if (first) requestAnimationFrame(handleMove);
+  });
+  function handleMove() {
+    var e = pendingMove;
+    pendingMove = null;
     var u = toDie(e), rg = regionAt(u);
     if (e.pointerType === 'mouse') {
       loupeOn = true;
@@ -1503,8 +1519,9 @@
       if (!anim) paint(!!current);
       setHud();
     }
-  });
+  }
   cv.addEventListener('pointerleave', function () {
+    pendingMove = null;
     loupeOn = false;
     frame.classList.remove('loupe-on');
     if (hover) { hover = null; if (!anim) paint(!!current); setHud(); }
@@ -1823,6 +1840,11 @@
       var when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : days <= 6 ? 'this ' + DAYFULL[next.d.getDay()] : 'in ' + days + ' days';
       lines = ['<span class="big">' + (CITY[key] || key) + '</span>', when];
     }
+    // a chalk sketch of the F1 mark, so the countdown has context
+    lines.unshift('<svg class="f1" viewBox="0 0 100 24" aria-label="F1">' +
+      '<path d="M66 0H31C22 0 16 3 11 8L0 24h12l8-10c3-4 7-6 13-6h26z"/>' +
+      '<path d="M52 11H32c-4 0-7 2-9 5l-6 8h11l3-4c1-1 2-2 4-2h12z"/>' +
+      '<path d="M79 0h12L71 24H59z"/><path d="M95 0h5L80 24h-5z"/></svg>');
     ink.innerHTML = lines.map(function (l, i) {
       return '<div class="l" style="animation-delay:' + (i * .7) + 's">' + l + '</div>';
     }).join('');
@@ -1839,43 +1861,99 @@
     }
   })();
 
-  /* ---------- the dark forest: Trisolaris in a figure-eight, stars that reveal themselves get struck ---------- */
+  /* ---------- the dark forest: chaotic Trisolaris, and the weapons that answer a broadcast ---------- */
   (function () {
     var cv = document.getElementById('forest');
     var c = cv.getContext('2d'), nEl = document.getElementById('dfN'), msg = document.getElementById('dfMsg');
-    var R = rng(1984), D = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
-    var stars = [], waves = [], shots = [], flashes = [], revealed = 0, raf = null, visible = false, nextAuto = 0, msgUntil = 0;
+    var R = rng(1984), D = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0, TAU = Math.PI * 2;
+    var stars = [], fx = [], revealed = 0, raf = null, visible = false, nextAuto = 0, msgUntil = 0, weaponIx = (R() * 3) | 0;
+    var WEAPONS = ['photoid', 'droplet', 'dual-vector foil'];
     function star(x, y) {
-      return { x: x == null ? R() : x, y: y == null ? R() : y, r: .35 + R() * R() * 1.5, ph: R() * 6.28, sp: .6 + R() * 1.6, a: 1, dead: false, hunted: false };
+      return { x: x == null ? R() : x, y: y == null ? R() : y, r: .35 + R() * R() * 1.5, ph: R() * TAU, sp: .6 + R() * 1.6, a: 1, dead: false, hunted: false };
     }
     for (var i = 0; i < 240; i++) stars.push(star());
 
-    // figure-eight three-body choreography (Chenciner–Montgomery), G = m = 1
-    var B = [
-      { x: .97000436, y: -.24308753, vx: .46620368, vy: .43236573, col: '255,196,120', tr: [] },
-      { x: -.97000436, y: .24308753, vx: .46620368, vy: .43236573, col: '255,126,96', tr: [] },
-      { x: 0, y: 0, vx: -.93240737, vy: -.86473146, col: '255,236,200', tr: [] }
+    /* --- Trisolaris: three suns of unequal mass in a chaotic orbit, and one planet caught between them --- */
+    var SUNS = [
+      { m: 1.0,  col: '255,238,205', r: 7.5 },
+      { m: .8,   col: '255,190,120', r: 6.5 },
+      { m: .45,  col: '255,118,88',  r: 4.6 }
     ];
-    function accel() {
-      B.forEach(function (b) { b.ax = 0; b.ay = 0; });
+    var suns, planet = null, civ = 1, era = 1, eraLbl = 'STABLE ERA', note = null, respawnAt = 0, simT = 0;
+    var K_CONF = .22, EPS_S = .012, EPS_P = .0004;
+    function resetSuns() {
+      suns = SUNS.map(function (d, i) {
+        var a = i * TAU / 3 + R() * .5, rr = .75 + R() * .35, v = .3 + R() * .18;
+        return { m: d.m, col: d.col, r: d.r, x: Math.cos(a) * rr, y: Math.sin(a) * rr, vx: -Math.sin(a) * v, vy: Math.cos(a) * v, tr: [] };
+      });
+      var M = 0, px = 0, py = 0, cx = 0, cy = 0;
+      suns.forEach(function (b) { M += b.m; px += b.m * b.vx; py += b.m * b.vy; cx += b.m * b.x; cy += b.m * b.y; });
+      suns.forEach(function (b) { b.vx -= px / M; b.vy -= py / M; b.x -= cx / M; b.y -= cy / M; });
+    }
+    function spawnPlanet() {
+      var host = suns[(R() * 2) | 0], r0 = .1 + R() * .04, a = R() * TAU, v = Math.sqrt(host.m / r0);
+      planet = { x: host.x + Math.cos(a) * r0, y: host.y + Math.sin(a) * r0, vx: host.vx - Math.sin(a) * v, vy: host.vy + Math.cos(a) * v, tr: [] };
+    }
+    function sunAcc() {
+      var cx = 0, cy = 0, M = 0;
+      suns.forEach(function (b) { M += b.m; cx += b.m * b.x; cy += b.m * b.y; b.ax = 0; b.ay = 0; });
+      cx /= M; cy /= M;
       for (var i = 0; i < 3; i++) for (var j = i + 1; j < 3; j++) {
-        var dx = B[j].x - B[i].x, dy = B[j].y - B[i].y, d2 = dx * dx + dy * dy + 1e-4, inv = 1 / (d2 * Math.sqrt(d2));
-        B[i].ax += dx * inv; B[i].ay += dy * inv; B[j].ax -= dx * inv; B[j].ay -= dy * inv;
+        var a = suns[i], b = suns[j], dx = b.x - a.x, dy = b.y - a.y, d2 = dx * dx + dy * dy + EPS_S, inv = 1 / (d2 * Math.sqrt(d2));
+        a.ax += b.m * dx * inv; a.ay += b.m * dy * inv; b.ax -= a.m * dx * inv; b.ay -= a.m * dy * inv;
       }
+      // a gentle pull toward the centre of mass keeps the system from flying apart for good
+      suns.forEach(function (b) { b.ax -= K_CONF * (b.x - cx); b.ay -= K_CONF * (b.y - cy); });
     }
-    function step(dt) {
-      accel();
-      B.forEach(function (b) { b.vx += .5 * dt * b.ax; b.vy += .5 * dt * b.ay; b.x += dt * b.vx; b.y += dt * b.vy; });
-      accel();
-      B.forEach(function (b) { b.vx += .5 * dt * b.ax; b.vy += .5 * dt * b.ay; });
+    function planetAcc() {
+      var ax = 0, ay = 0, best = 0, rest = 0;
+      suns.forEach(function (b) {
+        var dx = b.x - planet.x, dy = b.y - planet.y, d2 = dx * dx + dy * dy + EPS_P, g = b.m / d2, inv = g / Math.sqrt(d2);
+        ax += dx * inv; ay += dy * inv;
+        if (g > best) { rest += best; best = g; } else rest += g;
+      });
+      planet.ax = ax; planet.ay = ay;
+      return best / Math.max(rest, 1e-6);    // how much one sun dominates the sky
     }
-    function centre() { return W < 640 ? [W * .5, H * .7, Math.min(W, H) * .2] : [W * .72, H * .52, Math.min(W, H) * .19]; }
+    function stepSim(dt) {
+      sunAcc();
+      var dom = planet ? planetAcc() : 0;
+      suns.forEach(function (b) { b.vx += .5 * dt * b.ax; b.vy += .5 * dt * b.ay; b.x += dt * b.vx; b.y += dt * b.vy; });
+      if (planet) { planet.vx += .5 * dt * planet.ax; planet.vy += .5 * dt * planet.ay; planet.x += dt * planet.vx; planet.y += dt * planet.vy; }
+      sunAcc();
+      if (planet) dom = planetAcc();
+      suns.forEach(function (b) { b.vx += .5 * dt * b.ax; b.vy += .5 * dt * b.ay; });
+      if (planet) { planet.vx += .5 * dt * planet.ax; planet.vy += .5 * dt * planet.ay; }
+      simT += dt;
+      return dom;
+    }
+    function com() {
+      var M = 0, x = 0, y = 0;
+      suns.forEach(function (b) { M += b.m; x += b.m * b.x; y += b.m * b.y; });
+      return [x / M, y / M];
+    }
+    function checkPlanet(t) {
+      if (!planet) return;
+      var cm = com(), why = null;
+      suns.forEach(function (b) { var dx = b.x - planet.x, dy = b.y - planet.y; if (dx * dx + dy * dy < .0022) why = 'fell into a sun'; });
+      var ex = planet.x - cm[0], ey = planet.y - cm[1];
+      if (!why && ex * ex + ey * ey > 9) why = 'flung into deep space';
+      if (!why) return;
+      note = { text: 'civilization ' + civ + ' destroyed · ' + why, t0: t, x: planet.x, y: planet.y };
+      civ++;
+      planet = null;
+      respawnAt = t + 1.6;
+    }
+    resetSuns();
+    spawnPlanet();
+    for (var w = 0; w < 300; w++) stepSim(.002);
 
-    function resize() {
-      W = cv.clientWidth; H = cv.clientHeight;
-      cv.width = Math.round(W * D); cv.height = Math.round(H * D);
-      if (!raf) draw(performance.now());
+    function view() {
+      var narrow = W < 640;
+      return { cx: narrow ? W * .5 : W * .71, cy: narrow ? H * .68 : H * .48, sc: Math.min(W, H) * (narrow ? .17 : .2) };
     }
+
+    /* --- weapons --- */
     function edgePoint() {
       var side = (R() * 4) | 0, u = R();
       return side === 0 ? [u * W, -30] : side === 1 ? [W + 30, u * H] : side === 2 ? [u * W, H + 30] : [-30, u * H];
@@ -1883,23 +1961,319 @@
     function broadcast(s, t) {
       if (s.hunted || s.dead) return;
       s.hunted = true;
-      waves.push({ s: s, t0: t });
-      var e = edgePoint();
-      shots.push({ s: s, t0: t + 1.7 + R() * .8, x: e[0], y: e[1] });
+      fx.push({ type: 'wave', s: s, t0: t });
+      var kind = WEAPONS[weaponIx++ % 3], e = edgePoint();
+      fx.push({ type: kind, s: s, t0: t + 1.8 + R() * .6, ox: e[0], oy: e[1], seed: R(), wake: [], debris: null, flat: null });
     }
+    function kill(s, t) {
+      if (s.dead) return;
+      s.dead = true;
+      setTimeout(function () { var i = stars.indexOf(s); if (i >= 0) { var n = star(); n.a = 0; stars[i] = n; } }, 7000);
+    }
+    function struck(f, t) {
+      kill(f.s, t);
+      revealed++;
+      nEl.textContent = revealed;
+      msg.classList.add('on');
+      msgUntil = t + 2.6;
+    }
+    function label(x, y, text, a) {
+      c.globalAlpha = Math.max(0, Math.min(1, a));
+      c.fillStyle = '#c9ced8';
+      c.font = '500 10px "JetBrains Mono", monospace';
+      c.fillText(text, x + 10, y - 10);
+      c.globalAlpha = 1;
+    }
+    function ease(u) { return 1 - Math.pow(1 - u, 3); }
+
+    // photoid: a relativistic projectile; the star flares, a shockwave expands, a remnant nebula lingers
+    function photoid(f, t) {
+      var age = t - f.t0, tx = f.s.x * W, ty = f.s.y * H, T = .35;
+      if (age < T) {
+        var k = age / T, tl = Math.max(0, k - .4);
+        var ax = f.ox + (tx - f.ox) * tl, ay = f.oy + (ty - f.oy) * tl, hx = f.ox + (tx - f.ox) * k, hy = f.oy + (ty - f.oy) * k;
+        var g = c.createLinearGradient(ax, ay, hx, hy);
+        g.addColorStop(0, 'rgba(160,215,255,0)');
+        g.addColorStop(1, 'rgba(235,248,255,1)');
+        c.strokeStyle = g; c.lineWidth = 1.6;
+        c.beginPath(); c.moveTo(ax, ay); c.lineTo(hx, hy); c.stroke();
+        return true;
+      }
+      if (!f.hit) { f.hit = true; struck(f, t); }
+      var a = age - T;
+      if (a < 4.2) {
+        // remnant nebula
+        if (a > .4) {
+          var na = .32 * Math.min(1, (a - .4) / .6) * (1 - (a - .4) / 3.8), nr = 30 + a * 14;
+          [['255,110,170', -6, -3], ['110,210,255', 7, 4]].forEach(function (n) {
+            var gn = c.createRadialGradient(tx + n[1], ty + n[2], 0, tx + n[1], ty + n[2], nr);
+            gn.addColorStop(0, 'rgba(' + n[0] + ',' + na + ')');
+            gn.addColorStop(1, 'rgba(' + n[0] + ',0)');
+            c.fillStyle = gn; c.beginPath(); c.arc(tx + n[1], ty + n[2], nr, 0, TAU); c.fill();
+          });
+        }
+        // shockwave
+        if (a < 1.9) {
+          c.strokeStyle = 'rgba(255,225,190,' + (.7 * (1 - a / 1.9)) + ')';
+          c.lineWidth = 1.5;
+          c.beginPath(); c.arc(tx, ty, 6 + ease(a / 1.9) * 120, 0, TAU); c.stroke();
+        }
+        // flare
+        if (a < 1.4) {
+          var fa = 1 - a / 1.4, fr = 4 + 34 * Math.sin(Math.min(1, a / .5) * Math.PI / 2) * fa;
+          var gf = c.createRadialGradient(tx, ty, 0, tx, ty, fr * 2.2);
+          gf.addColorStop(0, 'rgba(255,255,250,' + fa + ')');
+          gf.addColorStop(.35, 'rgba(255,214,150,' + (.8 * fa) + ')');
+          gf.addColorStop(1, 'rgba(255,120,60,0)');
+          c.fillStyle = gf; c.beginPath(); c.arc(tx, ty, fr * 2.2, 0, TAU); c.fill();
+          c.fillStyle = 'rgba(255,240,220,' + (.6 * fa) + ')';
+          c.fillRect(tx - 120 * fa, ty - .6, 240 * fa, 1.2);
+        }
+        label(tx, ty, 'photoid', a < 2.5 ? 1 : 1 - (a - 2.5) / 1.2);
+        return true;
+      }
+      return false;
+    }
+
+    // droplet: a mirror-smooth probe that accelerates in on a curve, pierces the target and keeps going
+    function droplet(f, t) {
+      var age = t - f.t0, tx = f.s.x * W, ty = f.s.y * H, T = 1.3;
+      if (!f.ctrl) {
+        var mx = (f.ox + tx) / 2, my = (f.oy + ty) / 2, nx = -(ty - f.oy), ny = tx - f.ox, nl = Math.hypot(nx, ny) || 1, off = (f.seed - .5) * 260;
+        f.ctrl = [mx + nx / nl * off, my + ny / nl * off];
+      }
+      if (age < 0) return true;
+      var x, y, dx, dy;
+      if (age < T) {
+        var u = Math.pow(age / T, 2.3), iu = 1 - u;
+        x = iu * iu * f.ox + 2 * iu * u * f.ctrl[0] + u * u * tx;
+        y = iu * iu * f.oy + 2 * iu * u * f.ctrl[1] + u * u * ty;
+        dx = 2 * iu * (f.ctrl[0] - f.ox) + 2 * u * (tx - f.ctrl[0]);
+        dy = 2 * iu * (f.ctrl[1] - f.oy) + 2 * u * (ty - f.ctrl[1]);
+      } else {
+        if (!f.hit) {
+          f.hit = true;
+          struck(f, t);
+          f.dir = [tx - f.ctrl[0], ty - f.ctrl[1]];
+          var dl = Math.hypot(f.dir[0], f.dir[1]) || 1;
+          f.dir = [f.dir[0] / dl, f.dir[1] / dl];
+          f.debris = [];
+          for (var k = 0; k < 22; k++) {
+            var ang = R() * TAU, sp = 40 + R() * 170;
+            f.debris.push({ vx: Math.cos(ang) * sp + f.dir[0] * 60, vy: Math.sin(ang) * sp + f.dir[1] * 60, s: .6 + R() * 1.4 });
+          }
+        }
+        var a2 = age - T;
+        x = tx + f.dir[0] * a2 * 1400; y = ty + f.dir[1] * a2 * 1400;
+        dx = f.dir[0]; dy = f.dir[1];
+      }
+      f.wake.push(x, y);
+      if (f.wake.length > 44) f.wake.splice(0, 2);
+      // wake
+      for (var j = 2; j < f.wake.length; j += 2) {
+        c.strokeStyle = 'rgba(190,230,255,' + (.5 * j / f.wake.length) + ')';
+        c.lineWidth = 1.2 * j / f.wake.length;
+        c.beginPath(); c.moveTo(f.wake[j - 2], f.wake[j - 1]); c.lineTo(f.wake[j], f.wake[j + 1]); c.stroke();
+      }
+      // the droplet itself: a polished teardrop pointing along its velocity
+      if (x > -60 && x < W + 60 && y > -60 && y < H + 60) {
+        c.save();
+        c.translate(x, y);
+        c.rotate(Math.atan2(dy, dx));
+        var g = c.createLinearGradient(0, -5, 0, 5);
+        g.addColorStop(0, '#ffffff'); g.addColorStop(.45, '#c7d0dc'); g.addColorStop(1, '#3b4352');
+        c.fillStyle = g;
+        c.beginPath(); c.arc(0, 0, 4.2, -Math.PI / 2, Math.PI / 2); c.quadraticCurveTo(-6, 3, -17, 0); c.quadraticCurveTo(-6, -3, 0, -4.2); c.fill();
+        c.fillStyle = 'rgba(255,255,255,.95)';
+        c.beginPath(); c.ellipse(1.2, -1.6, 1.6, .8, 0, 0, TAU); c.fill();
+        c.restore();
+      }
+      // impact debris
+      if (f.debris) {
+        var a3 = age - T;
+        f.debris.forEach(function (d) {
+          var dr = 1 - Math.exp(-a3 * 1.6);
+          var px = tx + d.vx * dr / 1.6, py = ty + d.vy * dr / 1.6;
+          c.fillStyle = 'rgba(255,' + (200 + (d.s * 30 | 0)) + ',160,' + Math.max(0, 1 - a3 / 1.6) + ')';
+          c.fillRect(px, py, d.s, d.s);
+        });
+        if (a3 < .35) {
+          c.strokeStyle = 'rgba(255,255,255,' + (1 - a3 / .35) + ')';
+          c.lineWidth = 1;
+          c.beginPath(); c.arc(tx, ty, 3 + a3 * 50, 0, TAU); c.stroke();
+        }
+        label(tx, ty, 'droplet', a3 < 1.8 ? 1 : 1 - (a3 - 1.8) / 1);
+        return a3 < 2.8;
+      }
+      return true;
+    }
+
+    // dual-vector foil: a slip of "paper" drifts in, then space around the target collapses into a flat, painted plane
+    function foil(f, t) {
+      var age = t - f.t0, tx = f.s.x * W, ty = f.s.y * H, A = 2;
+      if (age < 0) return true;
+      if (age < A) {
+        if (!f.from) { var ang = f.seed * TAU; f.from = [tx + Math.cos(ang) * 110, ty + Math.sin(ang) * 110]; }
+        var u = ease(age / A), x = f.from[0] + (tx - f.from[0]) * u, y = f.from[1] + (ty - f.from[1]) * u;
+        c.save();
+        c.translate(x, y);
+        c.rotate(age * 1.7);
+        c.globalAlpha = Math.min(1, age / .4);
+        c.shadowColor = 'rgba(220,235,255,.9)';
+        c.shadowBlur = 8;
+        c.fillStyle = 'hsl(' + (200 + Math.sin(age * 6) * 60) + ',70%,88%)';
+        c.fillRect(-5, -1.4, 10, 2.8);
+        c.restore();
+        c.globalAlpha = 1;
+        return true;
+      }
+      var a = age - A;
+      if (!f.flat) {
+        f.flat = { tilt: (f.seed - .5) * .5, victims: [] };
+        struck(f, t);
+        stars.forEach(function (s) {
+          if (s === f.s || s.dead) return;
+          var dx = s.x * W - tx, dy = s.y * H - ty;
+          if (dx * dx + dy * dy < 120 * 120) f.flat.victims.push({ s: s, x: s.x * W, y: s.y * H, d: Math.sqrt(dx * dx + dy * dy) });
+        });
+      }
+      var grow = ease(Math.min(1, a / 2.4)), rx = 150 * grow, ry = rx * .14, fade = a < 4.2 ? 1 : Math.max(0, 1 - (a - 4.2) / 2.5);
+      c.save();
+      c.translate(tx, ty);
+      c.rotate(f.flat.tilt);
+      var bands = ['255,157,226', '143,211,255', '255,211,107', '201,167,255', '123,227,139', '255,140,110'];
+      for (var k = 0; k < 7; k++) {
+        var fr = 1 - k / 7;
+        c.fillStyle = 'rgba(' + bands[k % bands.length] + ',' + (.16 * fade) + ')';
+        c.beginPath(); c.ellipse(0, 0, rx * fr, ry * fr, 0, 0, TAU); c.fill();
+      }
+      c.strokeStyle = 'rgba(240,248,255,' + (.75 * fade * (1 - grow * .6)) + ')';
+      c.lineWidth = 1;
+      c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, TAU); c.stroke();
+      c.restore();
+      // anything the plane reaches is flattened into it
+      f.flat.victims.forEach(function (v) {
+        if (v.d > rx) return;
+        kill(v.s, t);
+        var sx = (v.x - tx) * Math.cos(-f.flat.tilt) - (v.y - ty) * Math.sin(-f.flat.tilt);
+        c.save();
+        c.translate(tx, ty);
+        c.rotate(f.flat.tilt);
+        c.fillStyle = 'rgba(230,236,255,' + (.7 * fade) + ')';
+        c.fillRect(sx - 5, -.5, 10, 1);
+        c.restore();
+      });
+      label(tx, ty - ry, 'dual-vector foil', a < 3.5 ? Math.min(1, a / .3) : fade);
+      return a < 6.7;
+    }
+
+    function wave(f, t) {
+      var age = t - f.t0;
+      if (age > 2.6) return false;
+      for (var k = 0; k < 3; k++) {
+        var a2 = age - k * .25;
+        if (a2 <= 0) continue;
+        c.strokeStyle = 'rgba(255,214,150,' + Math.max(0, .5 * (1 - a2 / 2.3)) + ')';
+        c.lineWidth = 1;
+        c.beginPath(); c.arc(f.s.x * W, f.s.y * H, a2 * 70, 0, TAU); c.stroke();
+      }
+      return true;
+    }
+    var RUN = { wave: wave, photoid: photoid, droplet: droplet, 'dual-vector foil': foil };
+
     function autoBroadcast(t) {
-      var cc = centre(), pick = stars.filter(function (s) {
-        var dx = s.x * W - cc[0], dy = s.y * H - cc[1];
-        return !s.dead && !s.hunted && s.r > .7 && dx * dx + dy * dy > cc[2] * cc[2] * 4;
+      var v = view(), busy = fx.filter(function (f) { return f.type !== 'wave'; }).length;
+      if (busy >= 2) return;
+      var pick = stars.filter(function (s) {
+        var dx = s.x * W - v.cx, dy = s.y * H - v.cy;
+        var clear = W < 640 ? s.y > .56 : s.x > .4;   // keep strikes off the text block
+        return !s.dead && !s.hunted && s.r > .7 && clear && s.x > .04 && s.x < .96 && s.y > .06 && s.y < .94 && dx * dx + dy * dy > v.sc * v.sc * 5;
       });
       if (pick.length) broadcast(pick[(R() * pick.length) | 0], t);
     }
-    function respawn() {
-      for (var i = 0; i < stars.length; i++) if (stars[i].dead) { var n = star(); n.a = 0; stars[i] = n; return; }
+
+    function drawTrisolaris(t) {
+      var v = view(), cm = com();
+      function P(x, y) { return [v.cx + (x - cm[0]) * v.sc, v.cy + (y - cm[1]) * v.sc]; }
+      // trails
+      suns.forEach(function (b) {
+        b.tr.push(b.x, b.y);
+        if (b.tr.length > 240) b.tr.splice(0, 2);
+      });
+      if (planet) { planet.tr.push(planet.x, planet.y); if (planet.tr.length > 180) planet.tr.splice(0, 2); }
+      function trail(tr, col, wdt) {
+        for (var seg = 0; seg < 4; seg++) {
+          var from = Math.floor(tr.length / 2 * seg / 4) * 2, to = Math.floor(tr.length / 2 * (seg + 1) / 4) * 2;
+          c.strokeStyle = 'rgba(' + col + ',' + (.05 + seg * .08) + ')';
+          c.lineWidth = wdt;
+          c.beginPath();
+          for (var j = from; j <= Math.min(to, tr.length - 2); j += 2) {
+            var q = P(tr[j], tr[j + 1]);
+            if (j === from) c.moveTo(q[0], q[1]); else c.lineTo(q[0], q[1]);
+          }
+          c.stroke();
+        }
+      }
+      suns.forEach(function (b) { trail(b.tr, b.col, 1.1); });
+      if (planet) trail(planet.tr, '140,210,255', .9);
+      // suns: corona, glow, core
+      suns.forEach(function (b, i) {
+        var q = P(b.x, b.y), fl = 1 + .06 * Math.sin(t * 5 + i * 2), rr = b.r * fl;
+        var g = c.createRadialGradient(q[0], q[1], 0, q[0], q[1], rr * 4.2);
+        g.addColorStop(0, 'rgba(' + b.col + ',.85)');
+        g.addColorStop(.25, 'rgba(' + b.col + ',.35)');
+        g.addColorStop(1, 'rgba(' + b.col + ',0)');
+        c.fillStyle = g; c.beginPath(); c.arc(q[0], q[1], rr * 4.2, 0, TAU); c.fill();
+        var g2 = c.createRadialGradient(q[0] - rr * .2, q[1] - rr * .2, 0, q[0], q[1], rr);
+        g2.addColorStop(0, '#fffdf6');
+        g2.addColorStop(.7, 'rgba(' + b.col + ',1)');
+        g2.addColorStop(1, 'rgba(' + b.col + ',.6)');
+        c.fillStyle = g2; c.beginPath(); c.arc(q[0], q[1], rr, 0, TAU); c.fill();
+      });
+      // the planet
+      if (planet) {
+        var pq = P(planet.x, planet.y);
+        c.fillStyle = '#9fd8ff';
+        c.beginPath(); c.arc(pq[0], pq[1], 2.3, 0, TAU); c.fill();
+        c.strokeStyle = 'rgba(159,216,255,.35)';
+        c.beginPath(); c.arc(pq[0], pq[1], 5, 0, TAU); c.stroke();
+      }
+      if (note) {
+        var na = t - note.t0;
+        if (na < 3.2) {
+          var nq = P(note.x, note.y);
+          if (na < .8) {
+            var gb = c.createRadialGradient(nq[0], nq[1], 0, nq[0], nq[1], 26);
+            gb.addColorStop(0, 'rgba(255,230,190,' + (1 - na / .8) + ')');
+            gb.addColorStop(1, 'rgba(255,160,90,0)');
+            c.fillStyle = gb; c.beginPath(); c.arc(nq[0], nq[1], 26, 0, TAU); c.fill();
+          }
+        } else note = null;
+      }
+      // labels
+      // status in a corner: top-right on wide screens, bottom-left on phones
+      var narrow = W < 640, lx = narrow ? 20 : W - 22, ly = narrow ? H - 86 : 30;
+      c.textAlign = narrow ? 'left' : 'right';
+      c.font = '500 10px "JetBrains Mono", monospace';
+      c.fillStyle = 'rgba(169,175,185,.75)';
+      c.fillText('TRISOLARIS · CIVILIZATION ' + civ, lx, ly);
+      c.fillStyle = era > .5 ? 'rgba(143,240,176,.85)' : 'rgba(255,122,122,.9)';
+      c.fillText(planet ? eraLbl : 'DEHYDRATING…', lx, ly + 15);
+      if (note && t - note.t0 < 3.2) {
+        c.fillStyle = 'rgba(255,190,150,' + Math.max(0, 1 - (t - note.t0) / 3.2) + ')';
+        c.fillText(note.text, lx, ly + 30);
+      }
+      c.textAlign = 'start';
+    }
+
+    function resize() {
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = Math.round(W * D); cv.height = Math.round(H * D);
+      draw(performance.now());   // resizing clears the canvas, so repaint right away
     }
 
     function draw(now) {
-      var t = now / 1000, cc = centre();
+      var t = now / 1000;
       c.setTransform(D, 0, 0, D, 0, 0);
       c.clearRect(0, 0, W, H);
       stars.forEach(function (s) {
@@ -1908,85 +2282,28 @@
         var tw = reduceMotion ? .8 : .55 + .45 * Math.sin(t * s.sp + s.ph);
         c.globalAlpha = s.a * tw;
         c.fillStyle = s.hunted ? '#ffe2a8' : '#cdd6ff';
-        c.beginPath(); c.arc(s.x * W, s.y * H, s.r + (s.hunted ? .9 : 0), 0, 6.283); c.fill();
+        c.beginPath(); c.arc(s.x * W, s.y * H, s.r + (s.hunted ? .9 : 0), 0, TAU); c.fill();
       });
       c.globalAlpha = 1;
-      // a location broadcast: shells expanding at "light speed"
-      waves = waves.filter(function (w) {
-        var age = t - w.t0;
-        if (age > 2.6) return false;
-        for (var k = 0; k < 3; k++) {
-          var a2 = age - k * .25;
-          if (a2 <= 0) continue;
-          c.strokeStyle = 'rgba(255,214,150,' + Math.max(0, .5 * (1 - a2 / 2.3)) + ')';
-          c.lineWidth = 1;
-          c.beginPath(); c.arc(w.s.x * W, w.s.y * H, a2 * 70, 0, 6.283); c.stroke();
+      fx = fx.filter(function (f) { return RUN[f.type](f, t); });
+
+      if (!reduceMotion) {
+        var dom = 0;
+        for (var n = 0; n < 6; n++) { dom = stepSim(.002); checkPlanet(t); }
+        if (!planet && t > respawnAt) spawnPlanet();
+        if (planet) {
+          era += ((dom > 7 ? 1 : 0) - era) * .03;
+          if (era > .6) eraLbl = 'STABLE ERA'; else if (era < .4) eraLbl = 'CHAOTIC ERA';
         }
-        return true;
-      });
-      // the strike, arriving out of the dark
-      shots = shots.filter(function (sh) {
-        var age = t - sh.t0;
-        if (age < 0) return true;
-        var k = Math.min(1, age / .3), tx = sh.s.x * W, ty = sh.s.y * H, tl = Math.max(0, k - .35);
-        var ax = sh.x + (tx - sh.x) * tl, ay = sh.y + (ty - sh.y) * tl, hx = sh.x + (tx - sh.x) * k, hy = sh.y + (ty - sh.y) * k;
-        var g = c.createLinearGradient(ax, ay, hx, hy);
-        g.addColorStop(0, 'rgba(150,215,255,0)');
-        g.addColorStop(1, 'rgba(225,245,255,.95)');
-        c.strokeStyle = g; c.lineWidth = 1.4;
-        c.beginPath(); c.moveTo(ax, ay); c.lineTo(hx, hy); c.stroke();
-        if (k < 1) return true;
-        sh.s.dead = true;
-        flashes.push({ x: tx, y: ty, t0: t });
-        revealed++;
-        nEl.textContent = revealed;
-        msg.classList.add('on');
-        msgUntil = t + 2.6;
-        setTimeout(respawn, 6000);
-        return false;
-      });
-      flashes = flashes.filter(function (f) {
-        var age = t - f.t0;
-        if (age > 1) return false;
-        var rr = 6 + age * 46, g = c.createRadialGradient(f.x, f.y, 0, f.x, f.y, rr);
-        g.addColorStop(0, 'rgba(255,250,235,' + (1 - age) + ')');
-        g.addColorStop(1, 'rgba(255,200,140,0)');
-        c.fillStyle = g;
-        c.beginPath(); c.arc(f.x, f.y, rr, 0, 6.283); c.fill();
-        return true;
-      });
-      // Trisolaris
-      if (!reduceMotion) for (var n = 0; n < 4; n++) step(.0035);
-      B.forEach(function (b) {
-        if (!reduceMotion || b.tr.length < 2) { b.tr.push(b.x, b.y); if (b.tr.length > 300) b.tr.splice(0, 2); }
-        var tr = b.tr;
-        for (var seg = 0; seg < 4; seg++) {
-          var from = Math.floor(tr.length * seg / 8) * 2, to = Math.floor(tr.length * (seg + 1) / 8) * 2 + 2;
-          c.strokeStyle = 'rgba(' + b.col + ',' + (.06 + seg * .09) + ')';
-          c.lineWidth = 1.2;
-          c.beginPath();
-          for (var j = from; j < Math.min(to, tr.length); j += 2) {
-            var px = cc[0] + tr[j] * cc[2], py = cc[1] + tr[j + 1] * cc[2];
-            if (j === from) c.moveTo(px, py); else c.lineTo(px, py);
-          }
-          c.stroke();
-        }
-        var bx = cc[0] + b.x * cc[2], by = cc[1] + b.y * cc[2], gl = c.createRadialGradient(bx, by, 0, bx, by, 16);
-        gl.addColorStop(0, 'rgba(' + b.col + ',.9)');
-        gl.addColorStop(1, 'rgba(' + b.col + ',0)');
-        c.fillStyle = gl;
-        c.beginPath(); c.arc(bx, by, 16, 0, 6.283); c.fill();
-        c.fillStyle = 'rgba(255,248,235,.95)';
-        c.beginPath(); c.arc(bx, by, 2.4, 0, 6.283); c.fill();
-      });
-      c.fillStyle = 'rgba(169,175,185,.55)';
-      c.font = '500 10px "JetBrains Mono", monospace';
-      c.textAlign = 'center';
-      c.fillText('TRISOLARIS', cc[0], cc[1] + cc[2] * 1.05 + 18);
-      c.textAlign = 'start';
+        // if a sun ever wanders too far, start a new system
+        var cm = com();
+        if (suns.some(function (b) { var dx = b.x - cm[0], dy = b.y - cm[1]; return dx * dx + dy * dy > 16; })) { resetSuns(); spawnPlanet(); }
+      }
+      drawTrisolaris(t);
+
       if (!reduceMotion) {
         if (!nextAuto) nextAuto = t + 1.5;
-        if (t > nextAuto) { autoBroadcast(t); nextAuto = t + 3.5 + R() * 3; }
+        if (t > nextAuto) { autoBroadcast(t); nextAuto = t + 3.6 + R() * 2.8; }
         if (msgUntil && t > msgUntil) { msg.classList.remove('on'); msgUntil = 0; }
       }
     }
@@ -1998,6 +2315,7 @@
     }
 
     cv.addEventListener('click', function (e) {
+      if (reduceMotion) return;
       var b = cv.getBoundingClientRect(), x = e.clientX - b.left, y = e.clientY - b.top, t = performance.now() / 1000;
       var best = null, bd = 28 * 28;
       stars.forEach(function (s) {
@@ -2014,8 +2332,6 @@
       broadcast(best, t);
     });
 
-    // precompute a full loop of trails so the system appears mid-orbit
-    for (var k = 0; k < 450; k++) { for (var n = 0; n < 4; n++) step(.0035); B.forEach(function (b) { b.tr.push(b.x, b.y); if (b.tr.length > 300) b.tr.splice(0, 2); }); }
     resize();
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(cv);
     if (!reduceMotion && 'IntersectionObserver' in window) {
