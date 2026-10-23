@@ -4,14 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Aakarsh Alam — Silicon &amp; FPGA</title>
-<meta name="description" content="Aakarsh Alam — silicon and FPGA engineer, Dual Degree in Microelectronics &amp; VLSI at IIT Kharagpur. Timing closure at Google, PCIe FPGA accelerators at Aramas.ai, FlashAttention on FPGA (ISFPGA '26)."/>
+<meta name="description" content="Aakarsh Alam — silicon and FPGA engineer, Dual Degree in Microelectronics &amp; VLSI at IIT Kharagpur. Previously at Google, Aramas.ai and IISc."/>
 <meta name="author" content="Aakarsh Alam"/>
 <meta name="theme-color" content="#07080a"/>
 <link rel="canonical" href="https://aakarshalam.github.io/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://aakarshalam.github.io/"/>
 <meta property="og:title" content="Aakarsh Alam — Silicon &amp; FPGA"/>
-<meta property="og:description" content="Every block on this die is something I built. Timing closure, PCIe FPGA accelerators, FlashAttention on FPGA."/>
+<meta property="og:description" content="A die you can put under a microscope: every block is something I built."/>
 <meta name="twitter:card" content="summary"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='3' fill='%2307080a' stroke='%23e8b057' stroke-width='2'/%3E%3Crect x='7' y='7' width='9' height='8' fill='%236ea8ff'/%3E%3Crect x='18' y='7' width='7' height='12' fill='%23e8b057'/%3E%3Crect x='7' y='17' width='9' height='8' fill='%23ff7a93'/%3E%3Crect x='18' y='21' width='7' height='4' fill='%234fd1c5'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -26,7 +26,7 @@
   "url": "https://aakarshalam.github.io/",
   "email": "mailto:a.aakarsh1050@gmail.com",
   "alumniOf": { "@type": "CollegeOrUniversity", "name": "Indian Institute of Technology Kharagpur" },
-  "knowsAbout": ["FPGA design", "Static timing analysis", "ML hardware", "Computer architecture", "VLSI"],
+  "knowsAbout": ["FPGA design", "ML hardware", "Computer architecture", "VLSI"],
   "sameAs": ["https://www.linkedin.com/in/aakarsh-a-b96830258/", "https://github.com/Aakarshalam"]
 }
 </script>
@@ -34,7 +34,7 @@
   :root {
     --bg:      #07080a;
     --bg-2:    #0c0e12;
-    --panel:   rgba(11,13,17,0.9);
+    --panel:   rgba(11,13,17,0.92);
     --line:    #1b1f26;
     --line-2:  #2a303a;
     --ink:     #eef0f3;
@@ -72,7 +72,7 @@
   }
   .top.scrolled { background: rgba(7,8,10,.82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom-color: var(--line); }
   .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 13px var(--mono); letter-spacing: .06em; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 13px var(--mono); letter-spacing: .04em; }
   .brand i { width: 10px; height: 10px; border-radius: 2px; background: var(--gold); box-shadow: 0 0 12px var(--gold); }
   .nav { display: flex; gap: 4px; }
   .nav a { padding: 8px 12px; border-radius: 8px; font: 500 12.5px var(--mono); color: var(--ink-2); text-decoration: none; transition: color .15s, background-color .15s; }
@@ -109,116 +109,94 @@
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 20px;
-    background: radial-gradient(120% 90% at 50% 40%, #0d1016, #06070a);
+    background: #07080b;
   }
-  #die { display: block; width: 100%; height: auto; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-  .die-hud {
-    display: flex;
-    margin: 12px 4px 0;
-    justify-content: space-between;
-    gap: 12px;
-    font: 500 11.5px var(--mono);
-    color: var(--ink-3);
+  #die { display: block; width: 100%; cursor: zoom-in; touch-action: manipulation; }
+  .die-frame.loupe-on #die { cursor: none; }
+  .zoomed #die { cursor: zoom-out; }
+  .loupe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    width: 190px;
+    height: 190px;
     pointer-events: none;
-    transition: opacity .2s;
+    opacity: 0;
+    transition: opacity .15s;
   }
-  .die-hud b { color: var(--ink); font-weight: 500; }
-  .die-hud .hue { color: var(--hue, var(--gold)); }
-  .die-wrap.zoomed .die-hud { opacity: 0; }
-  .die-out { fill: #090b0e; stroke: #3a3220; stroke-width: 2; }
-  .die-seal { fill: none; stroke: rgba(232,176,87,.25); stroke-width: 1; stroke-dasharray: 2 3; }
-  .pad { fill: rgba(232,176,87,.10); stroke: rgba(232,176,87,.45); stroke-width: 1; transition: fill .2s, stroke .2s; }
-  .pad.lit { fill: rgba(232,176,87,.55); stroke: var(--gold); }
-  .wire { stroke: rgba(232,176,87,.35); stroke-width: 1; }
-  .route { stroke: rgba(255,255,255,.05); stroke-width: 1; }
-  .pulse { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; opacity: .8; animation: run linear infinite; }
-  @keyframes run { to { stroke-dashoffset: 0; } }
-  .mark { font: 500 10px var(--mono); fill: rgba(232,176,87,.45); letter-spacing: .12em; }
-  .b-base { fill: #0b0d11; }
-  .b-tint { fill-opacity: .10; transition: fill-opacity .2s; }
-  .b-edge { fill: none; stroke-opacity: .5; stroke-width: 1.2; transition: stroke-opacity .2s, stroke-width .2s; }
-  .b-lbl { font: 700 18px var(--mono); letter-spacing: .04em; }
-  .b-sub { font: 500 10px var(--mono); fill: var(--ink-2); letter-spacing: .08em; }
-  .b-flow rect { fill: rgba(0,0,0,.45); stroke-opacity: .55; stroke-width: .7; }
-  .b-flow text { font-family: var(--mono); font-weight: 500; fill: var(--ink-2); }
-  .b-flow path { fill: none; stroke-opacity: .7; stroke-width: .8; }
-  .b-flow { opacity: .55; transition: opacity .3s; }
-  .blk { cursor: pointer; outline: none; transition: opacity .35s; }
-  .blk:hover .b-tint, .blk:focus-visible .b-tint, .blk.hot .b-tint { fill-opacity: .22; }
-  .blk:hover .b-edge, .blk:focus-visible .b-edge, .blk.hot .b-edge { stroke-opacity: 1; stroke-width: 2; }
-  .blk:hover .b-flow, .blk:focus-visible .b-flow { opacity: .9; }
-  .filler .b-lbl { fill: var(--ink-3); font-size: 12px; }
-  .filler .b-edge { stroke: var(--line-2); stroke-opacity: 1; }
-  .blk.fun .b-tint { fill-opacity: 0; }
-  .blk.fun .b-edge { stroke-dasharray: 5 4; stroke-opacity: .3; }
-  .blk.fun .b-lbl { fill: var(--ink-3); }
-  .blk.fun .b-flow { opacity: .25; }
-  .blk.fun:hover .b-tint, .blk.fun:focus-visible .b-tint, .blk.fun.sel .b-tint { fill-opacity: .16; }
-  .blk.fun:hover .b-lbl, .blk.fun:focus-visible .b-lbl, .blk.fun.sel .b-lbl { fill: var(--hue); }
-  .zoomed .blk:not(.sel), .zoomed .filler { opacity: .18; }
-  .zoomed .blk.sel .b-flow { opacity: 1; }
-  .zoomed .blk.sel .b-tint { fill-opacity: .16; }
-  .probe-g { pointer-events: none; transition: opacity .2s; }
-  .probe-g line { stroke-width: 1; stroke-dasharray: 4 4; stroke-opacity: .55; }
-  .probe-g text { font: 500 10px var(--mono); }
-  .zoomed .probe-g { opacity: 0; }
-  .sheen { mix-blend-mode: screen; pointer-events: none; }
+  .loupe-on .loupe { opacity: 1; }
+  .loupe-glass {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border: 2px solid rgba(232,176,87,.85);
+    border-radius: 50%;
+    background: #000;
+    box-shadow: 0 0 0 1px #000, 0 14px 40px rgba(0,0,0,.65), inset 0 0 30px rgba(0,0,0,.6);
+  }
+  .loupe-glass canvas { display: block; width: 100%; height: 100%; }
+  .loupe-glass::before, .loupe-glass::after { content: ''; position: absolute; background: rgba(232,176,87,.55); }
+  .loupe-glass::before { left: 50%; top: 38%; bottom: 38%; width: 1px; }
+  .loupe-glass::after { top: 50%; left: 38%; right: 38%; height: 1px; }
+  .loupe-tag {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 10px);
+    padding: 5px 11px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: rgba(7,8,10,.9);
+    font: 500 11.5px var(--mono);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .loupe-tag b { color: var(--hue, var(--gold)); font-weight: 700; }
+  .loupe.up .loupe-tag { top: auto; bottom: 100%; transform: translate(-50%, -10px); }
 
-  /* detail panel */
-  .panel {
+  .zcard {
     position: absolute;
     top: 16px;
     right: 16px;
-    width: 380px;
-    max-height: calc(100% - 32px);
-    display: flex;
-    flex-direction: column;
-    padding: 26px 26px 20px;
+    z-index: 4;
+    width: 340px;
+    padding: 18px 20px 20px;
     border: 1px solid var(--line-2);
     border-top: 2px solid var(--hue, var(--gold));
-    border-radius: 16px;
+    border-radius: 14px;
     background: var(--panel);
-    -webkit-backdrop-filter: blur(16px);
-            backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
     opacity: 0;
-    transform: translateX(24px);
+    transform: translateY(-8px);
     pointer-events: none;
-    transition: opacity .3s, transform .3s;
-    overflow-y: auto;
+    transition: opacity .25s, transform .25s;
   }
-  .zoomed .panel { opacity: 1; transform: none; pointer-events: auto; transition-delay: .25s; }
-  .panel-x {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 34px;
-    height: 34px;
+  .zoomed .zcard { opacity: 1; transform: none; pointer-events: auto; transition-delay: .3s; }
+  .zc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .zc-lbl { font: 700 12px var(--mono); letter-spacing: .1em; color: var(--hue, var(--gold)); }
+  .zc-ctrl { display: flex; gap: 2px; }
+  .zc-ctrl button {
+    width: 30px;
+    height: 30px;
     display: grid;
     place-items: center;
-    border: 1px solid var(--line-2);
-    border-radius: 9px;
+    border: 0;
+    border-radius: 8px;
     background: transparent;
-    color: var(--ink-2);
+    color: var(--ink-3);
+    font: 500 15px var(--mono);
     cursor: pointer;
   }
-  .panel-x:hover { color: var(--ink); border-color: var(--ink-3); }
-  .panel-body { flex: 1; }
-  .w .k { padding-right: 40px; font: 500 11.5px/1.5 var(--mono); color: var(--hue, var(--gold)); letter-spacing: .04em; }
-  .w h3 { margin: 10px 0 10px; font: 700 1.7rem/1.1 var(--sans); letter-spacing: -.025em; }
-  .w p.d { color: var(--ink-2); font-size: 15.5px; }
-  .w .st { display: flex; flex-wrap: wrap; gap: 14px 28px; margin: 22px 0; }
-  .w .st div { display: flex; flex-direction: column; }
-  .w .st b { font: 800 2.3rem/1 var(--sans); letter-spacing: -.03em; color: var(--ink); }
-  .w .st span { margin-top: 6px; font: 400 11.5px var(--mono); color: var(--ink-3); }
-  .w .tg { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
-  .w .st + .tg { margin-top: 0; }
-  .w .tg span { padding: 3px 9px; border: 1px solid var(--line-2); border-radius: 999px; font: 400 11.5px var(--mono); color: var(--ink-2); }
-  .w a.lnk { display: inline-block; margin-top: 18px; font: 500 12.5px var(--mono); color: var(--hue, var(--gold)); text-decoration: none; }
+  .zc-ctrl button:hover { color: var(--ink); background: rgba(255,255,255,.06); }
+  .w h3 { font: 700 1.45rem/1.15 var(--sans); letter-spacing: -.02em; }
+  .w .k { margin-top: 4px; font: 400 12px var(--mono); color: var(--ink-3); }
+  .w .d { margin-top: 10px; color: var(--ink-2); font-size: 15.5px; line-height: 1.5; }
+  .w a.lnk { display: inline-block; margin-top: 12px; font: 500 12.5px var(--mono); color: var(--hue, var(--gold)); text-decoration: none; }
   .w a.lnk:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .panel-nav { display: flex; justify-content: space-between; gap: 8px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .panel-nav button { padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; font: 500 12px var(--mono); color: var(--ink-3); cursor: pointer; }
-  .panel-nav button:hover { color: var(--ink); background: rgba(255,255,255,.05); }
 
+  .die-hud { display: flex; justify-content: space-between; gap: 12px; margin: 12px 4px 0; font: 500 11.5px var(--mono); color: var(--ink-3); }
   .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
   .legend button {
     display: inline-flex;
@@ -238,8 +216,8 @@
   .legend i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); }
 
   /* without JS the block data shows as a plain list */
-  .work-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 32px; }
-  .work-list .w { padding: 22px; border: 1px solid var(--line); border-radius: 14px; }
+  .work-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 32px; }
+  .work-list .w { padding: 20px; border: 1px solid var(--line); border-radius: 14px; }
   .js .work-list { display: none; }
 
   /* ---------- sections ---------- */
@@ -260,6 +238,7 @@
   .w-lbl { font: 700 11px var(--mono); letter-spacing: .04em; }
   .w-clk { fill: none; stroke: var(--ink-3); stroke-width: 1; opacity: .6; }
   .w-sig { fill: none; stroke-width: 1.6; stroke-linejoin: round; transition: stroke-width .15s; }
+  .w-sig.soon { stroke-dasharray: 2 2; opacity: .7; }
   .w-fill { fill-opacity: .12; transition: fill-opacity .15s; }
   .w-in { font: 500 10.5px var(--mono); fill: var(--ink); pointer-events: none; }
   .w-now { stroke: var(--gold); stroke-dasharray: 3 3; }
@@ -269,6 +248,8 @@
   .w-row:hover .w-sig, .w-row:focus-visible .w-sig { stroke-width: 2.6; }
   .w-row:hover .w-fill, .w-row:focus-visible .w-fill { fill-opacity: .3; }
   .w-row:focus-visible .w-hit { stroke: var(--gold); }
+  .w-sep { stroke: var(--line-2); stroke-dasharray: 2 4; }
+  .w-sep-t { font: 500 10px var(--mono); fill: var(--ink-3); letter-spacing: .08em; }
   .tip {
     position: absolute;
     z-index: 5;
@@ -285,11 +266,7 @@
   }
   .tip.on { opacity: 1; }
 
-  .w-sep { stroke: var(--line-2); stroke-dasharray: 2 4; }
-  .w-sep-t { font: 500 10px var(--mono); fill: var(--ink-3); letter-spacing: .08em; }
-  .w-joke .w-sig { opacity: .85; }
-
-  /* off the die */
+  /* side quests */
   .off { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; align-items: center; }
   .board {
     position: relative;
@@ -297,7 +274,6 @@
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 20px;
-    cursor: pointer;
   }
   .board img { display: block; width: 100%; height: auto; }
   .ink {
@@ -309,7 +285,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: .15em;
+    gap: .2em;
     font: 500 3.6cqw/1.15 'Caveat', 'Segoe Print', cursive;
     color: rgba(246,245,238,.9);
     text-shadow: 0 0 1px rgba(255,255,255,.35);
@@ -317,11 +293,9 @@
     filter: url(#chalk);
     pointer-events: none;
   }
-  .ink .l { white-space: nowrap; animation: write .7s steps(14, end) both; }
-  .ink .big { font-size: 6.4cqw; font-weight: 700; line-height: 1; }
-  .ink .circ { display: inline-block; padding: 0 .35em; border: .3cqw solid rgba(246,245,238,.85); border-radius: 50%; }
-  .ink sup { font-size: .6em; }
-  .ink sub { font-size: .7em; }
+  .ink .l { white-space: nowrap; animation: write .8s steps(16, end) both; }
+  .ink .big { font-size: 6.6cqw; font-weight: 700; line-height: 1; }
+  .ink .sm { font-size: 3cqw; opacity: .8; }
   @keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
   .board-cap {
     position: absolute;
@@ -451,11 +425,11 @@
     .nav a.opt { display: none; }
     .hero { padding-top: 96px; }
     .die-frame { overflow: visible; border: 0; border-radius: 0; background: none; }
-    #die { border: 1px solid var(--line); border-radius: 16px; background: radial-gradient(120% 90% at 50% 40%, #0d1016, #06070a); }
+    #die { border: 1px solid var(--line); border-radius: 16px; }
+    .zcard { position: static; width: auto; margin-top: 12px; display: none; transform: none; }
+    .zoomed .zcard { display: block; }
     .die-hud { justify-content: center; text-align: center; }
     .die-hud .r { display: none; }
-    .panel { position: static; display: none; width: auto; margin-top: 12px; transform: none; }
-    .zoomed .panel { display: flex; }
     .sec { padding-top: 100px; }
     .contact { padding: 110px 0 90px; }
   }
@@ -470,12 +444,12 @@
 
 <header class="top" id="top">
   <div class="wrap">
-    <a class="brand" href="#main"><i></i>AA-27</a>
+    <a class="brand" href="#main"><i></i>Aakarsh Alam</a>
     <nav class="nav" aria-label="Sections">
       <a class="opt" href="#main">Die</a>
       <a href="#timeline">Timeline</a>
       <a class="opt" href="#papers">Papers</a>
-      <a class="opt" href="#offdie">Off-die</a>
+      <a class="opt" href="#sidequests">Side quests</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -487,147 +461,128 @@
     <div class="wrap hero-top">
       <h1 class="name">Aakarsh<br/><span>Alam</span></h1>
       <div>
-        <p class="intro">I build hardware that makes silicon go faster: <b>FPGA accelerators</b>, <b>timing closure</b> and <b>ML hardware</b>. Previously at <b>Google</b>, <b>Aramas.ai</b> and <b>IISc</b>.</p>
+        <p class="intro">I build hardware that makes silicon go faster: <b>FPGA accelerators</b> and <b>ML hardware</b>. Previously at <b>Google</b>, <b>Aramas.ai</b> and <b>IISc</b>.</p>
         <p class="facts"><span><b>IIT Kharagpur</b> · Microelectronics &amp; VLSI</span><span>Dual Degree <b>'27</b></span><span>CGPA <b>9.14</b></span></p>
       </div>
     </div>
 
     <div class="die-wrap">
       <div class="die-frame" id="frame">
-        <svg id="die" role="group" aria-label="Die floorplan. Each block is a project or internship; select one to zoom in."></svg>
-        <aside class="panel" id="panel" aria-live="polite">
-          <button class="panel-x" id="panelX" type="button" aria-label="Close">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-          </button>
-          <div class="panel-body w" id="panelBody"></div>
-          <div class="panel-nav">
-            <button type="button" id="prev">← prev</button>
-            <button type="button" id="next">next →</button>
+        <canvas id="die" role="img" aria-label="A procedurally drawn silicon die. Each region is a project or internship; use the buttons below to zoom into one."></canvas>
+        <div class="loupe" id="loupe" aria-hidden="true">
+          <div class="loupe-glass"><canvas id="loupeCv"></canvas></div>
+          <div class="loupe-tag" id="loupeTag"></div>
+        </div>
+        <div class="zcard" id="zcard" aria-live="polite">
+          <div class="zc-top">
+            <span class="zc-lbl" id="zcLbl"></span>
+            <span class="zc-ctrl">
+              <button type="button" id="prev" aria-label="Previous block">‹</button>
+              <button type="button" id="next" aria-label="Next block">›</button>
+              <button type="button" id="zx" aria-label="Zoom out">×</button>
+            </span>
           </div>
-        </aside>
+          <div class="w" id="zcBody"></div>
+        </div>
       </div>
       <div class="die-hud" aria-hidden="true">
-        <span id="hud">▸ every block on this die is something I built</span>
-        <span class="r">hover to probe · click to zoom · not every block is work</span>
+        <span id="hud">▸ hover to inspect · click to zoom</span>
+        <span class="r">some blocks aren’t work</span>
       </div>
-      <div class="legend" id="legend" aria-label="Blocks"></div>
+      <div class="legend" id="legend" aria-label="Zoom to a block"></div>
     </div>
 
     <!-- Block data. Shown as a plain list without JS; the die script reads it with JS.
-         data-l / data-p = col,row,w,h on the landscape (12×8) and portrait (6×12) floorplan grids. -->
+         data-l / data-p = col,row,w,h on the landscape (12×8) and portrait (6×12) floorplan grids.
+         data-tex picks the silicon texture, data-pal its colour, data-art an optional doodle. -->
     <div class="wrap">
       <div class="work-list" id="work">
-        <article class="w" id="google" data-label="GOOGLE" data-sub="STA · ECO" data-hue="#6ea8ff" data-pat="std"
-                 data-flow="PT DB|VIPER|ECO|SIGNOFF" data-l="0,0,4,3" data-p="0,0,3,3" data-dates="2026-05,2026-07">
-          <p class="k">Google · Silicon Engineering Intern · May–Jul 2026</p>
-          <h3>Block-level timing closure</h3>
-          <p class="d">Took a block from baseline to timing signoff with PrimeTime STA and ECO flows, and built VIPER to triage violations at scale.</p>
-          <div class="st"><div><b>&gt;99.8%</b><span>setup &amp; hold fixed</span></div><div><b>100K+</b><span>endpoints triaged in seconds</span></div></div>
-          <div class="tg"><span>PrimeTime</span><span>DMSA</span><span>ECO</span><span>Python</span></div>
+        <article class="w" id="google" data-label="GOOGLE" data-hue="#6ea8ff" data-tex="logic" data-pal="blue"
+                 data-l="0,0,4,3" data-p="0,0,3,3" data-dates="2026-05,2026-07">
+          <h3>Google</h3>
+          <p class="k">Silicon Engineering Intern · 2026</p>
+          <p class="d">Closed timing on a block all the way to signoff, and built VIPER to triage 100K+ violations in seconds.</p>
         </article>
-        <article class="w" id="aramas" data-label="ARAMAS" data-sub="PCIe · FPGA" data-hue="#b48cff" data-pat="hatch"
-                 data-flow="HOST|MCDMA|AVALON-MM|SEARCH" data-l="4,0,3,3" data-p="3,0,3,3" data-dates="2026-01,2026-04">
-          <p class="k">Aramas.ai · FPGA Research Intern · Jan–Apr 2026</p>
-          <h3>PCIe vector-retrieval engine</h3>
-          <p class="d">An FPGA engine on Agilex-7 that takes semantic search off the CPU, fed over PCIe by a custom Linux driver.</p>
-          <div class="st"><div><b>7×</b><span>lower retrieval latency</span></div><div><b>40 µs</b><span>per query</span></div></div>
-          <div class="tg"><span>Agilex-7</span><span>PCIe MCDMA</span><span>Linux driver</span><span>INT8 / FP16</span></div>
+        <article class="w" id="aramas" data-label="ARAMAS" data-hue="#b48cff" data-tex="mixed" data-pal="purple"
+                 data-l="4,0,3,3" data-p="3,0,3,3" data-dates="2026-01,2026-04">
+          <h3>Aramas.ai</h3>
+          <p class="k">FPGA Research Intern · 2026</p>
+          <p class="d">A PCIe FPGA engine that does vector search 7× faster than the CPU.</p>
         </article>
-        <article class="w" id="fare" data-label="FARE" data-sub="FLASHATTENTION" data-hue="#e8b057" data-pat="sram"
-                 data-flow="STAGE 1|STAGE 2|STAGE 3" data-l="7,0,5,4" data-p="0,3,4,3" data-dates="2025-05,2026-01">
-          <p class="k">IISc Bangalore · Prof. Sumit K Mandal · 2025–26</p>
+        <article class="w" id="fare" data-label="FARE" data-hue="#e8b057" data-tex="accel" data-pal="gold"
+                 data-l="7,0,5,4" data-p="0,3,4,3" data-dates="2025-05,2026-01">
           <h3>FlashAttention on FPGA</h3>
-          <p class="d">A three-stage dataflow attention kernel on Alveo V80 with a numerically stable online softmax. Poster at ISFPGA ’26.</p>
-          <div class="st"><div><b>2.9×</b><span>lower latency vs. baseline</span></div><div><b>&lt;0.05%</b><span>softmax error, 32-bit</span></div></div>
-          <div class="tg"><span>Alveo V80</span><span>Zynq PS-PL</span><span>Online softmax</span></div>
+          <p class="k">IISc · 2025–26 · ISFPGA ’26</p>
+          <p class="d">An attention kernel on FPGA with 2.9× lower latency than the previous best.</p>
           <a class="lnk" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank" rel="noopener">Read the paper ↗</a>
         </article>
-        <article class="w" id="mlp" data-label="MLP" data-sub="ACCELERATOR" data-hue="#4fd1c5" data-pat="sram"
-                 data-flow="WEIGHTS|MAC ARRAY|CORDIC TANH" data-l="0,3,3,2" data-p="0,6,3,2" data-dates="2025-03,2025-08">
-          <p class="k">IIT Kharagpur · Prof. Indrajit Chakraborty · 2025</p>
-          <h3>MLP accelerator on Zynq-7000</h3>
-          <p class="d">A configurable fixed-point MLP with a pipelined MAC array and a CORDIC tanh engine.</p>
-          <div class="st"><div><b>200 MHz</b><span>timing closed, Zedboard</span></div><div><b>&lt;0.2%</b><span>tanh error, 16-bit</span></div></div>
-          <div class="tg"><span>Zynq-7000</span><span>CORDIC</span><span>Fixed-point</span></div>
+        <article class="w" id="mlp" data-label="MLP" data-hue="#4fd1c5" data-tex="accel" data-pal="teal"
+                 data-l="0,3,3,2" data-p="0,6,3,2" data-dates="2025-03,2025-08">
+          <h3>MLP accelerator</h3>
+          <p class="k">IIT Kharagpur · 2025</p>
+          <p class="d">A fixed-point MLP accelerator on Zynq, closing timing at 200 MHz.</p>
         </article>
-        <article class="w" id="qusim" data-label="QUSIM" data-sub="QUANTUM JOIN" data-hue="#7be38b" data-pat="dots"
-                 data-flow="SETS|AMP. EST.|JOIN" data-l="3,3,2,2" data-p="4,3,2,3">
-          <p class="k">Q-Data ’26 · with P. Kulkarni</p>
+        <article class="w" id="qusim" data-label="QUSIM" data-hue="#7be38b" data-tex="qubit" data-pal="blue"
+                 data-l="3,3,2,2" data-p="4,3,2,3">
           <h3>QuSim-Join</h3>
-          <p class="d">Set-similarity joins with a provably optimal quadratic speedup, using quantum amplitude estimation.</p>
-          <div class="st"><div><b>Quadratic</b><span>provably optimal speedup</span></div></div>
-          <div class="tg"><span>Quantum algorithms</span><span>Amplitude estimation</span></div>
+          <p class="k">Q-Data ’26 paper</p>
+          <p class="d">A provably optimal quadratic quantum speedup for set-similarity joins.</p>
           <a class="lnk" href="https://doi.org/10.1145/3811628.3811832" target="_blank" rel="noopener">Read the paper ↗</a>
         </article>
-        <article class="w" id="adc" data-label="ΔΣ ADC" data-sub="INTER IIT" data-hue="#ff7a93" data-pat="hatch"
-                 data-flow="CIFF ΔΣ|CIC|FIR|GDSII" data-l="5,3,2,3" data-p="3,6,3,2">
-          <p class="k">Inter IIT Tech Meet 14.0 · ISRO · Team Captain</p>
-          <h3>20-bit Delta-Sigma ADC</h3>
-          <p class="d">CIFF modulator into a CIC + FIR decimator, taken all the way to GDSII.</p>
-          <div class="st"><div><b>Silver</b><span>among 23 IITs</span></div><div><b>19.44</b><span>ENOB at 2 KSPS</span></div></div>
-          <div class="tg"><span>Genus</span><span>Innovus</span><span>Calibre</span></div>
+        <article class="w" id="adc" data-label="ΔΣ ADC" data-hue="#ff7a93" data-tex="analog" data-pal="magenta"
+                 data-l="5,3,2,3" data-p="3,6,3,2">
+          <h3>Delta-Sigma ADC</h3>
+          <p class="k">Inter IIT Tech Meet 14.0 · Silver</p>
+          <p class="d">A 20-bit ΔΣ ADC with its decimation filter taken all the way to GDSII.</p>
         </article>
-        <article class="w" id="fault" data-label="FAULT" data-sub="DFT SIM" data-hue="#ffb27a" data-pat="std"
-                 data-flow="NETLIST|COLLAPSE|SIM|COVERAGE" data-l="7,4,2,2" data-p="0,8,2,2" data-dates="2025-09,2025-11">
-          <p class="k">IIT Kharagpur · Prof. Indranil Sengupta · 2025</p>
-          <h3>Concurrent fault simulator</h3>
-          <p class="d">An event-driven, bit-parallel stuck-at fault simulator for Verilog netlists, with fault collapsing.</p>
-          <div class="st"><div><b>100%</b><span>stuck-at coverage, c17</span></div><div><b>55%</b><span>smaller fault list</span></div></div>
-          <div class="tg"><span>DFT</span><span>Verilog netlists</span></div>
+        <article class="w" id="fault" data-label="FAULT" data-hue="#ffb27a" data-tex="logic" data-pal="olive"
+                 data-l="7,4,2,2" data-p="0,8,2,2" data-dates="2025-09,2025-11">
+          <h3>Fault simulator</h3>
+          <p class="k">IIT Kharagpur · 2025</p>
+          <p class="d">A bit-parallel fault simulator reaching 100% stuck-at coverage.</p>
         </article>
-        <article class="w" id="rpca" data-label="RPCA" data-sub="B.TECH PROJECT" data-hue="#8fd3ff" data-pat="hatch"
-                 data-flow="HANKEL|PCP · IALM|INT-AWARE" data-l="9,4,3,2" data-p="2,8,2,2" data-dates="2025-08,2026-04">
-          <p class="k">B.Tech project · Prof. Amitalok J. Budkuley · 2025–26</p>
-          <h3>Robust-PCA signal recovery</h3>
-          <p class="d">Hankel-lifted Robust PCA that recovers multitone signals from sparse non-linear folding distortions.</p>
-          <div class="tg"><span>MATLAB</span><span>Robust PCA</span><span>Inexact ALM</span></div>
+        <article class="w" id="rpca" data-label="RPCA" data-hue="#8fd3ff" data-tex="dsp" data-pal="teal"
+                 data-l="9,4,3,2" data-p="2,8,2,2" data-dates="2025-08,2026-04">
+          <h3>Robust-PCA recovery</h3>
+          <p class="k">B.Tech project · 2025–26</p>
+          <p class="d">Robust PCA that untangles signals from non-linear distortions.</p>
         </article>
-        <article class="w" id="kart" data-label="KART" data-sub="FORMULA EV" data-hue="#f2d06b" data-pat="std"
-                 data-flow="CHARGER|BMS|TSAL|VCU" data-l="0,5,3,3" data-p="0,10,2,2" data-dates="2024-01,2025-10">
-          <p class="k">TeamKART Electric · Head of Electrical Systems</p>
+        <article class="w" id="kart" data-label="KART" data-hue="#f2d06b" data-tex="power" data-pal="bronze"
+                 data-l="0,5,3,3" data-p="0,10,2,2" data-dates="2024-01,2025-10">
           <h3>Formula Student EV</h3>
-          <p class="d">Led the electrical team of an FSAE electric race car, from charger and safety circuits to an 88 V, 200 A powertrain.</p>
-          <div class="st"><div><b>40+</b><span>engineers led</span></div><div><b>&lt;1 h</b><span>CC-CV fast charge</span></div></div>
-          <div class="tg"><span>STM32</span><span>FMEA</span><span>TSAL</span></div>
+          <p class="k">TeamKART Electric · 2024–25</p>
+          <p class="d">Led the 40+ person electrical team of a Formula Student electric race car.</p>
         </article>
-        <article class="w" id="midwest" data-label="MIDWEST" data-sub="BMS" data-hue="#c9a7ff" data-pat="dots"
-                 data-flow="CAN|EKF|UI" data-l="3,5,2,2" data-p="4,9,2,1" data-dates="2024-06,2024-07">
-          <p class="k">Midwest Energy · Embedded Intern · 2024</p>
-          <h3>Battery management system</h3>
-          <p class="d">CAN-connected STM32 BMS for a 160 V pack with a Kalman-filter state-of-charge estimator.</p>
-          <div class="st"><div><b>4.5%</b><span>lower SoC error</span></div></div>
-          <div class="tg"><span>STM32</span><span>CAN</span><span>EKF</span></div>
+        <article class="w" id="midwest" data-label="MIDWEST" data-hue="#8ef0b0" data-tex="mixed" data-pal="green"
+                 data-l="3,5,2,2" data-p="4,9,2,1" data-dates="2024-06,2024-07">
+          <h3>Midwest Energy</h3>
+          <p class="k">Embedded Intern · 2024</p>
+          <p class="d">An STM32 battery management system with Kalman-filter state of charge.</p>
         </article>
-        <article class="w" id="nokia" data-label="NOKIA" data-sub="HACKATHON" data-hue="#5fb7ff" data-pat="dots"
-                 data-flow="RTL|JENKINS|KV260" data-l="3,7,2,1" data-p="4,8,2,1">
-          <p class="k">Nokia FPGA Hackathon 2025 · Kraków</p>
-          <h3>Top-15 finish</h3>
-          <p class="d">Five FPGA designs on a Kria KV260, built through a Jenkins-driven Vivado pipeline.</p>
-          <div class="st"><div><b>Top 15</b><span>of 70 finalist teams</span></div></div>
-          <div class="tg"><span>Kria KV260</span><span>Vivado</span><span>Jenkins</span></div>
+        <article class="w" id="nokia" data-label="NOKIA" data-hue="#5fb7ff" data-tex="fpga" data-pal="blue"
+                 data-l="3,7,2,1" data-p="4,8,2,1">
+          <h3>Nokia FPGA Hackathon</h3>
+          <p class="k">Kraków · 2025</p>
+          <p class="d">A top-15 finish out of 70 finalist teams.</p>
         </article>
-        <!-- off-the-clock blocks: muted on the die, no timeline row, skipped by the legend and prev/next -->
-        <article class="w" id="f1" data-fun="1" data-label="PIT WALL" data-sub="LH44 · FORZA FERRARI" data-hue="#ff3b3b" data-pat="check"
-                 data-flow="PLAN A|PLAN B|PLAN C|PLAN F" data-l="7,6,3,2" data-p="2,10,2,2">
-          <p class="k">Pit wall · every race Sunday</p>
-          <h3>Lewis Hamilton fan, Ferrari delulu</h3>
-          <p class="d">Hardcore LH44 fan. Now that he’s in red, I’m fully delulu about Ferrari: this is our year. (It’s always our year.)</p>
-          <div class="st"><div><b>44</b><span>the only number that matters</span></div><div><b>Plan F</b><span>Ferrari strategy, probably</span></div></div>
-          <div class="tg"><span>F1</span><span>LH44</span><span>Forza Ferrari</span></div>
+        <!-- off-the-clock blocks: hidden doodles in the silicon, skipped by the legend and the timeline -->
+        <article class="w" id="f1" data-fun="1" data-label="F1" data-hue="#ff3b3b" data-tex="logic" data-pal="red" data-art="car"
+                 data-l="7,6,3,2" data-p="2,10,2,2">
+          <h3>F1</h3>
+          <p class="k">Sundays are booked</p>
+          <p class="d">Hardcore Lewis Hamilton fan, fully delulu about Ferrari. This is our year. (It’s always our year.)</p>
         </article>
-        <article class="w" id="travel" data-fun="1" data-label="PLL" data-sub="WANDERLUST" data-hue="#ff9de2" data-pat="ring"
-                 data-flow="REF|VCO|NEW CITY" data-l="10,6,2,1" data-p="4,10,2,1">
-          <p class="k">Phase-locked loop · wanderlust</p>
+        <article class="w" id="travel" data-fun="1" data-label="TRAVEL" data-hue="#ff9de2" data-tex="logic" data-pal="magenta" data-art="plane"
+                 data-l="10,6,2,1" data-p="4,10,2,1">
           <h3>Travel</h3>
-          <p class="d">Locks onto a new city whenever the schedule has slack. Most recent lock: a visit to Carnegie Mellon.</p>
-          <div class="tg"><span>Travel</span><span>CMU visit</span></div>
+          <p class="k">Bags half-packed</p>
+          <p class="d">Always planning the next trip. The last one was a visit to Carnegie Mellon.</p>
         </article>
-        <article class="w" id="books" data-fun="1" data-label="ROM" data-sub="SCI-FI" data-hue="#d4ff6b" data-pat="std"
-                 data-flow="READ|THINK|REREAD" data-l="10,7,2,1" data-p="4,11,2,1">
-          <p class="k">Read-only memory · bookshelf</p>
-          <h3>Sci-fi &amp; big ideas</h3>
-          <p class="d">Sci-fi and thought-provoking books: the kind you read once and keep thinking about for years.</p>
-          <div class="tg"><span>Sci-fi</span><span>Big ideas</span></div>
+        <article class="w" id="books" data-fun="1" data-label="BOOKS" data-hue="#d4ff6b" data-tex="logic" data-pal="olive" data-art="book"
+                 data-l="10,7,2,1" data-p="4,11,2,1">
+          <h3>Books</h3>
+          <p class="k">Currently reading</p>
+          <p class="d">Sci-fi and books that have you staring at the ceiling at 2 a.m.</p>
         </article>
       </div>
     </div>
@@ -674,20 +629,20 @@
     </div>
   </section>
 
-  <!-- ===== off the die ===== -->
-  <section class="sec" id="offdie" aria-labelledby="off-h">
+  <!-- ===== side quests ===== -->
+  <section class="sec" id="sidequests" aria-labelledby="side-h">
     <div class="wrap">
       <div class="sec-h">
-        <div><p class="kicker">Off the die</p><h2 id="off-h">When the clock stops</h2></div>
+        <div><p class="kicker">Personal</p><h2 id="side-h">Side quests</h2></div>
       </div>
       <div class="off">
-        <figure class="board" id="board" title="Tap the board">
+        <figure class="board">
           <img src="img/board.jpg" width="1200" height="1200" loading="lazy" alt="Aakarsh at a blackboard, pointing at it and grinning, on a visit to Carnegie Mellon"/>
           <div class="ink" id="ink" aria-live="polite"></div>
-          <figcaption class="board-cap">visiting CMU · tap the board ↻</figcaption>
+          <figcaption class="board-cap">visiting CMU</figcaption>
         </figure>
         <div>
-          <p class="off-copy">Outside the lab I’m watching <b>F1</b> (lifelong Lewis Hamilton fan, currently very delulu about Ferrari), planning the next <b>trip</b>, or halfway through a <b>sci-fi</b> book that’s rewiring my brain.</p>
+          <p class="off-copy">When I’m not at a desk, I’m watching <b>F1</b> (lifelong Lewis Hamilton fan, currently very delulu about Ferrari), planning the next <b>trip</b>, or halfway through a <b>sci-fi</b> book I can’t stop thinking about.</p>
           <ul class="likes">
             <li style="--c:#ff3b3b"><b>●</b> LH44</li>
             <li style="--c:#ff9de2"><b>●</b> Travel</li>
@@ -696,7 +651,7 @@
           </ul>
           <figure class="polaroid">
             <img src="img/gallery.jpg" width="800" height="1091" loading="lazy" alt="Aakarsh smiling in front of a large, chaotic abstract painting in a museum"/>
-            <figcaption>museum stop on the CMU trip<br/>(also: my routing congestion map)</figcaption>
+            <figcaption>pretending to understand modern art<br/>(CMU trip)</figcaption>
           </figure>
         </div>
       </div>
@@ -745,7 +700,7 @@
 <footer>
   <div class="wrap">
     <span>© <span id="year">2026</span> Aakarsh Alam</span>
-    <span>AA-27 · taped out by hand, no frameworks</span>
+    <span>Hand-built, no frameworks</span>
     <a href="#top">Back to top ↑</a>
   </div>
 </footer>
@@ -761,6 +716,8 @@
   'use strict';
   var NS = 'http://www.w3.org/2000/svg';
   var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var DAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   function el(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
     for (var k in attrs) if (attrs[k] != null) n.setAttribute(k, attrs[k]);
@@ -778,266 +735,649 @@
   /* ---------- block data (from the #work articles) ---------- */
   var items = Array.prototype.map.call(document.querySelectorAll('#work article'), function (a) {
     return {
-      id: a.id, el: a, label: a.dataset.label, sub: a.dataset.sub, hue: a.dataset.hue, pat: a.dataset.pat,
-      flow: a.dataset.flow.split('|'), L: nums(a.dataset.l), P: nums(a.dataset.p),
-      title: a.querySelector('h3').textContent, dates: a.dataset.dates, fun: a.dataset.fun === '1'
+      id: a.id, el: a, label: a.dataset.label, hue: a.dataset.hue, tex: a.dataset.tex, pal: a.dataset.pal, art: a.dataset.art,
+      L: nums(a.dataset.l), P: nums(a.dataset.p), title: a.querySelector('h3').textContent,
+      meta: a.querySelector('.k').textContent, dates: a.dataset.dates, fun: a.dataset.fun === '1'
     };
   });
   var byId = {};
   items.forEach(function (it) { byId[it.id] = it; });
   var work = items.filter(function (it) { return !it.fun; });
-  var FILLERS = [
-    { label: 'SRAM', pat: 'sram', L: [5, 6, 2, 2], P: null }
-  ];
+  var FILLERS = [{ id: 'sram', label: 'SRAM', meta: 'just storage, move along', tex: 'sram', pal: 'purple', L: [5, 6, 2, 2], P: null }];
   var LAYOUTS = {
-    L: { W: 1200, H: 760,  cx: 80, cy: 80, cw: 1040, ch: 600, cols: 12, rows: 8,  g: 10 },
-    P: { W: 600,  H: 1040, cx: 50, cy: 50, cw: 500,  ch: 940, cols: 6,  rows: 12, g: 8 }
+    L: { key: 'L', W: 1200, H: 760,  cx: 80, cy: 80, cw: 1040, ch: 600, cols: 12, rows: 8,  g: 10 },
+    P: { key: 'P', W: 600,  H: 1040, cx: 50, cy: 50, cw: 500,  ch: 940, cols: 6,  rows: 12, g: 8 }
   };
 
-  /* ---------- die ---------- */
-  var svg = document.getElementById('die');
-  var frame = document.getElementById('frame');
-  var hud = document.getElementById('hud');
-  var panel = document.getElementById('panel');
-  var panelBody = document.getElementById('panelBody');
-  var HUD_IDLE = '▸ every block on this die is something I built';
-  var mode = null, lay = null, vb = null, blocks = {}, probeG = null, sheenGrad = null, pads = [];
-  var current = null, anim = null;
+  /* =================================================================
+     Die renderer. The die is generated once per layout as a display list
+     of rect / line / path batches in die units, then drawn into a
+     high-res offscreen canvas. Zoom and the loupe sample that canvas;
+     once a zoom settles the visible window is redrawn from the list so
+     it stays sharp.
+     ================================================================= */
+  var PAL = {
+    blue:    ['#0c1424', '#2d5aa0', '#9cc4ff'],
+    purple:  ['#160f26', '#5b3f9a', '#c9a7ff'],
+    gold:    ['#191307', '#8a6a2a', '#f3cf7a'],
+    teal:    ['#0a1a18', '#22766a', '#8ff0d8'],
+    magenta: ['#1e0c19', '#86386e', '#ff9fd8'],
+    olive:   ['#12160a', '#5d7426', '#d6ee7c'],
+    green:   ['#08160e', '#2a7a4a', '#8ef0b0'],
+    red:     ['#1c0a0a', '#8a2a2a', '#ff8a7a'],
+    bronze:  ['#1a1009', '#8a5428', '#f4a868']
+  };
+  function rgba(hex, a) {
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + (n >> 16) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+  function rng(seed) {
+    var s = seed >>> 0 || 1;
+    return function () { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
+  }
+  function hash(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
 
-  function cellRect(c) {
+  function Scene() { this.ops = []; }
+  Scene.prototype.rects = function (style, bb) { var op = { t: 'R', s: style, d: [], bb: bb }; this.ops.push(op); return op.d; };
+  Scene.prototype.lines = function (style, lw, bb) { var op = { t: 'L', s: style, lw: lw, d: [], bb: bb }; this.ops.push(op); return op.d; };
+  Scene.prototype.path = function (style, lw, fill, bb) { var p = new Path2D(); this.ops.push({ t: 'P', s: style, lw: lw, f: fill, p: p, bb: bb }); return p; };
+  Scene.prototype.text = function (style, font, x, y, str, bb) { this.ops.push({ t: 'T', s: style, font: font, x: x, y: y, str: str, bb: bb }); };
+  Scene.prototype.grad = function (op) { op.t = 'G'; this.ops.push(op); };
+
+  function drawScene(ctx, scene, v, cw, ch) {
+    var s = cw / v[2], x0 = v[0], y0 = v[1], x1 = v[0] + v[2], y1 = v[1] + v[3];
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#07080b';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.setTransform(s, 0, 0, s, -x0 * s, -y0 * s);
+    scene.ops.forEach(function (op) {
+      var bb = op.bb;
+      if (bb && (bb[0] > x1 || bb[1] > y1 || bb[0] + bb[2] < x0 || bb[1] + bb[3] < y0)) return;
+      var d = op.d, i;
+      if (op.t === 'R') {
+        ctx.fillStyle = op.s;
+        for (i = 0; i < d.length; i += 4) {
+          if (d[i] > x1 || d[i + 1] > y1 || d[i] + d[i + 2] < x0 || d[i + 1] + d[i + 3] < y0) continue;
+          ctx.fillRect(d[i], d[i + 1], d[i + 2], d[i + 3]);
+        }
+      } else if (op.t === 'L') {
+        ctx.strokeStyle = op.s;
+        ctx.lineWidth = op.lw;
+        ctx.beginPath();
+        for (i = 0; i < d.length; i += 4) { ctx.moveTo(d[i], d[i + 1]); ctx.lineTo(d[i + 2], d[i + 3]); }
+        ctx.stroke();
+      } else if (op.t === 'P') {
+        if (op.f) { ctx.fillStyle = op.s; ctx.fill(op.p); }
+        else { ctx.strokeStyle = op.s; ctx.lineWidth = op.lw; ctx.lineJoin = 'round'; ctx.stroke(op.p); }
+      } else if (op.t === 'T') {
+        ctx.fillStyle = op.s;
+        ctx.font = op.font;
+        ctx.fillText(op.str, op.x, op.y);
+      } else if (op.t === 'G') {
+        var g = op.radial
+          ? ctx.createRadialGradient(op.c[0], op.c[1], 0, op.c[0], op.c[1], op.c[2])
+          : ctx.createLinearGradient(op.c[0], op.c[1], op.c[2], op.c[3]);
+        op.stops.forEach(function (st) { g.addColorStop(st[0], st[1]); });
+        ctx.save();
+        ctx.globalCompositeOperation = op.mode;
+        ctx.globalAlpha = op.alpha;
+        ctx.fillStyle = g;
+        ctx.fillRect(op.r[0], op.r[1], op.r[2], op.r[3]);
+        ctx.restore();
+      }
+    });
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  /* ---- silicon textures; r is the region rect, p its palette, R a seeded rng ---- */
+  function bbOf(r) { return [r.x, r.y, r.w, r.h]; }
+  function fill(S, r, c) { S.rects(c, bbOf(r)).push(r.x, r.y, r.w, r.h); }
+  function edge(S, r, p) {
+    var e = S.path(rgba(p[2], .3), .6, false, bbOf(r));
+    e.rect(r.x + .4, r.y + .4, r.w - .8, r.h - .8);
+    e.rect(r.x + 1.6, r.y + 1.6, r.w - 3.2, r.h - 3.2);
+  }
+  function straps(S, r, p, R) {
+    var st = S.rects(rgba(p[2], .2), bbOf(r));
+    for (var x = r.x + 6 + R() * 6; x < r.x + r.w - 2; x += 15 + R() * 6) st.push(x, r.y + 2, 1, r.h - 4);
+  }
+
+  var TEX = {
+    // standard-cell sea: rows of random-width cells, rails and vertical straps
+    logic: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var B = [rgba(p[1], .45), rgba(p[1], .7), rgba(p[1], .95), rgba(p[2], .3)].map(function (c) { return S.rects(c, bb); });
+      var rail = S.rects(rgba(p[2], .14), bb);
+      var rh = 2.4, g = .5, m = 2;
+      for (var y = r.y + m; y + rh <= r.y + r.h - m; y += rh + g) {
+        rail.push(r.x + m, y - g * .8, r.w - 2 * m, .3);
+        for (var x = r.x + m; x < r.x + r.w - m;) {
+          var w = Math.min(.9 + R() * R() * 7, r.x + r.w - m - x);
+          if (R() > .07) B[(R() * 4) | 0].push(x, y, Math.max(w - .3, .25), rh);
+          x += w;
+        }
+      }
+      straps(S, r, p, R);
+      edge(S, r, p);
+    },
+
+    // SRAM macros: banks of bit-cell arrays with row decoders and sense amps
+    sram: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var nx = Math.max(1, Math.round(r.w / 90)), ny = Math.max(1, Math.round(r.h / 80)), gp = 4;
+      var bw = (r.w - gp * (nx + 1)) / nx, bh = (r.h - gp * (ny + 1)) / ny;
+      var arr = S.rects(rgba(p[1], .32), bb), wl = S.lines(rgba(p[2], .28), .45, bb), bl = S.lines(rgba(p[1], .9), .3, bb);
+      var dec = S.rects(rgba(p[2], .4), bb), sa = S.rects(rgba(p[2], .5), bb);
+      for (var i = 0; i < nx; i++) for (var j = 0; j < ny; j++) {
+        var x = r.x + gp + i * (bw + gp), y = r.y + gp + j * (bh + gp);
+        var dw = Math.min(7, bw * .12), sh = Math.min(6, bh * .12);
+        var ax = x + dw + .8, ay = y, aw = bw - dw - .8, ah = bh - sh - .8, t;
+        arr.push(ax, ay, aw, ah);
+        for (t = ay + .7; t < ay + ah; t += 1.4) wl.push(ax, t, ax + aw, t);
+        for (t = ax + .9; t < ax + aw; t += 1.8) bl.push(t, ay, t, ay + ah);
+        for (t = ay + .3; t < ay + ah - .8; t += 1.4) dec.push(x + .4, t, dw * (.4 + R() * .55), .8);
+        for (t = ax + .3; t < ax + aw - 1; t += 1.8) sa.push(t, ay + ah + 1, 1.1, Math.max(sh - 1.4, .6));
+      }
+      edge(S, r, p);
+    },
+
+    // accelerator: input buffers on top, a tiled PE array with a NoC mesh below
+    accel: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var bufH = Math.max(16, r.h * .16);
+      TEX.sram(S, { x: r.x, y: r.y, w: r.w, h: bufH }, p, R);
+      var a = { x: r.x + 3, y: r.y + bufH + 3, w: r.w - 6, h: r.h - bufH - 6 }, g = 2.4;
+      var nx = Math.max(2, Math.round(a.w / 24)), ny = Math.max(2, Math.round(a.h / 24));
+      var tw = (a.w - g * (nx - 1)) / nx, th = (a.h - g * (ny - 1)) / ny;
+      var tile = S.rects(rgba(p[1], .38), bb), core = S.rects(rgba(p[2], .45), bb), hot = S.rects(rgba(p[2], .85), bb);
+      var bits = S.rects(rgba(p[1], .95), bb), mem = S.lines(rgba(p[2], .3), .35, bb), mesh = S.lines(rgba(p[2], .28), .5, bb);
+      for (var i = 0; i < nx; i++) for (var j = 0; j < ny; j++) {
+        var x = a.x + i * (tw + g), y = a.y + j * (th + g), mw = tw * .42, mh = th * .38, cs = Math.min(tw, th) * .34;
+        tile.push(x, y, tw, th);
+        for (var t = y + .8; t < y + mh; t += 1.1) mem.push(x + .8, t, x + .8 + mw, t);
+        core.push(x + tw - cs - 1.2, y + th - cs - 1.2, cs, cs);
+        hot.push(x + tw - cs * .62 - 1.2, y + th - cs * .62 - 1.2, cs * .24, cs * .24);
+        for (var k = 0; k < 10; k++) bits.push(x + 1 + R() * tw * .5, y + mh + 1.5 + R() * (th - mh - 3), .8 + R() * 2.5, .7);
+      }
+      for (i = 1; i < nx; i++) { var gx = a.x + i * (tw + g) - g / 2; mesh.push(gx, a.y, gx, a.y + a.h); }
+      for (j = 1; j < ny; j++) { var gy = a.y + j * (th + g) - g / 2; mesh.push(a.x, gy, a.x + a.w, gy); }
+      edge(S, r, p);
+    },
+
+    // memory on one side, logic on the other
+    mixed: function (S, r, p, R) {
+      var tall = r.h > r.w * 1.1, f = .4;
+      var m = tall ? { x: r.x, y: r.y, w: r.w, h: r.h * f } : { x: r.x, y: r.y, w: r.w * f, h: r.h };
+      var l = tall ? { x: r.x, y: r.y + r.h * f, w: r.w, h: r.h * (1 - f) } : { x: r.x + r.w * f, y: r.y, w: r.w * (1 - f), h: r.h };
+      TEX.sram(S, m, p, R);
+      TEX.logic(S, l, p, R);
+    },
+
+    // superconducting-style qubits: transmon crosses, couplers, meander resonators, a feedline
+    qubit: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var holes = S.rects(rgba(p[1], .35), bb), x, y;
+      for (y = r.y + 2; y < r.y + r.h - 1; y += 3.2) for (x = r.x + 2; x < r.x + r.w - 1; x += 3.2) holes.push(x, y, .7, .7);
+      var tall = r.h > r.w, nx = tall ? 2 : 3, ny = tall ? 3 : 2;
+      var qa = { x: r.x + 6, y: r.y + 6, w: r.w - 12, h: (r.h - 12) * .72 }, feed = r.y + r.h - 9;
+      var cw = qa.w / nx, ch = qa.h / ny, L = Math.min(cw, ch) * .3, a = 2.2;
+      var keep = S.rects(p[0], bb), arm = S.rects(rgba(p[2], .85), bb), coup = S.lines(rgba(p[2], .6), 1, bb);
+      var res = S.path(rgba(p[2], .5), .7, false, bb);
+      S.rects(rgba(p[2], .7), bb).push(r.x + 4, feed, r.w - 8, 1.6);
+      var cs = [];
+      for (var j = 0; j < ny; j++) for (var i = 0; i < nx; i++) {
+        var c = { x: qa.x + cw * (i + .5), y: qa.y + ch * (j + .5), i: i, j: j };
+        cs.push(c);
+        keep.push(c.x - L - 2, c.y - a / 2 - 2, 2 * L + 4, a + 4);
+        keep.push(c.x - a / 2 - 2, c.y - L - 2, a + 4, 2 * L + 4);
+        arm.push(c.x - L, c.y - a / 2, 2 * L, a);
+        arm.push(c.x - a / 2, c.y - L, a, 2 * L);
+        // readout resonator meandering down to the feedline
+        var rx = c.x + L * .55, ry = c.y + L * .55, n = 8, st = (feed - ry) / n;
+        res.moveTo(c.x + a, c.y + a);
+        res.lineTo(rx, ry);
+        for (var k = 1; k <= n; k++) res.lineTo(rx + (k % 2 ? 5 : 0), ry + k * st);
+      }
+      cs.forEach(function (c1) {
+        cs.forEach(function (c2) {
+          if (c2.j === c1.j && c2.i === c1.i + 1) coup.push(c1.x + L + 1.5, c1.y, c2.x - L - 1.5, c2.y);
+          if (c2.i === c1.i && c2.j === c1.j + 1) coup.push(c1.x, c1.y + L + 1.5, c2.x, c2.y - L - 1.5);
+        });
+      });
+      edge(S, r, p);
+    },
+
+    // analog: capacitor array, an octagonal spiral inductor, a resistor serpentine, MOS fingers
+    analog: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var tall = r.h > r.w, x, y;
+      var capA = tall ? { x: r.x + 4, y: r.y + 4, w: r.w - 8, h: r.h * .38 } : { x: r.x + 4, y: r.y + 4, w: r.w * .52, h: r.h * .6 };
+      var cell = S.rects(rgba(p[1], .7), bb), top = S.rects(rgba(p[2], .35), bb), cs = 7, g = 1.6;
+      for (y = capA.y + 2; y + cs < capA.y + capA.h; y += cs + g) for (x = capA.x + 2; x + cs < capA.x + capA.w; x += cs + g) {
+        cell.push(x, y, cs, cs);
+        top.push(x + 1.4, y + 1.4, cs - 2.8, cs - 2.8);
+      }
+      S.path(rgba(p[2], .45), 1.2, false, bb).rect(capA.x, capA.y, capA.w, capA.h);
+      var ind = tall ? { x: r.x, y: r.y + r.h * .4, w: r.w, h: r.h * .32 } : { x: r.x + r.w * .55, y: r.y, w: r.w * .45, h: r.h * .62 };
+      var cx = ind.x + ind.w / 2, cy = ind.y + ind.h / 2, R0 = Math.min(ind.w, ind.h) / 2 - 5;
+      var sp = S.path(rgba(p[2], .8), 2.2, false, bb), turns = 4, pitch = R0 / (turns + 1.6);
+      for (var k = 0; k <= turns * 8; k++) {
+        var ang = Math.PI / 8 + k * Math.PI / 4, rad = R0 - pitch * k / 8;
+        var px = cx + rad * Math.cos(ang), py = cy + rad * Math.sin(ang);
+        if (k) sp.lineTo(px, py); else sp.moveTo(px, py);
+      }
+      S.lines(rgba(p[1], 1), 1.8, bb).push(cx + (R0 - pitch * turns) * .7, cy, ind.x + ind.w - 2, cy);
+      var lo = tall ? { x: r.x + 4, y: r.y + r.h * .74, w: r.w - 8, h: r.h * .24 } : { x: r.x + 4, y: r.y + r.h * .66, w: r.w - 8, h: r.h * .32 };
+      var rs = S.path(rgba(p[2], .55), .9, false, bb), half = lo.w * .5;
+      rs.moveTo(lo.x, lo.y);
+      for (x = lo.x, k = 0; x < lo.x + half; x += 2.6, k++) { rs.lineTo(x, k % 2 ? lo.y : lo.y + lo.h - 2); rs.lineTo(x + 2.6, k % 2 ? lo.y : lo.y + lo.h - 2); }
+      var f = S.rects(rgba(p[1], .9), bb), gt = S.rects(rgba(p[2], .55), bb);
+      for (x = lo.x + half + 4; x < lo.x + lo.w - 2; x += 3) { f.push(x, lo.y + 1, 1.6, lo.h - 3); gt.push(x + 1.9, lo.y, .5, lo.h - 1); }
+      edge(S, r, p);
+    },
+
+    // bit-sliced datapath: one slice template repeated in columns
+    dsp: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var sw = 6, sh = 20, tmpl = [], x, y;
+      for (var k = 0; k < 9; k++) tmpl.push([R() * (sw - 2), R() * (sh - 2), .8 + R() * sw * .5, .6 + R() * 2.4, (R() * 3) | 0]);
+      var B = [rgba(p[1], .6), rgba(p[1], .95), rgba(p[2], .35)].map(function (c) { return S.rects(c, bb); });
+      for (x = r.x + 3; x + sw <= r.x + r.w - 3; x += sw + .6) for (y = r.y + 3; y + sh <= r.y + r.h - 3; y += sh + .6) {
+        tmpl.forEach(function (t) { B[t[4]].push(x + t[0], y + t[1], Math.min(t[2], sw - t[0]), t[3]); });
+      }
+      var bus = S.lines(rgba(p[2], .3), .35, bb);
+      for (y = r.y + 4; y < r.y + r.h - 2; y += 5) bus.push(r.x + 2, y, r.x + r.w - 2, y);
+      edge(S, r, p);
+    },
+
+    // power stage: interdigitated transistor fingers between bus bars, plus big probe pads
+    power: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var padH = Math.min(20, r.h * .16), arrH = r.h - padH - 10, n = r.w > 200 ? 2 : 1, gp = 6;
+      var aw = (r.w - 8 - gp * (n - 1)) / n;
+      var bus = S.rects(rgba(p[2], .45), bb), fa = S.rects(rgba(p[1], .9), bb), fb = S.rects(rgba(p[2], .35), bb), gate = S.rects(rgba(p[2], .65), bb);
+      for (var i = 0; i < n; i++) {
+        var x = r.x + 4 + i * (aw + gp), y = r.y + 4;
+        bus.push(x, y, 4, arrH);
+        bus.push(x + aw - 4, y, 4, arrH);
+        for (var t = y + 1, k = 0; t < y + arrH - 2; t += 2.6, k++) {
+          (k % 2 ? fa : fb).push(x + 5, t, aw - 10, 1.6);
+          gate.push(x + 5, t + 1.9, aw - 10, .35);
+        }
+      }
+      var pads = Math.max(2, Math.floor((r.w - 8) / (padH + 10))), pw = padH;
+      var po = S.rects(rgba(p[2], .55), bb), pi = S.rects(p[0], bb), pm = S.rects(rgba(p[2], .3), bb);
+      for (i = 0; i < pads; i++) {
+        var px = r.x + 4 + i * ((r.w - 8 - pw) / (pads - 1)), py = r.y + r.h - padH - 4;
+        po.push(px, py, pw, pw);
+        pi.push(px + 2, py + 2, pw - 4, pw - 4);
+        pm.push(px + pw * .3, py + pw * .3, pw * .4, pw * .4);
+      }
+      edge(S, r, p);
+    },
+
+    // FPGA fabric: logic tiles with LUTs and switch boxes on a routing grid
+    fpga: function (S, r, p, R) {
+      var bb = bbOf(r);
+      fill(S, r, p[0]);
+      var t = 8, g = 2.2, x, y;
+      var clb = S.rects(rgba(p[1], .55), bb), sb = S.rects(rgba(p[2], .55), bb), lut = S.rects(rgba(p[1], 1), bb), tr = S.lines(rgba(p[2], .22), .3, bb);
+      for (y = r.y + 3; y + t <= r.y + r.h - 3; y += t + g) {
+        tr.push(r.x + 2, y + t + g * .35, r.x + r.w - 2, y + t + g * .35);
+        tr.push(r.x + 2, y + t + g * .7, r.x + r.w - 2, y + t + g * .7);
+        for (x = r.x + 3; x + t <= r.x + r.w - 3; x += t + g) {
+          clb.push(x, y, t, t);
+          sb.push(x + t + .3, y + t + .3, g - .6, g - .6);
+          lut.push(x + 1.2, y + 1.2, 2.4, 2.4);
+          lut.push(x + 4.4, y + 1.2, 2.4, 2.4);
+          lut.push(x + 1.2, y + 4.4, 2.4, 2.4);
+        }
+      }
+      for (x = r.x + 3 + t; x < r.x + r.w - 3; x += t + g) {
+        tr.push(x + g * .35, r.y + 2, x + g * .35, r.y + r.h - 2);
+        tr.push(x + g * .7, r.y + 2, x + g * .7, r.y + r.h - 2);
+      }
+      edge(S, r, p);
+    }
+  };
+
+  /* ---- die art: tiny drawings in top metal, like the doodles real chip designers hide ---- */
+  function artFrame(S, r, p, w, h) {
+    var s = Math.min(r.w * .26 / w, r.h * .36 / h);
+    var x = r.x + (r.w - w * s) / 2, y = r.y + (r.h - h * s) / 2;
+    S.rects(p[0], bbOf(r)).push(x - 3 * s, y - 3 * s, (w + 6) * s, (h + 6) * s);
+    S.path(rgba(p[2], .25), .4, false, bbOf(r)).rect(x - 3 * s, y - 3 * s, (w + 6) * s, (h + 6) * s);
+    return { x: x, y: y, s: s };
+  }
+  function poly(path, f, pts) {
+    pts.forEach(function (q, i) { var X = f.x + q[0] * f.s, Y = f.y + q[1] * f.s; if (i) path.lineTo(X, Y); else path.moveTo(X, Y); });
+    path.closePath();
+  }
+  var ART = {
+    car: function (S, r, p) {
+      var f = artFrame(S, r, p, 48, 13), bb = bbOf(r), body = S.path(rgba(p[2], .9), 0, true, bb);
+      poly(body, f, [[2, 8], [6, 6], [14, 6], [16, 4], [19, 4], [20, 6], [24, 6], [26, 3], [29, 3], [30, 6], [40, 7], [47, 9], [47, 10], [2, 10]]);
+      poly(body, f, [[0, 1], [4, 1], [4, 7], [0, 7]]);
+      [[10, 10], [38, 10]].forEach(function (c) { body.moveTo(f.x + (c[0] + 3) * f.s, f.y + c[1] * f.s); body.arc(f.x + c[0] * f.s, f.y + c[1] * f.s, 3 * f.s, 0, Math.PI * 2); });
+      S.text(p[0], '700 ' + (3.6 * f.s) + 'px monospace', f.x + 31 * f.s, f.y + 9.2 * f.s, '44', bb);
+    },
+    plane: function (S, r, p) {
+      var f = artFrame(S, r, p, 40, 36), bb = bbOf(r), b = S.path(rgba(p[2], .9), 0, true, bb);
+      poly(b, f, [[18, 2], [22, 2], [22, 34], [18, 34]]);
+      poly(b, f, [[20, 12], [38, 20], [38, 23], [20, 19], [2, 23], [2, 20]]);
+      poly(b, f, [[20, 28], [28, 33], [28, 35], [20, 33], [12, 35], [12, 33]]);
+    },
+    book: function (S, r, p) {
+      var f = artFrame(S, r, p, 40, 26), bb = bbOf(r), b = S.path(rgba(p[2], .9), 0, true, bb);
+      poly(b, f, [[19.5, 4], [4, 1], [4, 22], [19.5, 25]]);
+      poly(b, f, [[20.5, 4], [36, 1], [36, 22], [20.5, 25]]);
+      var ln = S.lines(p[0], .5 * f.s, bb);
+      for (var k = 0; k < 5; k++) {
+        var y = 6 + k * 3.4;
+        ln.push(f.x + 7 * f.s, f.y + (y - 1.6) * f.s, f.x + 17 * f.s, f.y + y * f.s);
+        ln.push(f.x + 23 * f.s, f.y + y * f.s, f.x + 33 * f.s, f.y + (y - 1.6) * f.s);
+      }
+    }
+  };
+
+  function cellRect(lay, c) {
     var cw = lay.cw / lay.cols, ch = lay.ch / lay.rows, g = lay.g;
     return { x: lay.cx + c[0] * cw + g / 2, y: lay.cy + c[1] * ch + g / 2, w: c[2] * cw - g, h: c[3] * ch - g };
   }
-  function setVB(v) { vb = v; svg.setAttribute('viewBox', v.join(' ')); }
 
-  function defs() {
-    var d = el('defs', {}, svg), p;
-    p = el('pattern', { id: 'pat-std', width: 12, height: 9, patternUnits: 'userSpaceOnUse' }, d);
-    el('path', { d: 'M0 8.5H12M2 1v6M5 1v6M9 1v6', stroke: 'rgba(255,255,255,.07)', 'stroke-width': .8 }, p);
-    p = el('pattern', { id: 'pat-sram', width: 6, height: 6, patternUnits: 'userSpaceOnUse' }, d);
-    el('rect', { x: 1, y: 1, width: 4, height: 4, fill: 'rgba(255,255,255,.06)' }, p);
-    p = el('pattern', { id: 'pat-hatch', width: 8, height: 8, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, d);
-    el('path', { d: 'M0 0V8', stroke: 'rgba(255,255,255,.07)', 'stroke-width': 1.2 }, p);
-    p = el('pattern', { id: 'pat-dots', width: 7, height: 7, patternUnits: 'userSpaceOnUse' }, d);
-    el('circle', { cx: 3.5, cy: 3.5, r: 1, fill: 'rgba(255,255,255,.09)' }, p);
-    p = el('pattern', { id: 'pat-ring', width: 24, height: 24, patternUnits: 'userSpaceOnUse' }, d);
-    el('circle', { cx: 12, cy: 12, r: 8, fill: 'none', stroke: 'rgba(255,255,255,.07)' }, p);
-    p = el('pattern', { id: 'pat-check', width: 16, height: 16, patternUnits: 'userSpaceOnUse' }, d);
-    el('path', { d: 'M0 0h8v8H0zM8 8h8v8H8z', fill: 'rgba(255,255,255,.06)' }, p);
-    sheenGrad = el('radialGradient', { id: 'sheen', gradientUnits: 'userSpaceOnUse', cx: -999, cy: -999, r: 280 }, d);
-    el('stop', { offset: '0', 'stop-color': '#7fd8ff', 'stop-opacity': .16 }, sheenGrad);
-    el('stop', { offset: '.45', 'stop-color': '#b48cff', 'stop-opacity': .07 }, sheenGrad);
-    el('stop', { offset: '1', 'stop-color': '#000', 'stop-opacity': 0 }, sheenGrad);
-  }
+  function buildScene(lay, regions) {
+    var S = new Scene(), W = lay.W, H = lay.H, R = rng(hash('die' + lay.key)), x, y;
+    var core = { x: lay.cx, y: lay.cy, w: lay.cw, h: lay.ch };
+    S.rects('#0e1015', null).push(12, 12, W - 24, H - 24);
+    var seal = S.path('rgba(232,176,87,.35)', 1.1, false, null);
+    seal.rect(20, 20, W - 40, H - 40);
+    seal.rect(25, 25, W - 50, H - 50);
 
-  // tiny dataflow drawn inside each block: texture from afar, legible when zoomed in
-  function drawFlow(g, r, steps, hue) {
-    var pad = 12, gap = 14;
-    var bh = Math.min(26, Math.max(14, r.h * 0.2));
-    var n = steps.length, bw = (r.w - pad * 2 - gap * (n - 1)) / n;
-    if (bw < 18 || r.h < 60) return;
-    var y = r.y + r.h - bh - 12;
-    var f = el('g', { class: 'b-flow' }, g);
-    steps.forEach(function (s, i) {
-      var x = r.x + pad + i * (bw + gap);
-      el('rect', { x: x, y: y, width: bw, height: bh, rx: 2, stroke: hue }, f);
-      var fs = Math.min(8.5, (bw - 4) / (s.length * 0.62), bh * 0.42);
-      el('text', { x: x + bw / 2, y: y + bh / 2 + fs * 0.36, 'text-anchor': 'middle', 'font-size': fs.toFixed(2) }, f).textContent = s;
-      if (i < n - 1) el('path', { d: 'M' + (x + bw + 2) + ' ' + (y + bh / 2) + 'h' + (gap - 6) + 'm-3 -2.5l3 2.5l-3 2.5', stroke: hue }, f);
+    // I/O ring: pads, ESD cells, bond wires out to the package
+    var pads = [], ps = 14, step = 30, inset = 34;
+    var po = S.rects('rgba(205,165,95,.75)', null), pin = S.rects('rgba(54,40,20,.95)', null), esd = S.rects('rgba(150,120,70,.35)', null);
+    var wire = S.lines('rgba(232,190,120,.5)', .7, null);
+    function pad(px, py, wx, wy, ex, ey, ew, eh) {
+      wire.push(px + ps / 2, py + ps / 2, wx, wy);
+      po.push(px, py, ps, ps);
+      pin.push(px + 2.5, py + 2.5, ps - 5, ps - 5);
+      esd.push(ex, ey, ew, eh);
+      pads.push({ x: px, y: py, w: ps, h: ps });
+    }
+    for (x = inset + 24; x <= W - inset - 24 - ps; x += step) {
+      pad(x, inset, x + ps / 2, 12, x + 1, inset + ps + 3, ps - 2, 8);
+      pad(x, H - inset - ps, x + ps / 2, H - 12, x + 1, H - inset - ps - 11, ps - 2, 8);
+    }
+    for (y = inset + 24; y <= H - inset - 24 - ps; y += step) {
+      pad(inset, y, 12, y + ps / 2, inset + ps + 3, y + 1, 8, ps - 2);
+      pad(W - inset - ps, y, W - 12, y + ps / 2, W - inset - ps - 11, y + 1, 8, ps - 2);
+    }
+
+    // routing fabric under the core; it only shows through in the channels between blocks
+    var cb = bbOf(core), rh = S.lines('rgba(150,170,210,.10)', .45, cb), rv = S.lines('rgba(150,170,210,.06)', .45, cb);
+    for (y = core.y + .8; y < core.y + core.h; y += 1.6) rh.push(core.x, y, core.x + core.w, y);
+    for (x = core.x + .8; x < core.x + core.w; x += 1.6) rv.push(x, core.y, x, core.y + core.h);
+
+    regions.forEach(function (rg) {
+      var p = PAL[rg.pal], Rr = rng(hash(rg.id + lay.key));
+      TEX[rg.tex](S, rg.r, p, Rr);
+      if (rg.art) ART[rg.art](S, rg.r, p);
     });
+
+    // thick top-metal power grid over everything
+    var pg = S.rects('rgba(240,205,150,.05)', cb);
+    for (x = core.x + 20; x < core.x + core.w; x += 44) pg.push(x, core.y, 3.5, core.h);
+    for (y = core.y + 20; y < core.y + core.h; y += 44) pg.push(core.x, y, core.w, 3.5);
+
+    // thin-film interference sheen
+    S.grad({ mode: 'soft-light', alpha: .55, r: [0, 0, W, H], c: [0, 0, W, H],
+      stops: [[0, '#7a5cff'], [.33, '#19d3b0'], [.62, '#ffc35a'], [1, '#ff5cb0']] });
+    S.grad({ mode: 'screen', alpha: .08, radial: true, r: [0, 0, W, H], c: [W * .2, H * .15, W * .6],
+      stops: [[0, '#ffffff'], [1, 'rgba(255,255,255,0)']] });
+
+    S.pads = pads;
+    S.core = core;
+    return S;
   }
 
-  function drawBlock(item, r, filler) {
-    var g = el('g', { class: filler ? 'filler' : item.fun ? 'blk fun' : 'blk' }, svg.querySelector('.blocks'));
-    if (!filler && item.fun) g.style.setProperty('--hue', item.hue);
-    el('rect', { class: 'b-base', x: r.x, y: r.y, width: r.w, height: r.h, rx: 3 }, g);
-    if (!filler) el('rect', { class: 'b-tint', x: r.x, y: r.y, width: r.w, height: r.h, rx: 3, fill: item.hue }, g);
-    el('rect', { x: r.x, y: r.y, width: r.w, height: r.h, rx: 3, fill: 'url(#pat-' + item.pat + ')' }, g);
-    el('rect', { class: 'b-edge', x: r.x + .5, y: r.y + .5, width: r.w - 1, height: r.h - 1, rx: 3, stroke: filler ? null : item.hue }, g);
-    var small = r.h < 80;
-    var lbl = el('text', { class: 'b-lbl', x: r.x + 12, y: r.y + (filler ? 20 : small ? 24 : 28), fill: filler || item.fun ? null : item.hue }, g);
-    lbl.textContent = item.label;
-    if (filler) return g;
-    if (small) lbl.setAttribute('font-size', 14);
-    else el('text', { class: 'b-sub', x: r.x + 12, y: r.y + 45 }, g).textContent = item.sub;
-    drawFlow(g, r, item.flow, item.hue);
-    g.setAttribute('tabindex', 0);
-    g.setAttribute('role', 'button');
-    g.setAttribute('aria-label', item.label + ': ' + item.title);
-    g.addEventListener('mouseenter', function () { probe(item); });
-    g.addEventListener('focus', function () { probe(item); });
-    g.addEventListener('mouseleave', function () { probe(null); });
-    g.addEventListener('blur', function () { probe(null); });
-    g.addEventListener('click', function () { open(item.id); });
-    g.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(item.id); }
-    });
-    return g;
-  }
+  /* ---------- die view + interaction ---------- */
+  var frame = document.getElementById('frame');
+  var cv = document.getElementById('die'), ctx = cv.getContext('2d');
+  var loupe = document.getElementById('loupe'), lcv = document.getElementById('loupeCv'), lctx = lcv.getContext('2d');
+  var loupeTag = document.getElementById('loupeTag');
+  var zcard = document.getElementById('zcard'), zcBody = document.getElementById('zcBody'), zcLbl = document.getElementById('zcLbl');
+  var hud = document.getElementById('hud');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var mode = null, lay = null, scene = null, regions = [], regionById = {}, base = null, K = 2;
+  var view = [0, 0, 1, 1], current = null, hover = null, anim = null, cssW = 0, cssH = 0;
+  var LOUPE = 190, MAG = 2.6;
 
-  function build() {
-    var next = frame.clientWidth < 640 ? 'P' : 'L';
-    if (next === mode) return false;
-    mode = next;
+  function setup() {
+    var w = frame.clientWidth;
+    if (!w) return;
+    var nextMode = w < 640 ? 'P' : 'L';
+    var rebuildScene = nextMode !== mode;
+    mode = nextMode;
     lay = LAYOUTS[mode];
-    svg.innerHTML = '';
-    blocks = {};
-    pads = [];
-    defs();
-    var W = lay.W, H = lay.H;
-
-    el('rect', { class: 'die-out', x: 12, y: 12, width: W - 24, height: H - 24, rx: 10 }, svg);
-    el('rect', { class: 'die-seal', x: 22, y: 22, width: W - 44, height: H - 44, rx: 6 }, svg);
-
-    // pad ring with bond wires out to the package
-    var pg = el('g', {}, svg), ps = 14, gapP = 30, inset = 34;
-    function pad(x, y, wx, wy) {
-      el('line', { class: 'wire', x1: x + ps / 2, y1: y + ps / 2, x2: wx, y2: wy }, pg);
-      var r = el('rect', { class: 'pad', x: x, y: y, width: ps, height: ps, rx: 1.5 }, pg);
-      pads.push({ el: r, x: x + ps / 2, y: y + ps / 2 });
+    if (rebuildScene) {
+      regions = items.map(function (it) {
+        return { id: it.id, label: it.label, meta: it.meta, hue: it.hue, tex: it.tex, pal: it.pal, art: it.art, fun: it.fun, r: cellRect(lay, mode === 'L' ? it.L : it.P) };
+      });
+      FILLERS.forEach(function (f) {
+        var c = mode === 'L' ? f.L : f.P;
+        if (c) regions.push({ id: f.id, label: f.label, meta: f.meta, tex: f.tex, pal: f.pal, filler: true, r: cellRect(lay, c) });
+      });
+      regionById = {};
+      regions.forEach(function (rg) { regionById[rg.id] = rg; });
+      scene = buildScene(lay, regions);
     }
-    for (var x = inset + 24; x <= W - inset - 24 - ps; x += gapP) {
-      pad(x, inset, x + ps / 2, 12);
-      pad(x, H - inset - ps, x + ps / 2, H - 12);
-    }
-    for (var y = inset + 24; y <= H - inset - 24 - ps; y += gapP) {
-      pad(inset, y, 12, y + ps / 2);
-      pad(W - inset - ps, y, W - 12, y + ps / 2);
-    }
-
-    // routing channels on the cell grid; the blocks cover them, so they only show in the gutters
-    var rg = el('g', {}, svg), lines = [];
-    for (var c = 0; c <= lay.cols; c++) {
-      var lx = lay.cx + c * lay.cw / lay.cols;
-      lines.push([lx, lay.cy, lx, lay.cy + lay.ch]);
-    }
-    for (var r = 0; r <= lay.rows; r++) {
-      var ly = lay.cy + r * lay.ch / lay.rows;
-      lines.push([lay.cx, ly, lay.cx + lay.cw, ly]);
-    }
-    lines.forEach(function (l, i) {
-      el('line', { class: 'route', x1: l[0], y1: l[1], x2: l[2], y2: l[3] }, rg);
-      if (reduceMotion || i % 2) return;
-      var len = Math.abs(l[2] - l[0]) + Math.abs(l[3] - l[1]);
-      var p = el('path', { class: 'pulse', d: 'M' + l[0] + ' ' + l[1] + ' L' + l[2] + ' ' + l[3] }, rg);
-      p.style.strokeDasharray = '14 ' + (len + 40);
-      p.style.strokeDashoffset = len + 54;
-      p.style.animationDuration = (2.5 + Math.random() * 3).toFixed(2) + 's';
-      p.style.animationDelay = (-Math.random() * 5).toFixed(2) + 's';
-    });
-
-    el('g', { class: 'blocks' }, svg);
-    items.forEach(function (it) {
-      var rect = cellRect(mode === 'L' ? it.L : it.P);
-      blocks[it.id] = { g: drawBlock(it, rect, false), r: rect };
-    });
-    FILLERS.forEach(function (f) {
-      var cells = mode === 'L' ? f.L : f.P;
-      if (cells) drawBlock(f, cellRect(cells), true);
-    });
-
-    probeG = el('g', { class: 'probe-g' }, svg);
-    el('rect', { class: 'sheen', x: 0, y: 0, width: W, height: H, fill: 'url(#sheen)' }, svg);
-
-    if (mode === 'L') {
-      el('text', { class: 'mark', x: lay.cx, y: H - 58 }, svg).textContent = 'AA-27 · IIT KGP · REV 2026';
-      el('text', { class: 'mark', x: W - lay.cx, y: H - 58, 'text-anchor': 'end' }, svg).textContent = '© ALAM';
-    }
-
-    setVB([0, 0, W, H]);
-    return true;
+    cssW = w;
+    cssH = Math.round(w * lay.H / lay.W);
+    cv.style.height = cssH + 'px';
+    cv.width = Math.round(cssW * dpr);
+    cv.height = Math.round(cssH * dpr);
+    // offscreen copy at a resolution good enough for the loupe, capped for memory
+    K = Math.min(4, Math.max(2, dpr * cssW / lay.W * 1.6));
+    while (lay.W * K * lay.H * K > 14e6) K -= .25;
+    base = document.createElement('canvas');
+    base.width = Math.round(lay.W * K);
+    base.height = Math.round(lay.H * K);
+    drawScene(base.getContext('2d'), scene, [0, 0, lay.W, lay.H], base.width, base.height);
+    lcv.width = lcv.height = Math.round(LOUPE * dpr);
+    view = current ? targetFor(regionById[current].r) : [0, 0, lay.W, lay.H];
+    paint(!!current);
   }
 
-  function probe(item) {
-    probeG.innerHTML = '';
-    pads.forEach(function (p) { p.el.classList.remove('lit'); });
-    if (current) return;
-    if (!item) { hud.textContent = HUD_IDLE; frame.style.removeProperty('--hue'); return; }
-    var r = blocks[item.id].r, W = lay.W, H = lay.H, s = { stroke: item.hue };
-    el('line', Object.assign({ x1: 22, x2: W - 22, y1: r.y, y2: r.y }, s), probeG);
-    el('line', Object.assign({ x1: 22, x2: W - 22, y1: r.y + r.h, y2: r.y + r.h }, s), probeG);
-    el('line', Object.assign({ y1: 22, y2: H - 22, x1: r.x, x2: r.x }, s), probeG);
-    el('line', Object.assign({ y1: 22, y2: H - 22, x1: r.x + r.w, x2: r.x + r.w }, s), probeG);
-    el('text', { x: r.x + r.w - 6, y: r.y - 6, 'text-anchor': 'end', fill: item.hue }, probeG).textContent =
-      Math.round(r.w) + ' × ' + Math.round(r.h) + ' µm';
-    pads.forEach(function (p) {
-      var edgeRow = p.y < lay.cy || p.y > lay.cy + lay.ch;
-      var hit = edgeRow ? (p.x >= r.x && p.x <= r.x + r.w) : (p.y >= r.y && p.y <= r.y + r.h);
-      if (hit) p.el.classList.add('lit');
-    });
-    frame.style.setProperty('--hue', item.hue);
-    hud.innerHTML = '';
-    var a = document.createElement('span'); a.className = 'hue'; a.textContent = '▸ ' + item.label + '  ';
-    var b = document.createElement('b'); b.textContent = item.title;
-    hud.appendChild(a); hud.appendChild(b);
+  function paint(crisp) {
+    if (crisp) drawScene(ctx, scene, view, cv.width, cv.height);
+    else {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = '#07080b';
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.drawImage(base, view[0] * K, view[1] * K, view[2] * K, view[3] * K, 0, 0, cv.width, cv.height);
+    }
+    overlay();
   }
 
-  // iridescent sheen follows the pointer, like light across a wafer
-  svg.addEventListener('pointermove', function (e) {
-    var m = svg.getScreenCTM();
-    if (!m || !sheenGrad) return;
-    var pt = svg.createSVGPoint();
-    pt.x = e.clientX; pt.y = e.clientY;
-    var p = pt.matrixTransform(m.inverse());
-    sheenGrad.setAttribute('cx', p.x);
-    sheenGrad.setAttribute('cy', p.y);
+  function brackets(c, r, color, s) {
+    var L = Math.min(r.w, r.h) * .16, x0 = r.x - 2 / s, y0 = r.y - 2 / s, x1 = r.x + r.w + 2 / s, y1 = r.y + r.h + 2 / s;
+    c.strokeStyle = color;
+    c.lineWidth = 2 / s;
+    c.beginPath();
+    c.moveTo(x0, y0 + L); c.lineTo(x0, y0); c.lineTo(x0 + L, y0);
+    c.moveTo(x1 - L, y0); c.lineTo(x1, y0); c.lineTo(x1, y0 + L);
+    c.moveTo(x1, y1 - L); c.lineTo(x1, y1); c.lineTo(x1 - L, y1);
+    c.moveTo(x0 + L, y1); c.lineTo(x0, y1); c.lineTo(x0, y1 - L);
+    c.stroke();
+  }
+
+  function overlay() {
+    var s = cv.width / view[2];
+    ctx.setTransform(s, 0, 0, s, -view[0] * s, -view[1] * s);
+    if (current) {
+      var r = regionById[current].r;
+      ctx.fillStyle = 'rgba(4,5,8,.62)';
+      ctx.beginPath();
+      ctx.rect(view[0] - 10, view[1] - 10, view[2] + 20, view[3] + 20);
+      ctx.rect(r.x, r.y, r.w, r.h);
+      ctx.fill('evenodd');
+      brackets(ctx, r, regionById[current].hue, s);
+    } else if (hover && !hover.filler) {
+      var h = hover.r;
+      ctx.fillStyle = 'rgba(255,255,255,.06)';
+      ctx.fillRect(h.x, h.y, h.w, h.h);
+      brackets(ctx, h, hover.hue, s);
+      if (!loupeOn) {
+        ctx.font = '700 ' + (13 * dpr / s) + 'px "JetBrains Mono", monospace';
+        ctx.fillStyle = hover.hue;
+        ctx.fillText(hover.label, h.x + 6 / s * dpr, h.y + 18 / s * dpr);
+      }
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  function toDie(e) {
+    var b = cv.getBoundingClientRect();
+    var fx = (e.clientX - b.left) / b.width, fy = (e.clientY - b.top) / b.height;
+    return { x: view[0] + fx * view[2], y: view[1] + fy * view[3], cx: e.clientX - b.left, cy: e.clientY - b.top };
+  }
+  function regionAt(u) {
+    for (var i = 0; i < regions.length; i++) {
+      var r = regions[i].r;
+      if (u.x >= r.x && u.x <= r.x + r.w && u.y >= r.y && u.y <= r.y + r.h) return regions[i];
+    }
+    return null;
+  }
+  function zoneAt(u) {
+    var c = scene.core;
+    if (u.x < 12 || u.y < 12 || u.x > lay.W - 12 || u.y > lay.H - 12) return 'scribe line';
+    if (u.x < 26 || u.y < 26 || u.x > lay.W - 26 || u.y > lay.H - 26) return 'seal ring';
+    for (var i = 0; i < scene.pads.length; i++) {
+      var p = scene.pads[i];
+      if (u.x >= p.x && u.x <= p.x + p.w && u.y >= p.y && u.y <= p.y + p.h) return 'bond pad';
+    }
+    if (u.x < c.x || u.y < c.y || u.x > c.x + c.w || u.y > c.y + c.h) return 'I/O ring';
+    return 'routing channel';
+  }
+
+  var loupeOn = false;
+  function drawLoupe(u) {
+    var span = view[2] * (LOUPE / cssW) / MAG;   // die units visible across the loupe
+    lctx.fillStyle = '#07080b';
+    lctx.fillRect(0, 0, lcv.width, lcv.height);
+    lctx.drawImage(base, (u.x - span / 2) * K, (u.y - span / 2) * K, span * K, span * K, 0, 0, lcv.width, lcv.height);
+    loupe.style.transform = 'translate(' + (u.cx - LOUPE / 2) + 'px,' + (u.cy - LOUPE / 2) + 'px)';
+    loupe.classList.toggle('up', u.cy > cssH - LOUPE / 2 - 44);
+    var rg = regionAt(u);
+    loupeTag.innerHTML = '';
+    var b = document.createElement('b');
+    if (rg) {
+      b.textContent = rg.label;
+      loupeTag.style.setProperty('--hue', rg.hue || '#a9afb9');
+      loupeTag.appendChild(b);
+      loupeTag.appendChild(document.createTextNode('  ' + rg.meta));
+    } else {
+      loupeTag.style.removeProperty('--hue');
+      b.textContent = zoneAt(u);
+      loupeTag.appendChild(b);
+    }
+  }
+  loupe.style.left = '0px';
+  loupe.style.top = '0px';
+
+  cv.addEventListener('pointermove', function (e) {
+    if (!scene) return;
+    var u = toDie(e), rg = regionAt(u);
+    if (e.pointerType === 'mouse') {
+      loupeOn = true;
+      frame.classList.add('loupe-on');
+      drawLoupe(u);
+    }
+    var h = rg && !rg.filler ? rg : null;
+    if (h !== hover) {
+      hover = h;
+      if (!anim) paint(!!current);
+      setHud();
+    }
   });
-  svg.addEventListener('pointerleave', function () { if (sheenGrad) sheenGrad.setAttribute('cx', -999); });
+  cv.addEventListener('pointerleave', function () {
+    loupeOn = false;
+    frame.classList.remove('loupe-on');
+    if (hover) { hover = null; if (!anim) paint(!!current); setHud(); }
+  });
+  cv.addEventListener('click', function (e) {
+    var rg = regionAt(toDie(e));
+    if (rg && !rg.filler && rg.id !== current) open(rg.id);
+    else if (current) close();
+  });
 
-  /* zoom */
-  function targetFor(r) {
-    var A = lay.W / lay.H, vw, vh;
-    if (mode === 'L') {
-      // keep the block in the area left of the overlay panel
-      var fx = Math.max(.45, (frame.clientWidth - panel.offsetWidth - 40) / frame.clientWidth);
-      vw = Math.max(r.w / (fx * .82), (r.h / .78) * A, lay.W * .5);
-      vh = vw / A;
-      return [r.x + r.w / 2 - vw * fx / 2, clampY(r.y + r.h / 2 - vh / 2, vh), vw, vh];
-    }
-    vw = Math.max(r.w / .84, (r.h / .8) * A, lay.W * .7);
-    vh = vw / A;
-    return [r.x + r.w / 2 - vw / 2, clampY(r.y + r.h / 2 - vh / 2, vh), vw, vh];
+  function setHud() {
+    if (current) { hud.textContent = '▸ esc or click outside to zoom out'; return; }
+    hud.textContent = hover ? '▸ ' + hover.label + ' · ' + hover.meta : HUD_IDLE;
   }
-  // don't pan past the top or bottom edge of the die
-  function clampY(y, vh) { return Math.min(Math.max(y, 0), lay.H - vh); }
-  function animateTo(to, instant) {
+  var HUD_IDLE = matchMedia('(hover: hover)').matches ? '▸ hover to inspect · click to zoom' : '▸ tap a block to zoom';
+  setHud();
+
+  function targetFor(r) {
+    var A = lay.W / lay.H, vw, vh, vx, vy;
+    if (mode === 'L') {
+      var fx = Math.max(.45, (cssW - 340 - 48) / cssW);
+      vw = Math.max(r.w / (fx * .8), (r.h / .76) * A, lay.W * .42);
+      vh = vw / A;
+      vx = r.x + r.w / 2 - vw * fx / 2;
+    } else {
+      vw = Math.max(r.w / .84, (r.h / .8) * A, lay.W * .6);
+      vh = vw / A;
+      vx = r.x + r.w / 2 - vw / 2;
+    }
+    vy = Math.min(Math.max(r.y + r.h / 2 - vh / 2, 0), lay.H - vh);
+    return [vx, vy, vw, vh];
+  }
+  function animateTo(to) {
     if (anim) cancelAnimationFrame(anim);
-    if (instant || reduceMotion) { setVB(to); return; }
-    var from = vb.slice(), t0 = performance.now(), dur = 700;
+    if (reduceMotion) { view = to; anim = null; paint(true); return; }
+    var from = view.slice(), t0 = performance.now(), dur = 750;
     (function tick(now) {
       var t = Math.min(1, (now - t0) / dur);
       var e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      setVB(from.map(function (v, i) { return v + (to[i] - v) * e; }));
-      if (t < 1) anim = requestAnimationFrame(tick);
+      view = from.map(function (v, i) { return v + (to[i] - v) * e; });
+      if (t < 1) { paint(false); anim = requestAnimationFrame(tick); }
+      else { anim = null; paint(true); }
     })(t0);
   }
 
-  function open(id, instant) {
-    var item = byId[id];
-    if (!item) return;
-    current = null;
-    probe(null);
-    Object.keys(blocks).forEach(function (k) { blocks[k].g.classList.remove('sel'); });
+  function open(id) {
+    var it = byId[id];
+    if (!it) return;
     current = id;
-    blocks[id].g.classList.add('sel');
+    hover = null;
     frame.classList.add('zoomed');
-    frame.style.setProperty('--hue', item.hue);
-    panel.style.setProperty('--hue', item.hue);
-    panelBody.innerHTML = item.el.innerHTML;
-    panel.scrollTop = 0;
-    animateTo(targetFor(blocks[id].r), instant);
+    zcard.style.setProperty('--hue', it.hue);
+    zcLbl.textContent = it.label;
+    zcBody.innerHTML = it.el.innerHTML;
+    animateTo(targetFor(regionById[id].r));
     legendSync();
+    setHud();
     history.replaceState(null, '', '#' + id);
   }
   function close() {
     if (!current) return;
-    var g = blocks[current].g;
-    g.classList.remove('sel');
     current = null;
     frame.classList.remove('zoomed');
-    frame.style.removeProperty('--hue');
     animateTo([0, 0, lay.W, lay.H]);
     legendSync();
+    setHud();
     history.replaceState(null, '', location.pathname + location.search);
   }
   function step(d) {
@@ -1045,7 +1385,7 @@
     if (i < 0) i = d > 0 ? -1 : work.length;
     open(work[(i + d + work.length) % work.length].id);
   }
-  document.getElementById('panelX').addEventListener('click', close);
+  document.getElementById('zx').addEventListener('click', close);
   document.getElementById('prev').addEventListener('click', function () { step(-1); });
   document.getElementById('next').addEventListener('click', function () { step(1); });
   document.addEventListener('keydown', function (e) {
@@ -1054,12 +1394,7 @@
     else if (e.key === 'ArrowRight') step(1);
     else if (e.key === 'ArrowLeft') step(-1);
   });
-  // clicking empty die area zooms back out
-  svg.addEventListener('click', function (e) {
-    if (current && !e.target.closest('.blk')) close();
-  });
 
-  /* legend chips (also the easiest way in on phones) */
   var legend = document.getElementById('legend');
   work.forEach(function (it) {
     var b = document.createElement('button');
@@ -1069,32 +1404,61 @@
     b.appendChild(document.createElement('i'));
     b.appendChild(document.createTextNode(it.label));
     b.addEventListener('click', function () { current === it.id ? close() : open(it.id); });
-    b.addEventListener('mouseenter', function () { if (!current) { blocks[it.id].g.classList.add('hot'); probe(it); } });
-    b.addEventListener('mouseleave', function () { blocks[it.id].g.classList.remove('hot'); probe(null); });
+    b.addEventListener('mouseenter', function () { if (!current && scene) { hover = regionById[it.id]; paint(false); setHud(); } });
+    b.addEventListener('mouseleave', function () { if (hover) { hover = null; paint(!!current); setHud(); } });
     legend.appendChild(b);
   });
   function legendSync() {
     legend.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.id === current); });
   }
 
-  build();
-  var lastW = frame.clientWidth;
+  var lastW = 0, rTimer = null;
   function onResize() {
-    if (frame.clientWidth === lastW) return;
-    lastW = frame.clientWidth;
-    var rebuilt = build();
-    if (current) {
-      if (rebuilt) blocks[current].g.classList.add('sel');
-      animateTo(targetFor(blocks[current].r), true);
-    }
+    var w = frame.clientWidth;
+    if (Math.abs(w - lastW) < 2) return;
+    lastW = w;
+    clearTimeout(rTimer);
+    rTimer = setTimeout(setup, scene ? 150 : 0);
   }
-  if ('ResizeObserver' in window) new ResizeObserver(onResize).observe(frame);
-  else window.addEventListener('resize', onResize);
-  if (location.hash && byId[location.hash.slice(1)]) setTimeout(function () { open(location.hash.slice(1)); }, 700);
+  // give the page a frame to paint before the (heavier) die render
+  requestAnimationFrame(function () {
+    onResize();
+    if ('ResizeObserver' in window) new ResizeObserver(onResize).observe(frame);
+    else window.addEventListener('resize', onResize);
+    if (location.hash && byId[location.hash.slice(1)]) setTimeout(function () { open(location.hash.slice(1)); }, 400);
+  });
+
+  /* ---------- F1 calendar (race day; Saturday races included) ---------- */
+  var RACES = [
+    ['2024-03-02', 'Bahrain GP'], ['2024-03-09', 'Saudi Arabian GP'], ['2024-03-24', 'Australian GP'], ['2024-04-07', 'Japanese GP'],
+    ['2024-04-21', 'Chinese GP'], ['2024-05-05', 'Miami GP'], ['2024-05-19', 'Emilia Romagna GP'], ['2024-05-26', 'Monaco GP'],
+    ['2024-06-09', 'Canadian GP'], ['2024-06-23', 'Spanish GP'], ['2024-06-30', 'Austrian GP'], ['2024-07-07', 'British GP'],
+    ['2024-07-21', 'Hungarian GP'], ['2024-07-28', 'Belgian GP'], ['2024-08-25', 'Dutch GP'], ['2024-09-01', 'Italian GP'],
+    ['2024-09-15', 'Azerbaijan GP'], ['2024-09-22', 'Singapore GP'], ['2024-10-20', 'United States GP'], ['2024-10-27', 'Mexico City GP'],
+    ['2024-11-03', 'São Paulo GP'], ['2024-11-23', 'Las Vegas GP'], ['2024-12-01', 'Qatar GP'], ['2024-12-08', 'Abu Dhabi GP'],
+    ['2025-03-16', 'Australian GP'], ['2025-03-23', 'Chinese GP'], ['2025-04-06', 'Japanese GP'], ['2025-04-13', 'Bahrain GP'],
+    ['2025-04-20', 'Saudi Arabian GP'], ['2025-05-04', 'Miami GP'], ['2025-05-18', 'Emilia Romagna GP'], ['2025-05-25', 'Monaco GP'],
+    ['2025-06-01', 'Spanish GP'], ['2025-06-15', 'Canadian GP'], ['2025-06-29', 'Austrian GP'], ['2025-07-06', 'British GP'],
+    ['2025-07-27', 'Belgian GP'], ['2025-08-03', 'Hungarian GP'], ['2025-08-31', 'Dutch GP'], ['2025-09-07', 'Italian GP'],
+    ['2025-09-21', 'Azerbaijan GP'], ['2025-10-05', 'Singapore GP'], ['2025-10-19', 'United States GP'], ['2025-10-26', 'Mexico City GP'],
+    ['2025-11-09', 'São Paulo GP'], ['2025-11-22', 'Las Vegas GP'], ['2025-11-30', 'Qatar GP'], ['2025-12-07', 'Abu Dhabi GP'],
+    ['2026-03-08', 'Australian GP'], ['2026-03-15', 'Chinese GP'], ['2026-03-29', 'Japanese GP'], ['2026-05-03', 'Miami GP'],
+    ['2026-05-24', 'Canadian GP'], ['2026-06-07', 'Monaco GP'], ['2026-06-14', 'Barcelona-Catalunya GP'], ['2026-06-28', 'Austrian GP'],
+    ['2026-07-05', 'British GP'], ['2026-07-19', 'Belgian GP'], ['2026-07-26', 'Hungarian GP'], ['2026-08-23', 'Dutch GP'],
+    ['2026-09-06', 'Italian GP'], ['2026-09-13', 'Spanish GP'], ['2026-09-26', 'Azerbaijan GP'], ['2026-10-04', 'Bahrain GP (at Sepang)'],
+    ['2026-10-11', 'Singapore GP'], ['2026-10-25', 'United States GP'], ['2026-11-01', 'Mexico City GP'], ['2026-11-08', 'São Paulo GP'],
+    ['2026-11-21', 'Las Vegas GP'], ['2026-11-29', 'Qatar GP'], ['2026-12-06', 'Abu Dhabi GP']
+  ].map(function (r) {
+    var a = r[0].split('-').map(Number);
+    return { name: r[1], d: new Date(a[0], a[1] - 1, a[2]) };
+  });
+  function tOf(dt) {
+    return dt.getFullYear() * 12 + dt.getMonth() + (dt.getDate() - 1 + dt.getHours() / 24) / new Date(dt.getFullYear(), dt.getMonth() + 1, 0).getDate();
+  }
+  function fmtDay(d) { return DAY[d.getDay()] + ' ' + d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear(); }
 
   /* ---------- timing diagram ---------- */
-  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var TL = items.filter(function (it) { return it.dates; }).map(function (it) {
+  var TL = work.filter(function (it) { return it.dates; }).map(function (it) {
     var d = it.dates.split(',');
     return { it: it, s: d[0].split('-').map(Number), e: d[1] ? d[1].split('-').map(Number) : null };
   }).sort(function (a, b) { return (b.s[0] * 12 + b.s[1]) - (a.s[0] * 12 + a.s[1]); });
@@ -1129,7 +1493,7 @@
     var L = 92, R = 12, TOP = 30, RH = 34, SEP = 34;
     var now = new Date();
     var t0 = 2024 * 12;
-    var tNow = now.getFullYear() * 12 + now.getMonth() + (now.getDate() - 1) / 31;
+    var tNow = tOf(now);
     var t1 = Math.floor(tNow) + 2;
     var X = function (t) { return L + (t - t0) / (t1 - t0) * (W - L - R); };
     var jokeTop = TOP + (TL.length + 1) * RH + SEP;
@@ -1155,15 +1519,17 @@
 
     function row(top, o) {
       var lo = top + RH - 9, hi = top + 9;
-      var g = el('g', { class: 'w-row' + (o.joke ? ' w-joke' : ''), tabindex: 0, role: 'link', 'aria-label': o.title + ', ' + o.sub + '. Zoom to its block.' }, s);
+      var g = el('g', { class: 'w-row', tabindex: 0, role: 'link', 'aria-label': o.title + ', ' + o.sub + '. Zoom to its block.' }, s);
       el('rect', { class: 'w-hit', x: 0, y: top + 2, width: W, height: RH - 4, rx: 4 }, g);
       el('text', { class: 'w-lbl', x: 0, y: (lo + hi) / 2 + 4, fill: o.hue }, g).textContent = o.label;
       if (o.fill) el('path', { class: 'w-fill', fill: o.hue, d: o.fill(lo, hi) }, g);
       el('path', { class: 'w-sig', stroke: o.hue, d: o.path(lo, hi) }, g);
+      if (o.extra) o.extra(g, lo, hi);
       if (o.inner) el('text', { class: 'w-in', x: o.inner[0], y: (lo + hi) / 2 + 4 }, g).textContent = o.inner[1];
       g.addEventListener('mousemove', function (e) {
-        var b = box.getBoundingClientRect();
-        showTip(o.title, o.sub, e.clientX - b.left, e.clientY - b.top);
+        var b = box.getBoundingClientRect(), sb = s.getBoundingClientRect();
+        var tt = o.tipAt ? o.tipAt(e.clientX - sb.left) : [o.title, o.sub];
+        showTip(tt[0], tt[1], e.clientX - b.left, e.clientY - b.top);
       });
       g.addEventListener('mouseleave', hideTip);
       g.addEventListener('focus', function () {
@@ -1191,27 +1557,50 @@
       });
     });
 
-    // undocumented signals
+    // the important stuff
     var sy = jokeTop - SEP + 6;
     el('line', { class: 'w-sep', x1: 0, x2: W, y1: sy, y2: sy }, s);
-    el('text', { class: 'w-sep-t', x: L, y: sy + 13 }, s).textContent = '// undocumented signals';
+    el('text', { class: 'w-sep-t', x: L, y: sy + 13 }, s).textContent = '// the important stuff';
+
+    // F1: one pulse per race weekend (Fri–race day), upcoming weekends dashed
+    var wk = RACES.map(function (r) {
+      var a = new Date(r.d); a.setDate(a.getDate() - 2);
+      var b = new Date(r.d); b.setDate(b.getDate() + 1);
+      return { r: r, a: tOf(a), b: tOf(b), c: tOf(r.d) + .5 / 30 };
+    }).filter(function (w) { return w.b > t0 && w.a < t1; });
+    var past = wk.filter(function (w) { return w.b <= tNow; }), soon = wk.filter(function (w) { return w.b > tNow; });
+    function pulses(list, lo, hi) {
+      var d = 'M' + L + ' ' + lo;
+      list.forEach(function (w) {
+        var a = X(w.a), b = Math.max(X(w.b), a + 2);
+        d += ' H' + a + ' V' + hi + ' H' + b + ' V' + lo;
+      });
+      return d;
+    }
+    var nextRace = soon[0];
     row(jokeTop, {
-      label: 'F1_SUN', hue: '#ff3b3b', title: 'Race Sundays', sub: 'roughly every other weekend, Mar–Dec. Non-negotiable.', target: 'f1', anchor: xn - 40, joke: true,
-      path: function (lo, hi) {
-        var d = 'M' + L + ' ' + lo;
-        for (var t = t0 + 2; t < tNow; t += .5) {
-          if (t % 12 < 2) continue;                       // off-season: Jan–Feb
-          var a = X(t + .18), b = X(Math.min(t + .3, tNow));
-          d += ' H' + a + ' V' + hi + ' H' + b + ' V' + lo;
-        }
-        return d + ' H' + X(t1);
+      label: 'F1', hue: '#ff3b3b', target: 'f1', anchor: nextRace ? X(nextRace.a) : xn,
+      title: nextRace ? 'Next: ' + nextRace.r.name : 'Race weekends',
+      sub: nextRace ? fmtDay(nextRace.r.d) : 'every one since 2024',
+      path: function (lo, hi) { return pulses(past, lo, hi) + ' H' + (past.length ? Math.max(X(past[past.length - 1].b), xn) : xn); },
+      extra: function (g, lo, hi) {
+        if (!soon.length) return;
+        var d = '';
+        soon.forEach(function (w) { var a = X(w.a), b = Math.max(X(w.b), a + 2); d += ' M' + a + ' ' + lo + ' V' + hi + ' H' + b + ' V' + lo; });
+        el('path', { class: 'w-sig soon', stroke: '#ff3b3b', d: d }, g);
+      },
+      tipAt: function (mx) {
+        var tm = t0 + (mx - L) / (W - L - R) * (t1 - t0), best = null;
+        wk.forEach(function (w) { if (!best || Math.abs(w.c - tm) < Math.abs(best.c - tm)) best = w; });
+        if (!best) return ['F1', ''];
+        return [best.r.name, fmtDay(best.r.d) + (best.b > tNow ? ' · upcoming' : '')];
       }
     });
     row(jokeTop + RH, {
-      label: 'FERRARI', hue: '#ff3b3b', title: 'Ferrari title hopes', sub: 'stuck-at-1 (see fault simulator)', target: 'f1', anchor: xn - 40, joke: true,
+      label: 'FERRARI', hue: '#ff3b3b', title: 'Ferrari title hopes', sub: 'High every season since forever. Still high.', target: 'f1', anchor: xn - 40,
       fill: function (lo, hi) { return 'M' + L + ' ' + lo + ' V' + hi + ' H' + X(t1) + ' V' + lo + ' Z'; },
       path: function (lo, hi) { return 'M' + L + ' ' + hi + ' H' + X(t1); },
-      inner: [L + 9, 'stuck-at-1']
+      inner: [L + 9, 'this is our year']
     });
 
     el('line', { class: 'w-now', x1: xn, x2: xn, y1: TOP - 8, y2: H }, s);
@@ -1220,6 +1609,36 @@
   renderWave();
   if ('ResizeObserver' in window) new ResizeObserver(renderWave).observe(host);
   else window.addEventListener('resize', renderWave);
+
+  /* ---------- blackboard: countdown to the next race ---------- */
+  (function () {
+    var ink = document.getElementById('ink');
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var next = null;
+    for (var i = 0; i < RACES.length; i++) if (RACES[i].d >= today) { next = RACES[i]; break; }
+    var lines;
+    if (!next) lines = ['season’s over :(', '<span class="big">see you</span>', 'in March'];
+    else {
+      var days = Math.round((next.d - today) / 864e5);
+      var name = next.name.replace(/ GP.*$/, '');
+      var when = days === 0 ? 'it’s RACE DAY!!' : days === 1 ? 'tomorrow!!' : days === 2 ? 'race weekend!' : 'in ' + days + ' days';
+      lines = ['next race:', '<span class="big">' + name + '</span>', when, '<span class="sm">' + DAY[next.d.getDay()] + ' ' + next.d.getDate() + ' ' + MON[next.d.getMonth()] + ' · forza ferrari</span>'];
+    }
+    ink.innerHTML = lines.map(function (l, i) {
+      return '<div class="l" style="animation-delay:' + (i * .5) + 's">' + l + '</div>';
+    }).join('');
+    // replay the chalk writing once the board scrolls into view
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      ink.style.visibility = 'hidden';
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        ink.style.visibility = '';
+        ink.innerHTML = ink.innerHTML;
+        io.disconnect();
+      }, { threshold: .4 });
+      io.observe(ink.parentNode);
+    }
+  })();
 
   /* ---------- copy email ---------- */
   var toast = document.getElementById('toast'), toastTimer;
@@ -1240,32 +1659,6 @@
       ta.remove(); done();
     }
   });
-
-  /* ---------- blackboard ---------- */
-  var BOARDS = [
-    ['softmax, but stable:', 'e<sup>x<sub>i</sub> − m</sup> / Σ e<sup>x<sub>j</sub> − m</sup>', 'm = running max ✓'],
-    ['<span class="big">slack ≥ 0</span>', 'setup ✓ &nbsp;hold ✓', 'now I can sleep'],
-    ['<span class="big">LH 44</span>', 'Ferrari WDC? soon™', 'delulu is the solulu'],
-    ['TODO:', '☑ visit CMU', '☐ next city', '☐ finish that sci-fi book'],
-    ['Q: hire me?', 'A: <span class="big circ">yes</span>']
-  ];
-  var board = document.getElementById('board'), ink = document.getElementById('ink');
-  var bi = -1, bTimer = null, bVisible = false;
-  function nextBoard() {
-    bi = (bi + 1) % BOARDS.length;
-    ink.innerHTML = BOARDS[bi].map(function (l, i) {
-      return '<div class="l" style="animation-delay:' + (i * .45) + 's">' + l + '</div>';
-    }).join('');
-  }
-  function schedule() {
-    clearInterval(bTimer);
-    if (bVisible && !reduceMotion) bTimer = setInterval(nextBoard, 6000);
-  }
-  nextBoard();
-  board.addEventListener('click', function () { nextBoard(); schedule(); });
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { bVisible = es[0].isIntersecting; schedule(); }, { threshold: .3 }).observe(board);
-  }
 
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
