@@ -16,7 +16,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='3' fill='%2307080a' stroke='%23e8b057' stroke-width='2'/%3E%3Crect x='7' y='7' width='9' height='8' fill='%236ea8ff'/%3E%3Crect x='18' y='7' width='7' height='12' fill='%23e8b057'/%3E%3Crect x='7' y='17' width='9' height='8' fill='%23ff7a93'/%3E%3Crect x='18' y='21' width='7' height='4' fill='%234fd1c5'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');</script>
 <script type="application/ld+json">
 {
@@ -149,6 +149,12 @@
   .blk:hover .b-flow, .blk:focus-visible .b-flow { opacity: .9; }
   .filler .b-lbl { fill: var(--ink-3); font-size: 12px; }
   .filler .b-edge { stroke: var(--line-2); stroke-opacity: 1; }
+  .blk.fun .b-tint { fill-opacity: 0; }
+  .blk.fun .b-edge { stroke-dasharray: 5 4; stroke-opacity: .3; }
+  .blk.fun .b-lbl { fill: var(--ink-3); }
+  .blk.fun .b-flow { opacity: .25; }
+  .blk.fun:hover .b-tint, .blk.fun:focus-visible .b-tint, .blk.fun.sel .b-tint { fill-opacity: .16; }
+  .blk.fun:hover .b-lbl, .blk.fun:focus-visible .b-lbl, .blk.fun.sel .b-lbl { fill: var(--hue); }
   .zoomed .blk:not(.sel), .zoomed .filler { opacity: .18; }
   .zoomed .blk.sel .b-flow { opacity: 1; }
   .zoomed .blk.sel .b-tint { fill-opacity: .16; }
@@ -279,6 +285,73 @@
   }
   .tip.on { opacity: 1; }
 
+  .w-sep { stroke: var(--line-2); stroke-dasharray: 2 4; }
+  .w-sep-t { font: 500 10px var(--mono); fill: var(--ink-3); letter-spacing: .08em; }
+  .w-joke .w-sig { opacity: .85; }
+
+  /* off the die */
+  .off { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; align-items: center; }
+  .board {
+    position: relative;
+    container-type: inline-size;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .board img { display: block; width: 100%; height: auto; }
+  .ink {
+    position: absolute;
+    left: 4.5%;
+    top: 11%;
+    width: 42%;
+    height: 38%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .15em;
+    font: 500 3.6cqw/1.15 'Caveat', 'Segoe Print', cursive;
+    color: rgba(246,245,238,.9);
+    text-shadow: 0 0 1px rgba(255,255,255,.35);
+    transform: rotate(-1.5deg);
+    filter: url(#chalk);
+    pointer-events: none;
+  }
+  .ink .l { white-space: nowrap; animation: write .7s steps(14, end) both; }
+  .ink .big { font-size: 6.4cqw; font-weight: 700; line-height: 1; }
+  .ink .circ { display: inline-block; padding: 0 .35em; border: .3cqw solid rgba(246,245,238,.85); border-radius: 50%; }
+  .ink sup { font-size: .6em; }
+  .ink sub { font-size: .7em; }
+  @keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .board-cap {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(7,8,10,.72);
+    font: 500 11.5px var(--mono);
+    color: var(--ink-2);
+  }
+  .off-copy { font-size: 1.2rem; color: var(--ink-2); }
+  .off-copy b { color: var(--ink); font-weight: 600; }
+  .likes { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 34px; list-style: none; }
+  .likes li { padding: 6px 12px; border: 1px solid var(--line-2); border-radius: 999px; font: 500 12.5px var(--mono); color: var(--ink-2); }
+  .likes li b { color: var(--c); font-weight: 500; }
+  .polaroid {
+    width: min(300px, 80%);
+    margin-left: auto;
+    padding: 10px 10px 0;
+    background: #f3efe6;
+    border-radius: 3px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.45);
+    transform: rotate(3deg);
+    transition: transform .3s;
+  }
+  .polaroid:hover { transform: rotate(0deg) scale(1.03); }
+  .polaroid img { display: block; width: 100%; height: auto; }
+  .polaroid figcaption { padding: 10px 4px 14px; font: 600 1.15rem/1.15 'Caveat', cursive; color: #2a2620; text-align: center; }
+
   /* papers */
   .papers { border-top: 1px solid var(--line); }
   .paper {
@@ -369,6 +442,8 @@
     .duo { grid-template-columns: 1fr; }
     .paper { grid-template-columns: 1fr; gap: 6px; }
     .paper .go { justify-self: start; }
+    .off { grid-template-columns: 1fr; gap: 36px; }
+    .polaroid { margin: 0 auto; }
   }
   @media (max-width: 700px) {
     .wrap { padding: 0 16px; }
@@ -387,6 +462,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
+    .ink { filter: none; }
   }
 </style>
 </head>
@@ -399,6 +475,7 @@
       <a class="opt" href="#main">Die</a>
       <a href="#timeline">Timeline</a>
       <a class="opt" href="#papers">Papers</a>
+      <a class="opt" href="#offdie">Off-die</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -431,7 +508,7 @@
       </div>
       <div class="die-hud" aria-hidden="true">
         <span id="hud">▸ every block on this die is something I built</span>
-        <span class="r">hover to probe · click to zoom</span>
+        <span class="r">hover to probe · click to zoom · not every block is work</span>
       </div>
       <div class="legend" id="legend" aria-label="Blocks"></div>
     </div>
@@ -506,7 +583,7 @@
           <div class="tg"><span>MATLAB</span><span>Robust PCA</span><span>Inexact ALM</span></div>
         </article>
         <article class="w" id="kart" data-label="KART" data-sub="FORMULA EV" data-hue="#f2d06b" data-pat="std"
-                 data-flow="CHARGER|BMS|TSAL|VCU" data-l="0,5,3,3" data-p="0,10,3,2" data-dates="2024-01,2025-10">
+                 data-flow="CHARGER|BMS|TSAL|VCU" data-l="0,5,3,3" data-p="0,10,2,2" data-dates="2024-01,2025-10">
           <p class="k">TeamKART Electric · Head of Electrical Systems</p>
           <h3>Formula Student EV</h3>
           <p class="d">Led the electrical team of an FSAE electric race car, from charger and safety circuits to an 88 V, 200 A powertrain.</p>
@@ -528,6 +605,29 @@
           <p class="d">Five FPGA designs on a Kria KV260, built through a Jenkins-driven Vivado pipeline.</p>
           <div class="st"><div><b>Top 15</b><span>of 70 finalist teams</span></div></div>
           <div class="tg"><span>Kria KV260</span><span>Vivado</span><span>Jenkins</span></div>
+        </article>
+        <!-- off-the-clock blocks: muted on the die, no timeline row, skipped by the legend and prev/next -->
+        <article class="w" id="f1" data-fun="1" data-label="PIT WALL" data-sub="LH44 · FORZA FERRARI" data-hue="#ff3b3b" data-pat="check"
+                 data-flow="PLAN A|PLAN B|PLAN C|PLAN F" data-l="7,6,3,2" data-p="2,10,2,2">
+          <p class="k">Pit wall · every race Sunday</p>
+          <h3>Lewis Hamilton fan, Ferrari delulu</h3>
+          <p class="d">Hardcore LH44 fan. Now that he’s in red, I’m fully delulu about Ferrari: this is our year. (It’s always our year.)</p>
+          <div class="st"><div><b>44</b><span>the only number that matters</span></div><div><b>Plan F</b><span>Ferrari strategy, probably</span></div></div>
+          <div class="tg"><span>F1</span><span>LH44</span><span>Forza Ferrari</span></div>
+        </article>
+        <article class="w" id="travel" data-fun="1" data-label="PLL" data-sub="WANDERLUST" data-hue="#ff9de2" data-pat="ring"
+                 data-flow="REF|VCO|NEW CITY" data-l="10,6,2,1" data-p="4,10,2,1">
+          <p class="k">Phase-locked loop · wanderlust</p>
+          <h3>Travel</h3>
+          <p class="d">Locks onto a new city whenever the schedule has slack. Most recent lock: a visit to Carnegie Mellon.</p>
+          <div class="tg"><span>Travel</span><span>CMU visit</span></div>
+        </article>
+        <article class="w" id="books" data-fun="1" data-label="ROM" data-sub="SCI-FI" data-hue="#d4ff6b" data-pat="std"
+                 data-flow="READ|THINK|REREAD" data-l="10,7,2,1" data-p="4,11,2,1">
+          <p class="k">Read-only memory · bookshelf</p>
+          <h3>Sci-fi &amp; big ideas</h3>
+          <p class="d">Sci-fi and thought-provoking books: the kind you read once and keep thinking about for years.</p>
+          <div class="tg"><span>Sci-fi</span><span>Big ideas</span></div>
         </article>
       </div>
     </div>
@@ -570,6 +670,35 @@
           </div>
           <span class="go">DOI ↗</span>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== off the die ===== -->
+  <section class="sec" id="offdie" aria-labelledby="off-h">
+    <div class="wrap">
+      <div class="sec-h">
+        <div><p class="kicker">Off the die</p><h2 id="off-h">When the clock stops</h2></div>
+      </div>
+      <div class="off">
+        <figure class="board" id="board" title="Tap the board">
+          <img src="img/board.jpg" width="1200" height="1200" loading="lazy" alt="Aakarsh at a blackboard, pointing at it and grinning, on a visit to Carnegie Mellon"/>
+          <div class="ink" id="ink" aria-live="polite"></div>
+          <figcaption class="board-cap">visiting CMU · tap the board ↻</figcaption>
+        </figure>
+        <div>
+          <p class="off-copy">Outside the lab I’m watching <b>F1</b> (lifelong Lewis Hamilton fan, currently very delulu about Ferrari), planning the next <b>trip</b>, or halfway through a <b>sci-fi</b> book that’s rewiring my brain.</p>
+          <ul class="likes">
+            <li style="--c:#ff3b3b"><b>●</b> LH44</li>
+            <li style="--c:#ff9de2"><b>●</b> Travel</li>
+            <li style="--c:#d4ff6b"><b>●</b> Sci-fi</li>
+            <li style="--c:#e8b057"><b>●</b> Thought-provoking books</li>
+          </ul>
+          <figure class="polaroid">
+            <img src="img/gallery.jpg" width="800" height="1091" loading="lazy" alt="Aakarsh smiling in front of a large, chaotic abstract painting in a museum"/>
+            <figcaption>museum stop on the CMU trip<br/>(also: my routing congestion map)</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
   </section>
@@ -623,6 +752,10 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="chalk"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/></filter>
+</svg>
+
 <script>
 (function () {
   'use strict';
@@ -647,15 +780,14 @@
     return {
       id: a.id, el: a, label: a.dataset.label, sub: a.dataset.sub, hue: a.dataset.hue, pat: a.dataset.pat,
       flow: a.dataset.flow.split('|'), L: nums(a.dataset.l), P: nums(a.dataset.p),
-      title: a.querySelector('h3').textContent, dates: a.dataset.dates
+      title: a.querySelector('h3').textContent, dates: a.dataset.dates, fun: a.dataset.fun === '1'
     };
   });
   var byId = {};
   items.forEach(function (it) { byId[it.id] = it; });
+  var work = items.filter(function (it) { return !it.fun; });
   var FILLERS = [
-    { label: 'SRAM',      pat: 'sram', L: [5, 6, 2, 2],  P: [3, 10, 1, 2] },
-    { label: 'STD CELLS', pat: 'std',  L: [7, 6, 3, 2],  P: [4, 10, 2, 2] },
-    { label: 'PLL',       pat: 'ring', L: [10, 6, 2, 2], P: null }
+    { label: 'SRAM', pat: 'sram', L: [5, 6, 2, 2], P: null }
   ];
   var LAYOUTS = {
     L: { W: 1200, H: 760,  cx: 80, cy: 80, cw: 1040, ch: 600, cols: 12, rows: 8,  g: 10 },
@@ -690,6 +822,8 @@
     el('circle', { cx: 3.5, cy: 3.5, r: 1, fill: 'rgba(255,255,255,.09)' }, p);
     p = el('pattern', { id: 'pat-ring', width: 24, height: 24, patternUnits: 'userSpaceOnUse' }, d);
     el('circle', { cx: 12, cy: 12, r: 8, fill: 'none', stroke: 'rgba(255,255,255,.07)' }, p);
+    p = el('pattern', { id: 'pat-check', width: 16, height: 16, patternUnits: 'userSpaceOnUse' }, d);
+    el('path', { d: 'M0 0h8v8H0zM8 8h8v8H8z', fill: 'rgba(255,255,255,.06)' }, p);
     sheenGrad = el('radialGradient', { id: 'sheen', gradientUnits: 'userSpaceOnUse', cx: -999, cy: -999, r: 280 }, d);
     el('stop', { offset: '0', 'stop-color': '#7fd8ff', 'stop-opacity': .16 }, sheenGrad);
     el('stop', { offset: '.45', 'stop-color': '#b48cff', 'stop-opacity': .07 }, sheenGrad);
@@ -714,13 +848,14 @@
   }
 
   function drawBlock(item, r, filler) {
-    var g = el('g', { class: filler ? 'filler' : 'blk' }, svg.querySelector('.blocks'));
+    var g = el('g', { class: filler ? 'filler' : item.fun ? 'blk fun' : 'blk' }, svg.querySelector('.blocks'));
+    if (!filler && item.fun) g.style.setProperty('--hue', item.hue);
     el('rect', { class: 'b-base', x: r.x, y: r.y, width: r.w, height: r.h, rx: 3 }, g);
     if (!filler) el('rect', { class: 'b-tint', x: r.x, y: r.y, width: r.w, height: r.h, rx: 3, fill: item.hue }, g);
     el('rect', { x: r.x, y: r.y, width: r.w, height: r.h, rx: 3, fill: 'url(#pat-' + item.pat + ')' }, g);
     el('rect', { class: 'b-edge', x: r.x + .5, y: r.y + .5, width: r.w - 1, height: r.h - 1, rx: 3, stroke: filler ? null : item.hue }, g);
     var small = r.h < 80;
-    var lbl = el('text', { class: 'b-lbl', x: r.x + 12, y: r.y + (filler ? 20 : small ? 24 : 28), fill: filler ? null : item.hue }, g);
+    var lbl = el('text', { class: 'b-lbl', x: r.x + 12, y: r.y + (filler ? 20 : small ? 24 : 28), fill: filler || item.fun ? null : item.hue }, g);
     lbl.textContent = item.label;
     if (filler) return g;
     if (small) lbl.setAttribute('font-size', 14);
@@ -906,8 +1041,9 @@
     history.replaceState(null, '', location.pathname + location.search);
   }
   function step(d) {
-    var i = items.findIndex(function (it) { return it.id === current; });
-    open(items[(i + d + items.length) % items.length].id);
+    var i = work.findIndex(function (it) { return it.id === current; });
+    if (i < 0) i = d > 0 ? -1 : work.length;
+    open(work[(i + d + work.length) % work.length].id);
   }
   document.getElementById('panelX').addEventListener('click', close);
   document.getElementById('prev').addEventListener('click', function () { step(-1); });
@@ -925,7 +1061,7 @@
 
   /* legend chips (also the easiest way in on phones) */
   var legend = document.getElementById('legend');
-  items.forEach(function (it) {
+  work.forEach(function (it) {
     var b = document.createElement('button');
     b.type = 'button';
     b.dataset.id = it.id;
@@ -968,12 +1104,12 @@
   var waveW = 0;
   function fmt(ym) { return MON[ym[1] - 1] + ' ' + ym[0]; }
   function short(ym) { return MON[ym[1] - 1] + " '" + String(ym[0]).slice(2); }
-  function showTip(row, x, y) {
+  function showTip(title, sub, x, y) {
     tip.innerHTML = '';
-    var b = document.createElement('b'); b.textContent = row.it.title;
+    var b = document.createElement('b'); b.textContent = title;
     tip.appendChild(b);
     tip.appendChild(document.createElement('br'));
-    tip.appendChild(document.createTextNode(fmt(row.s) + ' – ' + (row.e ? fmt(row.e) : 'present')));
+    tip.appendChild(document.createTextNode(sub));
     tip.style.left = x + 'px';
     tip.style.top = y + 'px';
     tip.classList.add('on');
@@ -990,13 +1126,14 @@
     if (W === waveW) return;
     waveW = W;
     host.innerHTML = '';
-    var L = 92, R = 12, TOP = 30, RH = 34;
+    var L = 92, R = 12, TOP = 30, RH = 34, SEP = 34;
     var now = new Date();
     var t0 = 2024 * 12;
     var tNow = now.getFullYear() * 12 + now.getMonth() + (now.getDate() - 1) / 31;
     var t1 = Math.floor(tNow) + 2;
     var X = function (t) { return L + (t - t0) / (t1 - t0) * (W - L - R); };
-    var H = TOP + (TL.length + 1) * RH + 4;
+    var jokeTop = TOP + (TL.length + 1) * RH + SEP;
+    var H = jokeTop + 2 * RH + 4;
     var s = el('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H }, host);
     el('title', {}, s).textContent = 'Timing diagram of internships and projects since January 2024';
 
@@ -1016,32 +1153,65 @@
     el('text', { class: 'w-lbl', x: 0, y: (lo + hi) / 2 + 4, fill: '#6c727d' }, s).textContent = 'CLK';
     el('path', { class: 'w-clk', d: clk }, s);
 
-    TL.forEach(function (row, i) {
-      var top = TOP + (i + 1) * RH, lo = top + RH - 9, hi = top + 9, hue = row.it.hue;
-      var ts = row.s[0] * 12 + row.s[1] - 1;
-      var te = row.e ? row.e[0] * 12 + row.e[1] : tNow;
-      var xs = X(ts), xe = X(te), xr = X(t1);
-      var g = el('g', { class: 'w-row', tabindex: 0, role: 'link', 'aria-label': row.it.title + ', ' + fmt(row.s) + ' to ' + (row.e ? fmt(row.e) : 'present') + '. Zoom to its block.' }, s);
+    function row(top, o) {
+      var lo = top + RH - 9, hi = top + 9;
+      var g = el('g', { class: 'w-row' + (o.joke ? ' w-joke' : ''), tabindex: 0, role: 'link', 'aria-label': o.title + ', ' + o.sub + '. Zoom to its block.' }, s);
       el('rect', { class: 'w-hit', x: 0, y: top + 2, width: W, height: RH - 4, rx: 4 }, g);
-      el('text', { class: 'w-lbl', x: 0, y: (lo + hi) / 2 + 4, fill: hue }, g).textContent = row.it.label;
-      el('path', { class: 'w-fill', fill: hue, d: 'M' + xs + ' ' + lo + ' L' + (xs + 3) + ' ' + hi + ' L' + (xe - 3) + ' ' + hi + ' L' + xe + ' ' + lo + ' Z' }, g);
-      el('path', { class: 'w-sig', stroke: hue, d: 'M' + L + ' ' + lo + ' H' + xs + ' L' + (xs + 3) + ' ' + hi + ' H' + (xe - 3) + ' L' + xe + ' ' + lo + ' H' + xr }, g);
-      var range = short(row.s) + ' – ' + (row.e ? short(row.e) : 'now');
-      if (xe - xs > range.length * 6.4 + 14) el('text', { class: 'w-in', x: xs + 9, y: (lo + hi) / 2 + 4 }, g).textContent = range;
+      el('text', { class: 'w-lbl', x: 0, y: (lo + hi) / 2 + 4, fill: o.hue }, g).textContent = o.label;
+      if (o.fill) el('path', { class: 'w-fill', fill: o.hue, d: o.fill(lo, hi) }, g);
+      el('path', { class: 'w-sig', stroke: o.hue, d: o.path(lo, hi) }, g);
+      if (o.inner) el('text', { class: 'w-in', x: o.inner[0], y: (lo + hi) / 2 + 4 }, g).textContent = o.inner[1];
       g.addEventListener('mousemove', function (e) {
         var b = box.getBoundingClientRect();
-        showTip(row, e.clientX - b.left, e.clientY - b.top);
+        showTip(o.title, o.sub, e.clientX - b.left, e.clientY - b.top);
       });
       g.addEventListener('mouseleave', hideTip);
       g.addEventListener('focus', function () {
         var b = box.getBoundingClientRect(), sb = s.getBoundingClientRect();
-        showTip(row, sb.left - b.left + (xs + xe) / 2, sb.top - b.top + hi);
+        showTip(o.title, o.sub, sb.left - b.left + o.anchor, sb.top - b.top + hi);
       });
       g.addEventListener('blur', hideTip);
-      g.addEventListener('click', function () { goBlock(row.it.id); });
+      g.addEventListener('click', function () { goBlock(o.target); });
       g.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goBlock(row.it.id); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goBlock(o.target); }
       });
+    }
+
+    TL.forEach(function (r, i) {
+      var ts = r.s[0] * 12 + r.s[1] - 1;
+      var te = r.e ? r.e[0] * 12 + r.e[1] : tNow;
+      var xs = X(ts), xe = X(te), xr = X(t1);
+      var range = short(r.s) + ' – ' + (r.e ? short(r.e) : 'now');
+      row(TOP + (i + 1) * RH, {
+        label: r.it.label, hue: r.it.hue, title: r.it.title, target: r.it.id, anchor: (xs + xe) / 2,
+        sub: fmt(r.s) + ' – ' + (r.e ? fmt(r.e) : 'present'),
+        fill: function (lo, hi) { return 'M' + xs + ' ' + lo + ' L' + (xs + 3) + ' ' + hi + ' L' + (xe - 3) + ' ' + hi + ' L' + xe + ' ' + lo + ' Z'; },
+        path: function (lo, hi) { return 'M' + L + ' ' + lo + ' H' + xs + ' L' + (xs + 3) + ' ' + hi + ' H' + (xe - 3) + ' L' + xe + ' ' + lo + ' H' + xr; },
+        inner: xe - xs > range.length * 6.4 + 14 ? [xs + 9, range] : null
+      });
+    });
+
+    // undocumented signals
+    var sy = jokeTop - SEP + 6;
+    el('line', { class: 'w-sep', x1: 0, x2: W, y1: sy, y2: sy }, s);
+    el('text', { class: 'w-sep-t', x: L, y: sy + 13 }, s).textContent = '// undocumented signals';
+    row(jokeTop, {
+      label: 'F1_SUN', hue: '#ff3b3b', title: 'Race Sundays', sub: 'roughly every other weekend, Mar–Dec. Non-negotiable.', target: 'f1', anchor: xn - 40, joke: true,
+      path: function (lo, hi) {
+        var d = 'M' + L + ' ' + lo;
+        for (var t = t0 + 2; t < tNow; t += .5) {
+          if (t % 12 < 2) continue;                       // off-season: Jan–Feb
+          var a = X(t + .18), b = X(Math.min(t + .3, tNow));
+          d += ' H' + a + ' V' + hi + ' H' + b + ' V' + lo;
+        }
+        return d + ' H' + X(t1);
+      }
+    });
+    row(jokeTop + RH, {
+      label: 'FERRARI', hue: '#ff3b3b', title: 'Ferrari title hopes', sub: 'stuck-at-1 (see fault simulator)', target: 'f1', anchor: xn - 40, joke: true,
+      fill: function (lo, hi) { return 'M' + L + ' ' + lo + ' V' + hi + ' H' + X(t1) + ' V' + lo + ' Z'; },
+      path: function (lo, hi) { return 'M' + L + ' ' + hi + ' H' + X(t1); },
+      inner: [L + 9, 'stuck-at-1']
     });
 
     el('line', { class: 'w-now', x1: xn, x2: xn, y1: TOP - 8, y2: H }, s);
@@ -1070,6 +1240,32 @@
       ta.remove(); done();
     }
   });
+
+  /* ---------- blackboard ---------- */
+  var BOARDS = [
+    ['softmax, but stable:', 'e<sup>x<sub>i</sub> − m</sup> / Σ e<sup>x<sub>j</sub> − m</sup>', 'm = running max ✓'],
+    ['<span class="big">slack ≥ 0</span>', 'setup ✓ &nbsp;hold ✓', 'now I can sleep'],
+    ['<span class="big">LH 44</span>', 'Ferrari WDC? soon™', 'delulu is the solulu'],
+    ['TODO:', '☑ visit CMU', '☐ next city', '☐ finish that sci-fi book'],
+    ['Q: hire me?', 'A: <span class="big circ">yes</span>']
+  ];
+  var board = document.getElementById('board'), ink = document.getElementById('ink');
+  var bi = -1, bTimer = null, bVisible = false;
+  function nextBoard() {
+    bi = (bi + 1) % BOARDS.length;
+    ink.innerHTML = BOARDS[bi].map(function (l, i) {
+      return '<div class="l" style="animation-delay:' + (i * .45) + 's">' + l + '</div>';
+    }).join('');
+  }
+  function schedule() {
+    clearInterval(bTimer);
+    if (bVisible && !reduceMotion) bTimer = setInterval(nextBoard, 6000);
+  }
+  nextBoard();
+  board.addEventListener('click', function () { nextBoard(); schedule(); });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { bVisible = es[0].isIntersecting; schedule(); }, { threshold: .3 }).observe(board);
+  }
 
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
