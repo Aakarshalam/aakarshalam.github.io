@@ -16,7 +16,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='3' fill='%2307080a' stroke='%23e8b057' stroke-width='2'/%3E%3Crect x='7' y='7' width='9' height='8' fill='%236ea8ff'/%3E%3Crect x='18' y='7' width='7' height='12' fill='%23e8b057'/%3E%3Crect x='7' y='17' width='9' height='8' fill='%23ff7a93'/%3E%3Crect x='18' y='21' width='7' height='4' fill='%234fd1c5'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;700&family=Shadows+Into+Light&display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');</script>
 <script type="application/ld+json">
 {
@@ -267,7 +267,7 @@
   .tip.on { opacity: 1; }
 
   /* side quests */
-  .off { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; align-items: center; }
+  .off { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 56px; align-items: center; }
   .board {
     position: relative;
     container-type: inline-size;
@@ -276,44 +276,33 @@
     border-radius: 20px;
   }
   .board img { display: block; width: 100%; height: auto; }
+  /* chalk sits on the lower-left panel, where the finger points */
   .ink {
     position: absolute;
-    left: 4.5%;
-    top: 11%;
-    width: 42%;
-    height: 38%;
+    left: 3.5%;
+    top: 55%;
+    width: 25.5%;
+    height: 26%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: .2em;
-    font: 500 3.6cqw/1.15 'Caveat', 'Segoe Print', cursive;
-    color: rgba(246,245,238,.9);
-    text-shadow: 0 0 1px rgba(255,255,255,.35);
-    transform: rotate(-1.5deg);
+    align-items: flex-start;
+    font: 400 4.4cqw/1.05 'Shadows Into Light', 'Segoe Print', cursive;
+    color: rgba(236,236,226,.8);
+    transform: rotate(-4deg);
     filter: url(#chalk);
     pointer-events: none;
   }
-  .ink .l { white-space: nowrap; animation: write .8s steps(16, end) both; }
-  .ink .big { font-size: 6.6cqw; font-weight: 700; line-height: 1; }
-  .ink .sm { font-size: 3cqw; opacity: .8; }
+  .ink .l { white-space: nowrap; animation: write 1.1s steps(20, end) both; }
+  .ink .l + .l { margin-left: .9em; }
+  .ink .big { font-size: 6.4cqw; letter-spacing: .02em; }
   @keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-  .board-cap {
-    position: absolute;
-    left: 14px;
-    bottom: 12px;
-    padding: 5px 10px;
-    border-radius: 999px;
-    background: rgba(7,8,10,.72);
-    font: 500 11.5px var(--mono);
-    color: var(--ink-2);
-  }
-  .off-copy { font-size: 1.2rem; color: var(--ink-2); }
-  .off-copy b { color: var(--ink); font-weight: 600; }
-  .likes { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 34px; list-style: none; }
-  .likes li { padding: 6px 12px; border: 1px solid var(--line-2); border-radius: 999px; font: 500 12.5px var(--mono); color: var(--ink-2); }
-  .likes li b { color: var(--c); font-weight: 500; }
+  .sq { display: grid; margin-bottom: 40px; border-top: 1px solid var(--line); }
+  .sq div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .sq dt { font: 500 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .sq dd { font-size: 1.12rem; color: var(--ink); }
   .polaroid {
-    width: min(300px, 80%);
+    width: min(280px, 78%);
     margin-left: auto;
     padding: 10px 10px 0;
     background: #f3efe6;
@@ -326,7 +315,90 @@
   .polaroid img { display: block; width: 100%; height: auto; }
   .polaroid figcaption { padding: 10px 4px 14px; font: 600 1.15rem/1.15 'Caveat', cursive; color: #2a2620; text-align: center; }
 
-  /* papers */
+  /* bookshelf */
+  .shelf-h { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; margin: 110px 0 8px; }
+  .shelf-h h3 { margin-top: 8px; font: 800 clamp(1.7rem, 3.6vw, 2.6rem)/1 var(--sans); letter-spacing: -.035em; }
+  .shelf-h span { font: 400 12px var(--mono); color: var(--ink-3); }
+  .shelf-scroll { overflow-x: auto; scrollbar-width: thin; padding-top: 30px; }
+  .shelf {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    width: max-content;
+    min-width: 100%;
+    justify-content: center;
+    padding: 0 22px;
+    list-style: none;
+    border-bottom: 9px solid #2a2118;
+    box-shadow: 0 14px 24px -14px rgba(0,0,0,.9);
+  }
+  .book {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: var(--w);
+    height: var(--h);
+    padding: 14px 0 12px;
+    background: linear-gradient(90deg, rgba(0,0,0,.28), transparent 20%, transparent 78%, rgba(0,0,0,.32)), var(--c);
+    border-radius: 3px 3px 1px 1px;
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    color: var(--t, #f3efe6);
+    transition: transform .2s;
+  }
+  .book:hover { transform: translateY(-10px); }
+  .book b { font: 700 13px/1 var(--sans); letter-spacing: .02em; }
+  .book i { font: 400 10.5px/1 var(--mono); font-style: normal; opacity: .72; }
+  .book.fav { box-shadow: inset 0 0 0 1px rgba(232,176,87,.75); }
+  .book.fav::before {
+    content: '★';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    writing-mode: horizontal-tb;
+    font-size: 13px;
+    color: var(--gold);
+  }
+  .book.lean { margin-left: 14px; transform: rotate(8deg); transform-origin: bottom left; }
+  .book.lean:hover { transform: rotate(8deg) translateY(-10px); }
+  .shelf-note { margin-top: 14px; font: 400 12px var(--mono); color: var(--ink-3); }
+  .shelf-note b { color: var(--gold); font-weight: 500; }
+
+  /* dark forest */
+  .df {
+    position: relative;
+    height: 480px;
+    margin-top: 28px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: radial-gradient(120% 100% at 72% 50%, #0b0e17, #030406 70%);
+  }
+  #forest { position: absolute; inset: 0; display: block; width: 100%; height: 100%; cursor: crosshair; }
+  .df-copy { position: absolute; left: 34px; top: 34px; max-width: 360px; pointer-events: none; }
+  .df-copy h3 { margin: 10px 0 18px; font: 800 clamp(1.6rem, 3.2vw, 2.3rem)/1.05 var(--sans); letter-spacing: -.03em; }
+  .df-copy ol { display: grid; gap: 10px; list-style: none; counter-reset: ax; }
+  .df-copy li { position: relative; padding-left: 28px; font-size: 14.5px; color: var(--ink-2); counter-increment: ax; }
+  .df-copy li::before {
+    content: counter(ax);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 18px;
+    border: 1px solid rgba(232,176,87,.5);
+    border-radius: 4px;
+    font: 500 11px/16px var(--mono);
+    color: var(--gold);
+    text-align: center;
+  }
+  .df-hint { margin-top: 18px; font: 400 12px var(--mono); color: var(--ink-3); }
+  .df-hud { position: absolute; right: 20px; bottom: 16px; font: 500 11.5px var(--mono); color: var(--ink-3); pointer-events: none; }
+  .df-hud b { font-weight: 500; color: #ff7a7a; opacity: 0; transition: opacity .4s; }
+  .df-hud b.on { opacity: 1; }
+
+  /* papers */  /* papers */
   .papers { border-top: 1px solid var(--line); }
   .paper {
     display: grid;
@@ -345,13 +417,10 @@
   .paper:hover h3 { color: var(--gold); }
   .paper:hover .go { color: var(--gold); transform: translate(2px, -2px); }
 
-  /* awards + toolbox */
+  /* toolbox */
   .duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
   .card { padding: 26px; border: 1px solid var(--line); border-radius: 20px; background: var(--bg-2); }
   .card h3 { margin-bottom: 18px; font: 500 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-  .awards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 20px; }
-  .awards b { display: block; font: 800 1.9rem/1 var(--sans); letter-spacing: -.03em; }
-  .awards span { display: block; margin-top: 6px; font: 400 12.5px var(--mono); color: var(--ink-3); }
   .tools { display: grid; gap: 14px; }
   .tools div { display: flex; flex-wrap: wrap; gap: 6px; }
   .tools span { padding: 4px 10px; border: 1px solid var(--line-2); border-radius: 999px; font: 400 12.5px var(--mono); color: var(--ink-2); }
@@ -418,6 +487,8 @@
     .paper .go { justify-self: start; }
     .off { grid-template-columns: 1fr; gap: 36px; }
     .polaroid { margin: 0 auto; }
+    .df { height: 580px; }
+    .df-copy { left: 22px; right: 22px; top: 24px; }
   }
   @media (max-width: 700px) {
     .wrap { padding: 0 16px; }
@@ -461,7 +532,7 @@
     <div class="wrap hero-top">
       <h1 class="name">Aakarsh<br/><span>Alam</span></h1>
       <div>
-        <p class="intro">I build hardware that makes silicon go faster: <b>FPGA accelerators</b> and <b>ML hardware</b>. Previously at <b>Google</b>, <b>Aramas.ai</b> and <b>IISc</b>.</p>
+        <p class="intro">Hardware engineer working on <b>FPGA accelerators</b> and <b>ML hardware</b>. Silicon intern at <b>Google</b>, FPGA intern at <b>Aramas.ai</b>, research at <b>IISc</b>.</p>
         <p class="facts"><span><b>IIT Kharagpur</b> · Microelectronics &amp; VLSI</span><span>Dual Degree <b>'27</b></span><span>CGPA <b>9.14</b></span></p>
       </div>
     </div>
@@ -494,95 +565,96 @@
 
     <!-- Block data. Shown as a plain list without JS; the die script reads it with JS.
          data-l / data-p = col,row,w,h on the landscape (12×8) and portrait (6×12) floorplan grids.
-         data-tex picks the silicon texture, data-pal its colour, data-art an optional doodle. -->
+         data-tex picks the silicon texture, data-pal its colour, data-icon the mark etched on it. -->
     <div class="wrap">
       <div class="work-list" id="work">
-        <article class="w" id="google" data-label="GOOGLE" data-hue="#6ea8ff" data-tex="logic" data-pal="blue"
+        <article class="w" id="google" data-label="GOOGLE" data-hue="#6ea8ff" data-tex="logic" data-pal="blue" data-icon="google"
                  data-l="0,0,4,3" data-p="0,0,3,3" data-dates="2026-05,2026-07">
           <h3>Google</h3>
-          <p class="k">Silicon Engineering Intern · 2026</p>
-          <p class="d">Closed timing on a block all the way to signoff, and built VIPER to triage 100K+ violations in seconds.</p>
+          <p class="k">Silicon Engineering Intern · May–Jul 2026</p>
+          <p class="d">Block-level STA and ECO in PrimeTime, from baseline to signoff. Built VIPER, a Python tool that triages 100K+ failing endpoints in seconds.</p>
         </article>
-        <article class="w" id="aramas" data-label="ARAMAS" data-hue="#b48cff" data-tex="mixed" data-pal="purple"
+        <article class="w" id="aramas" data-label="ARAMAS" data-hue="#b48cff" data-tex="mixed" data-pal="purple" data-icon="aramas"
                  data-l="4,0,3,3" data-p="3,0,3,3" data-dates="2026-01,2026-04">
           <h3>Aramas.ai</h3>
-          <p class="k">FPGA Research Intern · 2026</p>
-          <p class="d">A PCIe FPGA engine that does vector search 7× faster than the CPU.</p>
+          <p class="k">FPGA Research Intern · Jan–Apr 2026</p>
+          <p class="d">Vector-retrieval IP on an Agilex-7 over PCIe, with a custom Linux driver. 7× lower latency than the CPU, 40 µs per query.</p>
         </article>
-        <article class="w" id="fare" data-label="FARE" data-hue="#e8b057" data-tex="accel" data-pal="gold"
+        <article class="w" id="fare" data-label="FARE" data-hue="#e8b057" data-tex="accel" data-pal="gold" data-icon="bolt"
                  data-l="7,0,5,4" data-p="0,3,4,3" data-dates="2025-05,2026-01">
           <h3>FlashAttention on FPGA</h3>
-          <p class="k">IISc · 2025–26 · ISFPGA ’26</p>
-          <p class="d">An attention kernel on FPGA with 2.9× lower latency than the previous best.</p>
-          <a class="lnk" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank" rel="noopener">Read the paper ↗</a>
+          <p class="k">IISc Bangalore · May 2025 – Jan 2026</p>
+          <p class="d">Three-stage dataflow FlashAttention on an Alveo V80 with a numerically stable online softmax. 2.9× lower latency than the baseline.</p>
+          <a class="lnk" href="https://dl.acm.org/doi/abs/10.1145/3748173.3779572" target="_blank" rel="noopener">ISFPGA ’26 paper ↗</a>
         </article>
-        <article class="w" id="mlp" data-label="MLP" data-hue="#4fd1c5" data-tex="accel" data-pal="teal"
+        <article class="w" id="mlp" data-label="MLP" data-hue="#4fd1c5" data-tex="accel" data-pal="teal" data-icon="mlp"
                  data-l="0,3,3,2" data-p="0,6,3,2" data-dates="2025-03,2025-08">
           <h3>MLP accelerator</h3>
-          <p class="k">IIT Kharagpur · 2025</p>
-          <p class="d">A fixed-point MLP accelerator on Zynq, closing timing at 200 MHz.</p>
+          <p class="k">IIT Kharagpur · Mar–Aug 2025</p>
+          <p class="d">Configurable fixed-point MLP on a Zynq-7000: pipelined MAC array and a CORDIC tanh, timing closed at 200 MHz.</p>
         </article>
-        <article class="w" id="qusim" data-label="QUSIM" data-hue="#7be38b" data-tex="qubit" data-pal="blue"
+        <article class="w" id="qusim" data-label="QUSIM" data-hue="#7be38b" data-tex="qubit" data-pal="blue" data-icon="bloch"
                  data-l="3,3,2,2" data-p="4,3,2,3">
           <h3>QuSim-Join</h3>
-          <p class="k">Q-Data ’26 paper</p>
-          <p class="d">A provably optimal quadratic quantum speedup for set-similarity joins.</p>
-          <a class="lnk" href="https://doi.org/10.1145/3811628.3811832" target="_blank" rel="noopener">Read the paper ↗</a>
+          <p class="k">Q-Data ’26 · with P. Kulkarni</p>
+          <p class="d">Set-similarity joins using quantum amplitude estimation, with a provably optimal quadratic speedup.</p>
+          <a class="lnk" href="https://doi.org/10.1145/3811628.3811832" target="_blank" rel="noopener">Paper ↗</a>
         </article>
-        <article class="w" id="adc" data-label="ΔΣ ADC" data-hue="#ff7a93" data-tex="analog" data-pal="magenta"
+        <article class="w" id="adc" data-label="ΔΣ ADC" data-hue="#ff7a93" data-tex="analog" data-pal="magenta" data-icon="adc"
                  data-l="5,3,2,3" data-p="3,6,3,2">
           <h3>Delta-Sigma ADC</h3>
-          <p class="k">Inter IIT Tech Meet 14.0 · Silver</p>
-          <p class="d">A 20-bit ΔΣ ADC with its decimation filter taken all the way to GDSII.</p>
+          <p class="k">Inter IIT Tech Meet 14.0 · Silver · Team captain</p>
+          <p class="d">20-bit ΔΣ ADC: CIFF modulator into a CIC + FIR decimator, taken to GDSII. 19.44 ENOB at 2 KSPS.</p>
         </article>
-        <article class="w" id="fault" data-label="FAULT" data-hue="#ffb27a" data-tex="logic" data-pal="olive"
+        <article class="w" id="fault" data-label="FAULT" data-hue="#ffb27a" data-tex="logic" data-pal="olive" data-icon="bug"
                  data-l="7,4,2,2" data-p="0,8,2,2" data-dates="2025-09,2025-11">
           <h3>Fault simulator</h3>
-          <p class="k">IIT Kharagpur · 2025</p>
-          <p class="d">A bit-parallel fault simulator reaching 100% stuck-at coverage.</p>
+          <p class="k">IIT Kharagpur · Sep–Nov 2025</p>
+          <p class="d">Event-driven, bit-parallel stuck-at fault simulator with fault collapsing. 100% coverage on ISCAS-85 c17.</p>
         </article>
-        <article class="w" id="rpca" data-label="RPCA" data-hue="#8fd3ff" data-tex="dsp" data-pal="teal"
+        <article class="w" id="rpca" data-label="RPCA" data-hue="#8fd3ff" data-tex="dsp" data-pal="teal" data-icon="ls"
                  data-l="9,4,3,2" data-p="2,8,2,2" data-dates="2025-08,2026-04">
           <h3>Robust-PCA recovery</h3>
           <p class="k">B.Tech project · 2025–26</p>
-          <p class="d">Robust PCA that untangles signals from non-linear distortions.</p>
+          <p class="d">Hankel-lifted Robust PCA that recovers multitone signals from sparse non-linear folding distortions.</p>
         </article>
-        <article class="w" id="kart" data-label="KART" data-hue="#f2d06b" data-tex="power" data-pal="bronze"
+        <article class="w" id="kart" data-label="KART" data-hue="#f2d06b" data-tex="power" data-pal="bronze" data-icon="flag"
                  data-l="0,5,3,3" data-p="0,10,2,2" data-dates="2024-01,2025-10">
           <h3>Formula Student EV</h3>
-          <p class="k">TeamKART Electric · 2024–25</p>
-          <p class="d">Led the 40+ person electrical team of a Formula Student electric race car.</p>
+          <p class="k">TeamKART Electric · Head of Electrical</p>
+          <p class="d">Led a 40+ member team on the electrical side of an FSAE car: 88 V / 200 A powertrain, CC-CV charger, safety circuits.</p>
         </article>
-        <article class="w" id="midwest" data-label="MIDWEST" data-hue="#8ef0b0" data-tex="mixed" data-pal="green"
+        <article class="w" id="midwest" data-label="MIDWEST" data-hue="#8ef0b0" data-tex="mixed" data-pal="green" data-icon="battery"
                  data-l="3,5,2,2" data-p="4,9,2,1" data-dates="2024-06,2024-07">
           <h3>Midwest Energy</h3>
-          <p class="k">Embedded Intern · 2024</p>
-          <p class="d">An STM32 battery management system with Kalman-filter state of charge.</p>
+          <p class="k">Embedded Intern · Jun–Jul 2024</p>
+          <p class="d">STM32 battery management for a 160 V pack: CAN, a Kalman-filter SoC estimator, a TouchGFX display.</p>
         </article>
-        <article class="w" id="nokia" data-label="NOKIA" data-hue="#5fb7ff" data-tex="fpga" data-pal="blue"
+        <article class="w" id="nokia" data-label="NOKIA" data-hue="#5fb7ff" data-tex="fpga" data-pal="blue" data-icon="nokia"
                  data-l="3,7,2,1" data-p="4,8,2,1">
           <h3>Nokia FPGA Hackathon</h3>
           <p class="k">Kraków · 2025</p>
-          <p class="d">A top-15 finish out of 70 finalist teams.</p>
+          <p class="d">Top 15 of 70 finalist teams. Five designs on a Kria KV260 through a Jenkins-driven Vivado flow.</p>
         </article>
-        <!-- off-the-clock blocks: hidden doodles in the silicon, skipped by the legend and the timeline -->
+        <!-- off-the-clock blocks: small doodles in the silicon, skipped by the legend and the timeline -->
         <article class="w" id="f1" data-fun="1" data-label="F1" data-hue="#ff3b3b" data-tex="logic" data-pal="red" data-art="car"
                  data-l="7,6,3,2" data-p="2,10,2,2">
           <h3>F1</h3>
-          <p class="k">Sundays are booked</p>
-          <p class="d">Hardcore Lewis Hamilton fan, fully delulu about Ferrari. This is our year. (It’s always our year.)</p>
+          <p class="k">Hamilton · Ferrari</p>
+          <p class="d">Lewis Hamilton fan. Ferrari, every season.</p>
         </article>
         <article class="w" id="travel" data-fun="1" data-label="TRAVEL" data-hue="#ff9de2" data-tex="logic" data-pal="magenta" data-art="plane"
                  data-l="10,6,2,1" data-p="4,10,2,1">
           <h3>Travel</h3>
-          <p class="k">Bags half-packed</p>
-          <p class="d">Always planning the next trip. The last one was a visit to Carnegie Mellon.</p>
+          <p class="k">Latest stop: Pittsburgh</p>
+          <p class="d">Most recent trip: Pittsburgh, visiting Carnegie Mellon.</p>
         </article>
         <article class="w" id="books" data-fun="1" data-label="BOOKS" data-hue="#d4ff6b" data-tex="logic" data-pal="olive" data-art="book"
                  data-l="10,7,2,1" data-p="4,11,2,1">
           <h3>Books</h3>
-          <p class="k">Currently reading</p>
-          <p class="d">Sci-fi and books that have you staring at the ceiling at 2 a.m.</p>
+          <p class="k">Mostly sci-fi</p>
+          <p class="d">Favourite: The Three-Body Problem.</p>
+          <a class="lnk" href="#shelf">The bookshelf ↓</a>
         </article>
       </div>
     </div>
@@ -637,39 +709,62 @@
       </div>
       <div class="off">
         <figure class="board">
-          <img src="img/board.jpg" width="1200" height="1200" loading="lazy" alt="Aakarsh at a blackboard, pointing at it and grinning, on a visit to Carnegie Mellon"/>
+          <img src="img/board.jpg" width="1200" height="1200" loading="lazy" alt="Aakarsh at a blackboard at Carnegie Mellon, pointing at the board"/>
           <div class="ink" id="ink" aria-live="polite"></div>
-          <figcaption class="board-cap">visiting CMU</figcaption>
         </figure>
         <div>
-          <p class="off-copy">When I’m not at a desk, I’m watching <b>F1</b> (lifelong Lewis Hamilton fan, currently very delulu about Ferrari), planning the next <b>trip</b>, or halfway through a <b>sci-fi</b> book I can’t stop thinking about.</p>
-          <ul class="likes">
-            <li style="--c:#ff3b3b"><b>●</b> LH44</li>
-            <li style="--c:#ff9de2"><b>●</b> Travel</li>
-            <li style="--c:#d4ff6b"><b>●</b> Sci-fi</li>
-            <li style="--c:#e8b057"><b>●</b> Thought-provoking books</li>
-          </ul>
+          <dl class="sq">
+            <div style="--c:#ff5a5a"><dt>F1</dt><dd>Lewis Hamilton fan. Ferrari, every season.</dd></div>
+            <div style="--c:#ff9de2"><dt>Travel</dt><dd>Latest stop: Pittsburgh, visiting CMU.</dd></div>
+            <div style="--c:#d4ff6b"><dt>Reading</dt><dd>Mostly sci-fi. Favourite: <em>The Three-Body Problem</em>.</dd></div>
+          </dl>
           <figure class="polaroid">
-            <img src="img/gallery.jpg" width="800" height="1091" loading="lazy" alt="Aakarsh smiling in front of a large, chaotic abstract painting in a museum"/>
-            <figcaption>pretending to understand modern art<br/>(CMU trip)</figcaption>
+            <img src="img/gallery.jpg" width="800" height="1091" loading="lazy" alt="Aakarsh in front of a large abstract painting in a museum"/>
+            <figcaption>Pittsburgh</figcaption>
           </figure>
         </div>
+      </div>
+
+      <div class="shelf-h" id="shelf">
+        <div><p class="kicker">Reading</p><h3>The bookshelf</h3></div>
+        <span>12 books · ★ favourites</span>
+      </div>
+      <div class="shelf-scroll">
+        <ul class="shelf" aria-label="Books I have read">
+          <li class="book" style="--c:#a8352b;--w:40px;--h:212px" title="George Orwell"><b>1984</b><i>Orwell</i></li>
+          <li class="book fav" style="--c:#14304e;--t:#f1d48a;--w:50px;--h:282px" title="Cixin Liu"><b>The Three-Body Problem</b><i>Cixin Liu</i></li>
+          <li class="book fav" style="--c:#0c1626;--t:#f1d48a;--w:52px;--h:250px" title="Cixin Liu"><b>The Dark Forest</b><i>Cixin Liu</i></li>
+          <li class="book fav" style="--c:#2e2245;--t:#f1d48a;--w:54px;--h:254px" title="Cixin Liu"><b>Death’s End</b><i>Cixin Liu</i></li>
+          <li class="book" style="--c:#1d1f24;--w:42px;--h:224px" title="Blake Crouch"><b>Dark Matter</b><i>Crouch</i></li>
+          <li class="book" style="--c:#2f5872;--w:42px;--h:226px" title="Blake Crouch"><b>Recursion</b><i>Crouch</i></li>
+          <li class="book" style="--c:#8a541c;--w:48px;--h:238px" title="James S. A. Corey"><b>Leviathan Wakes</b><i>Corey</i></li>
+          <li class="book" style="--c:#2c5636;--w:46px;--h:232px" title="Adrian Tchaikovsky"><b>Children of Time</b><i>Tchaikovsky</i></li>
+          <li class="book" style="--c:#5b1d1d;--w:44px;--h:222px" title="Dan Brown"><b>Angels &amp; Demons</b><i>Dan Brown</i></li>
+          <li class="book" style="--c:#9b7428;--t:#1a1408;--w:44px;--h:226px" title="Dan Brown"><b>The Da Vinci Code</b><i>Dan Brown</i></li>
+          <li class="book" style="--c:#28476a;--w:42px;--h:218px" title="Dan Brown"><b>Deception Point</b><i>Dan Brown</i></li>
+          <li class="book lean" style="--c:#41484f;--w:42px;--h:224px" title="Dan Brown"><b>Origin</b><i>Dan Brown</i></li>
+        </ul>
+      </div>
+
+      <div class="df">
+        <canvas id="forest" aria-label="Animation: a dark starfield around a three-star system. Stars that reveal their position get struck."></canvas>
+        <div class="df-copy">
+          <p class="kicker">Favourite · The Three-Body Problem</p>
+          <h3>The universe is a dark forest.</h3>
+          <ol>
+            <li>Survival is the primary need of a civilization.</li>
+            <li>Civilizations keep growing, but the matter in the universe stays constant.</li>
+          </ol>
+          <p class="df-hint">Click a star to give away its position.</p>
+        </div>
+        <div class="df-hud" aria-live="polite">revealed <span id="dfN">0</span> · <b id="dfMsg">do not answer.</b></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== awards + toolbox ===== -->
-  <section class="sec" aria-label="Awards and toolbox">
-    <div class="wrap duo">
-      <div class="card">
-        <h3>Awards</h3>
-        <div class="awards">
-          <div><b>AIR 1516</b><span>JEE Advanced 2022</span></div>
-          <div><b>AIR 600</b><span>KVPY Fellow 2021</span></div>
-          <div><b>Top 2,000</b><span>NTSE Scholar 2020</span></div>
-          <div><b>2×</b><span>VVM State Camp winner</span></div>
-        </div>
-      </div>
+  <!-- ===== toolbox ===== -->
+  <section class="sec" aria-label="Toolbox">
+    <div class="wrap">
       <div class="card">
         <h3>Toolbox</h3>
         <div class="tools">
@@ -708,7 +803,13 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <filter id="chalk"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/></filter>
+  <filter id="chalk" x="-5%" y="-10%" width="110%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" result="d"/>
+    <feTurbulence type="fractalNoise" baseFrequency="2.4" numOctaves="1" seed="9" result="g"/>
+    <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.6 0 0 0 1.75" result="mask"/>
+    <feComposite in="d" in2="mask" operator="in"/>
+  </filter>
 </svg>
 
 <script>
@@ -718,6 +819,7 @@
   var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var DAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var DAYFULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   function el(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
     for (var k in attrs) if (attrs[k] != null) n.setAttribute(k, attrs[k]);
@@ -735,7 +837,7 @@
   /* ---------- block data (from the #work articles) ---------- */
   var items = Array.prototype.map.call(document.querySelectorAll('#work article'), function (a) {
     return {
-      id: a.id, el: a, label: a.dataset.label, hue: a.dataset.hue, tex: a.dataset.tex, pal: a.dataset.pal, art: a.dataset.art,
+      id: a.id, el: a, label: a.dataset.label, hue: a.dataset.hue, tex: a.dataset.tex, pal: a.dataset.pal, art: a.dataset.art, icon: a.dataset.icon,
       L: nums(a.dataset.l), P: nums(a.dataset.p), title: a.querySelector('h3').textContent,
       meta: a.querySelector('.k').textContent, dates: a.dataset.dates, fun: a.dataset.fun === '1'
     };
@@ -785,7 +887,7 @@
   Scene.prototype.rects = function (style, bb) { var op = { t: 'R', s: style, d: [], bb: bb }; this.ops.push(op); return op.d; };
   Scene.prototype.lines = function (style, lw, bb) { var op = { t: 'L', s: style, lw: lw, d: [], bb: bb }; this.ops.push(op); return op.d; };
   Scene.prototype.path = function (style, lw, fill, bb) { var p = new Path2D(); this.ops.push({ t: 'P', s: style, lw: lw, f: fill, p: p, bb: bb }); return p; };
-  Scene.prototype.text = function (style, font, x, y, str, bb) { this.ops.push({ t: 'T', s: style, font: font, x: x, y: y, str: str, bb: bb }); };
+  Scene.prototype.text = function (style, font, x, y, str, bb, align) { this.ops.push({ t: 'T', s: style, font: font, x: x, y: y, str: str, bb: bb, align: align }); };
   Scene.prototype.grad = function (op) { op.t = 'G'; this.ops.push(op); };
 
   function drawScene(ctx, scene, v, cw, ch) {
@@ -816,6 +918,7 @@
       } else if (op.t === 'T') {
         ctx.fillStyle = op.s;
         ctx.font = op.font;
+        ctx.textAlign = op.align || 'start';
         ctx.fillText(op.str, op.x, op.y);
       } else if (op.t === 'G') {
         var g = op.radial
@@ -1091,6 +1194,95 @@
     }
   };
 
+  /* ---- logo plates: a mark etched in top metal at the centre of each block (24-unit icon box) ---- */
+  function plate(S, r, p, w, h) {
+    var k = Math.max(.7, Math.min(2.4, r.w * .28 / w, r.h * .3 / h));
+    var pw = w * k, ph = h * k, pad = 3 * k, bb = bbOf(r);
+    var x = r.x + (r.w - pw) / 2, y = r.y + (r.h - ph) / 2;
+    S.rects(rgba(p[0], .94), bb).push(x - pad, y - pad, pw + 2 * pad, ph + 2 * pad);
+    S.path(rgba(p[2], .5), .6, false, bb).rect(x - pad, y - pad, pw + 2 * pad, ph + 2 * pad);
+    return { x: x, y: y, k: k, s: k, bb: bb };
+  }
+  function at(f, u, v) { return [f.x + u * f.k, f.y + v * f.k]; }
+  var ICON = {
+    google: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24), c = at(f, 12, 12), R0 = 8 * f.k, lw = 3.6 * f.k, d = Math.PI / 180;
+      [['#EA4335', 207, 322], ['#FBBC05', 150, 207], ['#34A853', 40, 150], ['#4285F4', -6, 40]].forEach(function (a) {
+        S.path(a[0], lw, false, f.bb).arc(c[0], c[1], R0, a[1] * d, a[2] * d);
+      });
+      S.rects('#4285F4', f.bb).push(c[0], c[1] - lw / 2, R0 + lw / 2, lw);
+    },
+    aramas: function (S, r, p) {
+      var f = plate(S, r, p, 40, 12);
+      S.text(rgba(p[2], .95), '700 ' + (8.6 * f.k) + 'px monospace', f.x + 20 * f.k, f.y + 9 * f.k, 'aramas', f.bb, 'center');
+    },
+    nokia: function (S, r, p) {
+      var f = plate(S, r, p, 40, 12);
+      S.text(rgba(p[2], .95), '800 ' + (10 * f.k) + 'px sans-serif', f.x + 20 * f.k, f.y + 10 * f.k, 'NOKIA', f.bb, 'center');
+    },
+    ls: function (S, r, p) {
+      var f = plate(S, r, p, 30, 14);
+      S.text(rgba(p[2], .95), '700 ' + (11 * f.k) + 'px monospace', f.x + 15 * f.k, f.y + 11 * f.k, 'L+S', f.bb, 'center');
+    },
+    bolt: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24);
+      poly(S.path(rgba(p[2], .95), 0, true, f.bb), f, [[14, 1], [4, 14], [11, 14], [9, 23], [20, 9], [13, 9]]);
+    },
+    mlp: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24);
+      var layers = [[[3, 6], [3, 12], [3, 18]], [[12, 4], [12, 9.3], [12, 14.6], [12, 20]], [[21, 9], [21, 15]]];
+      var ln = S.lines(rgba(p[2], .5), .7 * f.k, f.bb), nd = S.path(rgba(p[2], .95), 0, true, f.bb);
+      [0, 1].forEach(function (i) {
+        layers[i].forEach(function (a) {
+          layers[i + 1].forEach(function (b) { var A = at(f, a[0], a[1]), B = at(f, b[0], b[1]); ln.push(A[0], A[1], B[0], B[1]); });
+        });
+      });
+      layers.forEach(function (L) {
+        L.forEach(function (n) { var c = at(f, n[0], n[1]); nd.moveTo(c[0] + 2 * f.k, c[1]); nd.arc(c[0], c[1], 2 * f.k, 0, Math.PI * 2); });
+      });
+    },
+    bloch: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24), c = at(f, 12, 12), R0 = 9.5 * f.k, col = rgba(p[2], .95);
+      S.path(col, 1.1 * f.k, false, f.bb).arc(c[0], c[1], R0, 0, Math.PI * 2);
+      S.path(rgba(p[2], .5), .7 * f.k, false, f.bb).ellipse(c[0], c[1], R0, R0 * .32, 0, 0, Math.PI * 2);
+      S.lines(rgba(p[2], .45), .6 * f.k, f.bb).push(c[0], c[1] - R0, c[0], c[1] + R0);
+      S.lines(col, 1.4 * f.k, f.bb).push(c[0], c[1], c[0] + 5.5 * f.k, c[1] - 6.5 * f.k);
+      S.path(col, 0, true, f.bb).arc(c[0] + 5.5 * f.k, c[1] - 6.5 * f.k, 1.8 * f.k, 0, Math.PI * 2);
+    },
+    adc: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24), sn = S.path(rgba(p[2], .45), f.k, false, f.bb), st = S.path(rgba(p[2], .95), 1.4 * f.k, false, f.bb), i, q;
+      function wave(u) { return 12 - 7 * Math.sin((u - 2) / 20 * Math.PI * 2); }
+      for (i = 0; i <= 40; i++) { q = at(f, 2 + i * .5, wave(2 + i * .5)); if (i) sn.lineTo(q[0], q[1]); else sn.moveTo(q[0], q[1]); }
+      for (i = 0; i < 10; i++) {
+        var u0 = 2 + i * 2, lvl = Math.round(wave(u0 + 1) / 3) * 3, a = at(f, u0, lvl), b = at(f, u0 + 2, lvl);
+        if (i) st.lineTo(a[0], a[1]); else st.moveTo(a[0], a[1]);
+        st.lineTo(b[0], b[1]);
+      }
+    },
+    bug: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24), col = rgba(p[2], .95), b = S.path(col, 0, true, f.bb), o;
+      o = at(f, 12, 14); b.ellipse(o[0], o[1], 5 * f.k, 6.8 * f.k, 0, 0, Math.PI * 2);
+      o = at(f, 12, 6); b.moveTo(o[0] + 3 * f.k, o[1]); b.arc(o[0], o[1], 3 * f.k, 0, Math.PI * 2);
+      var l = S.lines(col, 1.1 * f.k, f.bb);
+      [[7, 10, 3, 8], [7, 14, 2.5, 14], [7.5, 18, 3.5, 21], [17, 10, 21, 8], [17, 14, 21.5, 14], [16.5, 18, 20.5, 21], [10.5, 3.6, 8.5, 1], [13.5, 3.6, 15.5, 1]]
+        .forEach(function (sg) { var A = at(f, sg[0], sg[1]), B = at(f, sg[2], sg[3]); l.push(A[0], A[1], B[0], B[1]); });
+      var m0 = at(f, 12, 8.5), m1 = at(f, 12, 20.5);
+      S.lines(rgba(p[0], 1), .9 * f.k, f.bb).push(m0[0], m0[1], m1[0], m1[1]);
+    },
+    flag: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24), k = f.k, col = rgba(p[2], .95), sq = S.rects(col, f.bb);
+      S.rects(col, f.bb).push(f.x + 3 * k, f.y + 2 * k, 1.4 * k, 21 * k);
+      for (var i = 0; i < 5; i++) for (var j = 0; j < 3; j++) if ((i + j) % 2 === 0) sq.push(f.x + (4.4 + i * 3.4) * k, f.y + (2 + j * 3.4) * k, 3.4 * k, 3.4 * k);
+      S.path(rgba(p[2], .6), .6 * k, false, f.bb).rect(f.x + 4.4 * k, f.y + 2 * k, 17 * k, 10.2 * k);
+    },
+    battery: function (S, r, p) {
+      var f = plate(S, r, p, 24, 24), k = f.k, col = rgba(p[2], .95);
+      S.path(col, 1.4 * k, false, f.bb).rect(f.x + 2 * k, f.y + 6.5 * k, 18 * k, 11 * k);
+      S.rects(col, f.bb).push(f.x + 20.5 * k, f.y + 9.5 * k, 2 * k, 5 * k);
+      poly(S.path(col, 0, true, f.bb), f, [[12.5, 7.8], [7.5, 12.6], [10.6, 12.6], [9.5, 16.2], [14.5, 11.4], [11.4, 11.4]]);
+    }
+  };
+
   function cellRect(lay, c) {
     var cw = lay.cw / lay.cols, ch = lay.ch / lay.rows, g = lay.g;
     return { x: lay.cx + c[0] * cw + g / 2, y: lay.cy + c[1] * ch + g / 2, w: c[2] * cw - g, h: c[3] * ch - g };
@@ -1133,6 +1325,7 @@
       var p = PAL[rg.pal], Rr = rng(hash(rg.id + lay.key));
       TEX[rg.tex](S, rg.r, p, Rr);
       if (rg.art) ART[rg.art](S, rg.r, p);
+      if (rg.icon) ICON[rg.icon](S, rg.r, p);
     });
 
     // thick top-metal power grid over everything
@@ -1172,7 +1365,7 @@
     lay = LAYOUTS[mode];
     if (rebuildScene) {
       regions = items.map(function (it) {
-        return { id: it.id, label: it.label, meta: it.meta, hue: it.hue, tex: it.tex, pal: it.pal, art: it.art, fun: it.fun, r: cellRect(lay, mode === 'L' ? it.L : it.P) };
+        return { id: it.id, label: it.label, meta: it.meta, hue: it.hue, tex: it.tex, pal: it.pal, art: it.art, icon: it.icon, fun: it.fun, r: cellRect(lay, mode === 'L' ? it.L : it.P) };
       });
       FILLERS.forEach(function (f) {
         var c = mode === 'L' ? f.L : f.P;
@@ -1610,24 +1803,30 @@
   if ('ResizeObserver' in window) new ResizeObserver(renderWave).observe(host);
   else window.addEventListener('resize', renderWave);
 
-  /* ---------- blackboard: countdown to the next race ---------- */
+  /* ---------- blackboard: the next race, in chalk ---------- */
   (function () {
     var ink = document.getElementById('ink');
+    var CITY = {
+      'Australian': 'Melbourne', 'Chinese': 'Shanghai', 'Japanese': 'Suzuka', 'Miami': 'Miami', 'Canadian': 'Montréal',
+      'Monaco': 'Monaco', 'Barcelona-Catalunya': 'Barcelona', 'Austrian': 'Spielberg', 'British': 'Silverstone', 'Belgian': 'Spa',
+      'Hungarian': 'Budapest', 'Dutch': 'Zandvoort', 'Italian': 'Monza', 'Spanish': 'Madrid', 'Azerbaijan': 'Baku',
+      'Bahrain': 'Sepang', 'Singapore': 'Singapore', 'United States': 'Austin', 'Mexico City': 'Mexico City',
+      'São Paulo': 'Interlagos', 'Las Vegas': 'Las Vegas', 'Qatar': 'Lusail', 'Abu Dhabi': 'Abu Dhabi'
+    };
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var next = null;
     for (var i = 0; i < RACES.length; i++) if (RACES[i].d >= today) { next = RACES[i]; break; }
     var lines;
-    if (!next) lines = ['season’s over :(', '<span class="big">see you</span>', 'in March'];
+    if (!next) lines = ['season’s over', 'back in March'];
     else {
-      var days = Math.round((next.d - today) / 864e5);
-      var name = next.name.replace(/ GP.*$/, '');
-      var when = days === 0 ? 'it’s RACE DAY!!' : days === 1 ? 'tomorrow!!' : days === 2 ? 'race weekend!' : 'in ' + days + ' days';
-      lines = ['next race:', '<span class="big">' + name + '</span>', when, '<span class="sm">' + DAY[next.d.getDay()] + ' ' + next.d.getDate() + ' ' + MON[next.d.getMonth()] + ' · forza ferrari</span>'];
+      var days = Math.round((next.d - today) / 864e5), key = next.name.replace(/ GP.*$/, '');
+      var when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : days <= 6 ? 'this ' + DAYFULL[next.d.getDay()] : 'in ' + days + ' days';
+      lines = ['<span class="big">' + (CITY[key] || key) + '</span>', when];
     }
     ink.innerHTML = lines.map(function (l, i) {
-      return '<div class="l" style="animation-delay:' + (i * .5) + 's">' + l + '</div>';
+      return '<div class="l" style="animation-delay:' + (i * .7) + 's">' + l + '</div>';
     }).join('');
-    // replay the chalk writing once the board scrolls into view
+    // write it once the board scrolls into view
     if ('IntersectionObserver' in window && !reduceMotion) {
       ink.style.visibility = 'hidden';
       var io = new IntersectionObserver(function (es) {
@@ -1637,6 +1836,193 @@
         io.disconnect();
       }, { threshold: .4 });
       io.observe(ink.parentNode);
+    }
+  })();
+
+  /* ---------- the dark forest: Trisolaris in a figure-eight, stars that reveal themselves get struck ---------- */
+  (function () {
+    var cv = document.getElementById('forest');
+    var c = cv.getContext('2d'), nEl = document.getElementById('dfN'), msg = document.getElementById('dfMsg');
+    var R = rng(1984), D = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
+    var stars = [], waves = [], shots = [], flashes = [], revealed = 0, raf = null, visible = false, nextAuto = 0, msgUntil = 0;
+    function star(x, y) {
+      return { x: x == null ? R() : x, y: y == null ? R() : y, r: .35 + R() * R() * 1.5, ph: R() * 6.28, sp: .6 + R() * 1.6, a: 1, dead: false, hunted: false };
+    }
+    for (var i = 0; i < 240; i++) stars.push(star());
+
+    // figure-eight three-body choreography (Chenciner–Montgomery), G = m = 1
+    var B = [
+      { x: .97000436, y: -.24308753, vx: .46620368, vy: .43236573, col: '255,196,120', tr: [] },
+      { x: -.97000436, y: .24308753, vx: .46620368, vy: .43236573, col: '255,126,96', tr: [] },
+      { x: 0, y: 0, vx: -.93240737, vy: -.86473146, col: '255,236,200', tr: [] }
+    ];
+    function accel() {
+      B.forEach(function (b) { b.ax = 0; b.ay = 0; });
+      for (var i = 0; i < 3; i++) for (var j = i + 1; j < 3; j++) {
+        var dx = B[j].x - B[i].x, dy = B[j].y - B[i].y, d2 = dx * dx + dy * dy + 1e-4, inv = 1 / (d2 * Math.sqrt(d2));
+        B[i].ax += dx * inv; B[i].ay += dy * inv; B[j].ax -= dx * inv; B[j].ay -= dy * inv;
+      }
+    }
+    function step(dt) {
+      accel();
+      B.forEach(function (b) { b.vx += .5 * dt * b.ax; b.vy += .5 * dt * b.ay; b.x += dt * b.vx; b.y += dt * b.vy; });
+      accel();
+      B.forEach(function (b) { b.vx += .5 * dt * b.ax; b.vy += .5 * dt * b.ay; });
+    }
+    function centre() { return W < 640 ? [W * .5, H * .7, Math.min(W, H) * .2] : [W * .72, H * .52, Math.min(W, H) * .19]; }
+
+    function resize() {
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = Math.round(W * D); cv.height = Math.round(H * D);
+      if (!raf) draw(performance.now());
+    }
+    function edgePoint() {
+      var side = (R() * 4) | 0, u = R();
+      return side === 0 ? [u * W, -30] : side === 1 ? [W + 30, u * H] : side === 2 ? [u * W, H + 30] : [-30, u * H];
+    }
+    function broadcast(s, t) {
+      if (s.hunted || s.dead) return;
+      s.hunted = true;
+      waves.push({ s: s, t0: t });
+      var e = edgePoint();
+      shots.push({ s: s, t0: t + 1.7 + R() * .8, x: e[0], y: e[1] });
+    }
+    function autoBroadcast(t) {
+      var cc = centre(), pick = stars.filter(function (s) {
+        var dx = s.x * W - cc[0], dy = s.y * H - cc[1];
+        return !s.dead && !s.hunted && s.r > .7 && dx * dx + dy * dy > cc[2] * cc[2] * 4;
+      });
+      if (pick.length) broadcast(pick[(R() * pick.length) | 0], t);
+    }
+    function respawn() {
+      for (var i = 0; i < stars.length; i++) if (stars[i].dead) { var n = star(); n.a = 0; stars[i] = n; return; }
+    }
+
+    function draw(now) {
+      var t = now / 1000, cc = centre();
+      c.setTransform(D, 0, 0, D, 0, 0);
+      c.clearRect(0, 0, W, H);
+      stars.forEach(function (s) {
+        if (s.dead) return;
+        if (s.a < 1) s.a = Math.min(1, s.a + .008);
+        var tw = reduceMotion ? .8 : .55 + .45 * Math.sin(t * s.sp + s.ph);
+        c.globalAlpha = s.a * tw;
+        c.fillStyle = s.hunted ? '#ffe2a8' : '#cdd6ff';
+        c.beginPath(); c.arc(s.x * W, s.y * H, s.r + (s.hunted ? .9 : 0), 0, 6.283); c.fill();
+      });
+      c.globalAlpha = 1;
+      // a location broadcast: shells expanding at "light speed"
+      waves = waves.filter(function (w) {
+        var age = t - w.t0;
+        if (age > 2.6) return false;
+        for (var k = 0; k < 3; k++) {
+          var a2 = age - k * .25;
+          if (a2 <= 0) continue;
+          c.strokeStyle = 'rgba(255,214,150,' + Math.max(0, .5 * (1 - a2 / 2.3)) + ')';
+          c.lineWidth = 1;
+          c.beginPath(); c.arc(w.s.x * W, w.s.y * H, a2 * 70, 0, 6.283); c.stroke();
+        }
+        return true;
+      });
+      // the strike, arriving out of the dark
+      shots = shots.filter(function (sh) {
+        var age = t - sh.t0;
+        if (age < 0) return true;
+        var k = Math.min(1, age / .3), tx = sh.s.x * W, ty = sh.s.y * H, tl = Math.max(0, k - .35);
+        var ax = sh.x + (tx - sh.x) * tl, ay = sh.y + (ty - sh.y) * tl, hx = sh.x + (tx - sh.x) * k, hy = sh.y + (ty - sh.y) * k;
+        var g = c.createLinearGradient(ax, ay, hx, hy);
+        g.addColorStop(0, 'rgba(150,215,255,0)');
+        g.addColorStop(1, 'rgba(225,245,255,.95)');
+        c.strokeStyle = g; c.lineWidth = 1.4;
+        c.beginPath(); c.moveTo(ax, ay); c.lineTo(hx, hy); c.stroke();
+        if (k < 1) return true;
+        sh.s.dead = true;
+        flashes.push({ x: tx, y: ty, t0: t });
+        revealed++;
+        nEl.textContent = revealed;
+        msg.classList.add('on');
+        msgUntil = t + 2.6;
+        setTimeout(respawn, 6000);
+        return false;
+      });
+      flashes = flashes.filter(function (f) {
+        var age = t - f.t0;
+        if (age > 1) return false;
+        var rr = 6 + age * 46, g = c.createRadialGradient(f.x, f.y, 0, f.x, f.y, rr);
+        g.addColorStop(0, 'rgba(255,250,235,' + (1 - age) + ')');
+        g.addColorStop(1, 'rgba(255,200,140,0)');
+        c.fillStyle = g;
+        c.beginPath(); c.arc(f.x, f.y, rr, 0, 6.283); c.fill();
+        return true;
+      });
+      // Trisolaris
+      if (!reduceMotion) for (var n = 0; n < 4; n++) step(.0035);
+      B.forEach(function (b) {
+        if (!reduceMotion || b.tr.length < 2) { b.tr.push(b.x, b.y); if (b.tr.length > 300) b.tr.splice(0, 2); }
+        var tr = b.tr;
+        for (var seg = 0; seg < 4; seg++) {
+          var from = Math.floor(tr.length * seg / 8) * 2, to = Math.floor(tr.length * (seg + 1) / 8) * 2 + 2;
+          c.strokeStyle = 'rgba(' + b.col + ',' + (.06 + seg * .09) + ')';
+          c.lineWidth = 1.2;
+          c.beginPath();
+          for (var j = from; j < Math.min(to, tr.length); j += 2) {
+            var px = cc[0] + tr[j] * cc[2], py = cc[1] + tr[j + 1] * cc[2];
+            if (j === from) c.moveTo(px, py); else c.lineTo(px, py);
+          }
+          c.stroke();
+        }
+        var bx = cc[0] + b.x * cc[2], by = cc[1] + b.y * cc[2], gl = c.createRadialGradient(bx, by, 0, bx, by, 16);
+        gl.addColorStop(0, 'rgba(' + b.col + ',.9)');
+        gl.addColorStop(1, 'rgba(' + b.col + ',0)');
+        c.fillStyle = gl;
+        c.beginPath(); c.arc(bx, by, 16, 0, 6.283); c.fill();
+        c.fillStyle = 'rgba(255,248,235,.95)';
+        c.beginPath(); c.arc(bx, by, 2.4, 0, 6.283); c.fill();
+      });
+      c.fillStyle = 'rgba(169,175,185,.55)';
+      c.font = '500 10px "JetBrains Mono", monospace';
+      c.textAlign = 'center';
+      c.fillText('TRISOLARIS', cc[0], cc[1] + cc[2] * 1.05 + 18);
+      c.textAlign = 'start';
+      if (!reduceMotion) {
+        if (!nextAuto) nextAuto = t + 1.5;
+        if (t > nextAuto) { autoBroadcast(t); nextAuto = t + 3.5 + R() * 3; }
+        if (msgUntil && t > msgUntil) { msg.classList.remove('on'); msgUntil = 0; }
+      }
+    }
+    function loop(now) {
+      raf = null;
+      if (!visible) return;
+      draw(now);
+      raf = requestAnimationFrame(loop);
+    }
+
+    cv.addEventListener('click', function (e) {
+      var b = cv.getBoundingClientRect(), x = e.clientX - b.left, y = e.clientY - b.top, t = performance.now() / 1000;
+      var best = null, bd = 28 * 28;
+      stars.forEach(function (s) {
+        if (s.dead || s.hunted) return;
+        var dx = s.x * W - x, dy = s.y * H - y, d = dx * dx + dy * dy;
+        if (d < bd) { bd = d; best = s; }
+      });
+      if (!best) {
+        best = star(x / W, y / H);
+        best.r = 1.2;
+        stars.push(best);
+        if (stars.length > 320) stars = stars.filter(function (s) { return !s.dead; });
+      }
+      broadcast(best, t);
+    });
+
+    // precompute a full loop of trails so the system appears mid-orbit
+    for (var k = 0; k < 450; k++) { for (var n = 0; n < 4; n++) step(.0035); B.forEach(function (b) { b.tr.push(b.x, b.y); if (b.tr.length > 300) b.tr.splice(0, 2); }); }
+    resize();
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(cv);
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        visible = es[0].isIntersecting;
+        if (visible && !raf) raf = requestAnimationFrame(loop);
+      }).observe(cv);
     }
   })();
 
